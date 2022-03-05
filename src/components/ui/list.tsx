@@ -39,7 +39,7 @@ export const List: FunctionComponent<ListProps> = ({ children, background, displ
   )
 }
 
-export const ListActions = ({ children }) => {
+export const ListActions = ({ children }: any) => {
   return (
     <CustomActions>
       {children}
@@ -47,7 +47,7 @@ export const ListActions = ({ children }) => {
   )
 }
 
-export const ListHeader = ({ children }) => {
+export const ListHeader = ({ children }: any) => {
   return (
     <CustomHeader>
       {children}

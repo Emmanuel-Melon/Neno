@@ -20,7 +20,7 @@ export const CustomModal: FunctionComponent<ModalProps> = ({show, close, childre
 
   // Tracks mouse position
   useEffect(() => {
-    const setFromEvent = (e) => setPosition({ x: e.clientX, y: e.clientY });
+    const setFromEvent = (e: { clientX: any; clientY: any; }) => setPosition({ x: e.clientX, y: e.clientY });
     window.addEventListener("click", setFromEvent);
 
     return () => {

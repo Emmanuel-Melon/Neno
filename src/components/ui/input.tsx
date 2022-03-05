@@ -14,21 +14,8 @@ const Input = styled.input`
   border: solid 0.1rem var(--primary-color);
 `;
 
-const FormControl = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: solid 0.15rem var(--primary-color);
-  padding: var(--padding);
-  box-shadow: var(--box-shadow);
-  border-radius: var(--border-radius);
-  margin-bottom: 1rem;
-`;
-
-
 type InputProps = {
   placeholder: string,
-  onChange?: Function,
   inputField?: string,
   id?: string,
   type: string,
@@ -40,16 +27,5 @@ type InputProps = {
 export const TextInput: FunctionComponent<InputProps> = (props) => {
   return (
     <Input {...props}/>
-  )
-}
-
-export const IconInput: FunctionComponent<InputProps> = (props) => {
-  return (
-    <FormControl>
-      <label htmlFor="email">
-        {props.icon}
-      </label>
-      <Input {...props} />
-    </FormControl>
   )
 }
