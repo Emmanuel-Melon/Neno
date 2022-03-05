@@ -8,6 +8,7 @@ import Layout from '../../src/layout/layout'
 import RoomMembers from '../../src/components/RoomMembers'
 import { useGetOnlineUsers } from '../../src/hooks/users'
 import RoomChat from '../../src/components/RoomChat'
+import GameScreen from '../../src/components/GameScreen'
 
 import { Button } from '../../src/components/ui/button'
 
@@ -36,14 +37,16 @@ const Game: NextPage = () => {
         <Layout>
             <Container>
                 {
-                    gameStarted ? <h3>Game</h3> : (
+                    gameStarted ? <GameScreen /> : (
                         <Body>
                             <RoomChat />
                             <RoomMembers members={users} />
                         </Body>
                     )
                 }
-                <Button onClick={startGame}>Start Game</Button>
+                {
+                    !gameStarted ? <Button onClick={startGame}>Start Game</Button> : null
+                }
             </Container>
         </Layout>
     )
