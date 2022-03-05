@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-const Container = styled.button`
+const Container = styled.button<ButtonProps>`
     padding: var(--padding);
     background: var(--primary-color);
     outline: none;
