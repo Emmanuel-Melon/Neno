@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Button } from './ui/button'
 
 const Container = styled.div`
-
     width: 25%;
     & ul {
         padding: var(--padding);

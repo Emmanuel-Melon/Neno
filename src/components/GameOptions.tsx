@@ -1,10 +1,11 @@
 import React from "react";
-import styled from "styled-components";
+import styled from "styled-components"
+import { FormControl, FormLabel, Switch } from '@chakra-ui/react'
 
 const Container = styled.div`
     padding: var(--padding);
     box-shadow: var(--box-shadow);
-    width: 500px;
+    width: fit-content;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -21,12 +22,27 @@ export const GameOptions = () => {
                 <h3>Game Options</h3>
                 <div>
                     <h4>Appearance</h4>
-                    <p>Dark mode</p>
+                    <FormControl display='flex' alignItems='center' justifyContent='space-between'>
+                        <FormLabel htmlFor='email-alerts' mb='0'>
+                            Dark Mode
+                        </FormLabel>
+                        <Switch id='email-alerts' />
+                    </FormControl>
                 </div>
                 <div>
                     <h4>Audio</h4>
-                    <p>Sound Effects</p>
-                    <p>Music</p>
+                    <FormControl display='flex' alignItems='center' justifyContent='space-between'>
+                        <FormLabel htmlFor='email-alerts' mb='0'>
+                            Music
+                        </FormLabel>
+                        <Switch id='email-alerts' />
+                    </FormControl>
+                    <FormControl display='flex' alignItems='center' justifyContent='space-between'>
+                        <FormLabel htmlFor='email-alerts' mb='0'>
+                            Sound Effects
+                        </FormLabel>
+                        <Switch id='email-alerts' />
+                    </FormControl>
                 </div>
             </div>
         </Container>

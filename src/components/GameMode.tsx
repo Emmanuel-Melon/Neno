@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC, useState } from 'react'
 import { Button } from './ui/button'
 import styled from 'styled-components'
-
-
+import { RoomSettings } from './RoomSettings'
+import { CustomModal } from './ui/modal'
 
 const Container = styled.div`
     padding: var(--padding);
@@ -10,16 +10,34 @@ const Container = styled.div`
     justify-content: space-evenly;
     flex-direction: column;
     width: 25%;
-    height: 300px;
 `
 
+type GameModeProps = {
+    joinRoom: () => void;
+    createRoom: () => void;
+}
 
-export const GameMode = () => {
+export const GameMode: FC<GameModeProps> = ({ createRoom, joinRoom }) => {
+    const [isModalOpen, setModalOpen] = useState<boolean>(false)
+
+    function closeModal() {
+        setModalOpen(currentState => !currentState)
+      }
+
+    function openModal () {
+        setModalOpen(currentState => !currentState)
+    }
     return (
         <Container>
-            <Button>Create Room</Button>
-            <Button>Join Room</Button>
-            <Button>Invitation Link</Button>
+            <Button fullWidth onClick={openModal}>Create Room</Button>
+            <Button fullWidth onClick={joinRoom}>Join Room</Button>
+
+
+            <CustomModal show={isModalOpen} close={closeModal}>
+                <>
+                    <RoomSettings createRoom={createRoom} /> 
+                </>
+            </CustomModal>
         </Container>
     )
 }
