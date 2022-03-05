@@ -2,7 +2,9 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { GameMode } from '../../src/components/GameMode'
 import styled from 'styled-components'
-
+import { useGetActiveRooms, useInsertRoom } from '../../src/hooks/rooms'
+import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/router'
 
 const Container = styled.div`
   display: flex;
@@ -10,17 +12,22 @@ const Container = styled.div`
   align-items: center;
 `
 
-
 const Game: NextPage = () => {
+  const { rooms } = useGetActiveRooms()
+  const { insertRoom, error, loading } = useInsertRoom()
+  const router = useRouter()
+  const roomId = uuidv4()
 
-  function createRoom () {
-      console.log('creating room')
+  function createRoom() {
+    insertRoom({
+      hostId: "78ad3bbf-7d76-4580-824c-e031abdb7da7",
+      id: roomId
+    }).then(() => router.push(`/Game/${roomId}`))
   }
 
-  function joinRoom () {
-      console.log('joining room')
+  function joinRoom() {
+    // add ability to join rooms
   }
-
 
   return (
     <Container>

@@ -7,6 +7,8 @@ Guess words with friends!
 
 // A list of words that start with that same letter
 
+// computer suggests
+
 // pre-defined list
 
 // name, object, animal, country, food
@@ -15,7 +17,10 @@ Guess words with friends!
 
 // shows that the other players are guessing.
 
-// you can click on a button that says stop once you're sure your guess is correct and the game will pause
+
+// rushed mode: you can click on a button that says stop once you're sure your guess is correct and the game will pause
+
+// classic mode:
 
 // everyone's guesses are evaluated and a leaderboard is created
 

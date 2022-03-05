@@ -70,6 +70,8 @@ export const RoomSettings: FC<RoomSettingsProps> = ({ createRoom }) => {
 
     const players = [2, 4, 6, 8]
 
+    const roomNames = ["Random", "Custom Name"]
+
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'roomType',
         defaultValue: 'public',
@@ -80,6 +82,23 @@ export const RoomSettings: FC<RoomSettingsProps> = ({ createRoom }) => {
     return (
         <>
             <Container>
+            <Option>
+                    <OptionHeader>
+                        <p>Room Type</p>
+                    </OptionHeader>
+                    <OptionBody>
+                        <HStack {...group}>
+                            {roomNames.map((value) => {
+                                const radio = getRadioProps({ value })
+                                return (
+                                    <RadioCard key={value} {...radio}>
+                                        {value}
+                                    </RadioCard>
+                                )
+                            })}
+                        </HStack>
+                    </OptionBody>
+                </Option>
                 <Option>
                     <OptionHeader>
                         <p>Room Type</p>

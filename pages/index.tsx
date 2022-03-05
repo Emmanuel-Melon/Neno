@@ -37,8 +37,6 @@ const Home: NextPage = () => {
 
   const { users } = useGetOnlineUsers();
 
-  console.log(users);
-
   return (
     <div className={styles.container}>
       <Head>
