@@ -31,8 +31,6 @@ export const GameMode: FC<GameModeProps> = ({ createRoom, joinRoom }) => {
         <Container>
             <Button fullWidth onClick={openModal}>Create Room</Button>
             <Button fullWidth onClick={joinRoom}>Join Room</Button>
-
-
             <CustomModal show={isModalOpen} close={closeModal}>
                 <>
                     <RoomSettings createRoom={createRoom} /> 

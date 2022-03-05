@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { CustomModal } from '../src/components/ui/modal'
 import { GameOptions } from '../src/components/GameOptions'
 import { GameInstructions } from '../src/components/GameInstructions'
+import { useGetOnlineUsers } from '../src/hooks/users'
 
 const Home: NextPage = () => {
   const [showOptions, setShowOptions] = useState<boolean>(false)
@@ -33,6 +34,9 @@ const Home: NextPage = () => {
   function closeModal() {
     setModalOpen(currentState => !currentState)
   }
+
+  const { users } = useGetOnlineUsers();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -44,7 +48,6 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <GameMenu startGame={startGame} viewOptions={viewOptions} viewInstructions={viewInstructions} />
       </main>
-      <div id="root"></div>
       <CustomModal show={isModalOpen} close={closeModal}>
         <>
         {
