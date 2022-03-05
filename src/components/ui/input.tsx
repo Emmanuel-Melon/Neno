@@ -15,10 +15,10 @@ const Input = styled.input`
 `;
 
 type InputProps = {
-  placeholder: string,
+  placeholder?: string,
   inputField?: string,
   id?: string,
-  type: string,
+  type?: string,
   icon?: string,
   label?: string,
   value?: string

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { NextPage } from 'next'
 import styled from 'styled-components'
 import { useGetActiveRooms, useInsertRoom } from '../../src/hooks/rooms'
@@ -19,6 +20,7 @@ const Body = styled.div`
 `
 
 const Game: NextPage = () => {
+    const [gameStarted, setGameStarted] = useState<boolean>(false)
     const { rooms } = useGetActiveRooms()
     const { users } = useGetOnlineUsers()
     const { insertRoom, error, loading } = useInsertRoom()
@@ -26,24 +28,22 @@ const Game: NextPage = () => {
     const roomId = uuidv4()
 
     function startGame() {
-        insertRoom({
-            hostId: "78ad3bbf-7d76-4580-824c-e031abdb7da7",
-            id: roomId
-        }).then(res => {
-            router.push(`/Game/${roomId}`)
-        })
+        setGameStarted(currentState => !currentState)
     }
 
 
     return (
         <Layout>
             <Container>
-
-                <Body>
-                    <RoomChat />
-                    <RoomMembers members={users} />
-                </Body>
-                <Button>Start Game</Button>
+                {
+                    gameStarted ? <h3>Game</h3> : (
+                        <Body>
+                            <RoomChat />
+                            <RoomMembers members={users} />
+                        </Body>
+                    )
+                }
+                <Button onClick={startGame}>Start Game</Button>
             </Container>
         </Layout>
     )
