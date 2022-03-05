@@ -1,35 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frodle
+Guess words with friends!
 
-## Getting Started
+// Maximum Players: 8
 
-First, run the development server:
+// A player suggests a letter
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+// A list of words that start with that same letter
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+// pre-defined list
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+// name, object, animal, country, food
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+// you can create your own custom list as well (host)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+// shows that the other players are guessing.
 
-## Learn More
+// you can click on a button that says stop once you're sure your guess is correct and the game will pause
 
-To learn more about Next.js, take a look at the following resources:
+// everyone's guesses are evaluated and a leaderboard is created
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+// rank is based on correctness and speed
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+// everyone's guesses will be revealed and whoever guesses first is the winner. results will be displayed in a leaderboard
 
-## Deploy on Vercel
+// you can then start a new game with a new letter
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+// new letters can be suggested by the host or by letting a random player choose.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# frodle
+// share your win on social media!
+
+//

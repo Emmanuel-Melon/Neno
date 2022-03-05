@@ -1,9 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&family=Smooch+Sans&display=swap");
+
+:root {
+  --select-border: #777;
+  --select-focus: blue;
+  --select-arrow: var(--select-border);
+  --heading-color: #686868;
+  --box-shadow: rgba(127, 17, 224, 0.2) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  --border-radius: 1rem;
+  --background: #fff;
+  --white: #fff;
+  --grey: #f6f1f9;
+  --padding: 1rem;
+  --primary-color: #f07b3f;
+  --secondary-color: #8785a2;
+  --accent-color: #c06c84;
+  --colored-background: #fae6ff;
+  --text-color: white;
+  --grey-text: #8d8d8d;
+  --grey-background: #f7f8fd;
+  --progress-bg: rgba(22, 199, 132, 0.12);
+  --pastdue-bg: rgba(212, 69, 58, 0.12);
+  --pastdue-color: #d4453a;
+  --progress-color: #16c784;
+  --text-secondary: #8785a2;
+  --text-primary: #8d8d8d;
+  --gradient: linear-gradient(
+    125deg,
+    var(--text-color) 0%,
+    var(--text-color) 40%,
+    var(--accent-color) calc(40% + 1px),
+    var(--accent-color) 60%,
+    var(--secondary-color) calc(60% + 1px),
+    var(--secondary-color) 72%,
+    var(--primary-color) calc(72% + 1px),
+    var(--primary-color) 100%
+  );
+  --button-width: fit-content;
+}
+
 html,
 body {
-  padding: 0;
+  font-family: "Inconsolata", -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+  height: 100%;
+  background: var(--secondary-color);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Smooch Sans", -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
 }
 
 a {
@@ -13,4 +71,20 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+input[type="checkbox"] {
+  display: none;
 }
