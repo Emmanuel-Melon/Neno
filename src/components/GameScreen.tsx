@@ -1,158 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import countries from '../../countries.json'
+import { WordCategory } from './WordCategory'
+import { ActivePlayers } from "./ActivePlayers";
 import styled from 'styled-components'
-import { Input } from '@chakra-ui/react'
-import { Planet } from 'react-planet'
-import { CircleMenu, CircleMenuItem } from "react-circular-menu";
 
 const Container = styled.div`
     display: flex;
-    justify-content: center;
-    padding: var(--padding);
     align-items: center;
-    height: 100vh;
-
+    justify-content: space-between;
 `
 
 const Guesses = styled.div`
-    width: 600px;
-    display: flex;
-    flex-direction: column;
-    background: var(--accent-color);
+    flex: 2;
     padding: var(--padding);
-    border-radius: 5rem;
-    border: solid 1rem var(--secondary-color);
-    align-items: center;
-    
-    & div {
-        margin: 0.5rem;
-    }
 `
 
 const GuessCategories = styled.div`
-    display: flex;
+    & div {
+
+    }
 `
 
-const Timer = styled.div`
-    background: var(--white);
-    padding: var(--padding);
-    width: 150px;
-    text-align: center;
-`
+type GameScreenProps = {
+    players: any
+}
 
-const GameInfo = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--white);
-    width: 100%;
-    padding: var(--padding);
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-
-`
-
-/**
- * 
- * @returns 
- *                         <Guesses>
-                            <GuessCategories>
-                                <div>
-                                    <Input placeholder='Animal' />
-                                </div>
-                                <div>
-                                    <Input placeholder='Country' />
-                                </div>
-                                <div>
-                                    <Input placeholder='Object' />
-                                </div>
-                                <div>
-                                    <Input placeholder='Food' />
-                                </div>
-                                <div>
-                                    <Input placeholder='Name' />
-                                </div>
-                            </GuessCategories>
-                            <Timer>
-                                <h3>04:48</h3>
-                            </Timer>
-                        </Guesses>
- */
+const categories = [
+    {
+        id: 1,
+        name: "Nature: (Animal, Plant)"
+    },
+    {
+        id: 2,
+        name: "Location: (Country, Capital City"
+    },
+    {
+        id: 3,
+        name: "Food"
+    }
+]
 
 
-/**
- * 
- * @returns <GameInfo>
-    <h3>Exit Game</h3>
+// show a list of answers when a users lose a game
 
-    <h3>S</h3>
 
-    <div>
-        <h3>Game: #125</h3>
-        <p>5/6 players</p>
-    </div>
-</GameInfo>
- */
-export default function GameScreen() {
+export default function GameScreen({ players }: GameScreenProps) {
+    const [attempt, setAttempt] = useState({
+        category1: "",
+        category2: "",
+        category3: "",
+        category4: "",
+        category5: ""
+    })
 
-    const Players = [
-        {
-            id: 1,
-            name: "Sisco"
-        },
-        {
-            id: 2,
-            name: "Sisco"
-        },
-        {
-            id: 3,
-            name: "Sisco"
-        },
-        {
-            id: 1,
-            name: "Sisco"
-        },
-        {
-            id: 2,
-            name: "Sisco"
-        },
-        {
-            id: 3,
-            name: "Sisco"
-        },
-        {
-            id: 1,
-            name: "Sisco"
-        },
-        {
-            id: 2,
-            name: "Sisco"
-        }
-    ]
+    const onCategoryInputChange = (e: any) => {
+        attempt[e.target.id] = e.target.value;
+    }
+
+    const submitAnswers = (e: any) => {
+        e.preventDefault()
+        const country = countries.find(country => {
+            console.log(country.name.official);
+            return country.name.official === "Sudan" || country.name.common === "Sudan"
+        });
+    }
+
     return (
-
         <Container>
-            <CircleMenu
-                startAngle={-90}
-                rotationAngle={360}
-                itemSize={5}
-                radius={15}
-                /**
-                 * rotationAngleInclusive (default true)
-                 * Whether to include the ending angle in rotation because an
-                 * item at 360deg is the same as an item at 0deg if inclusive.
-                 * Leave this prop for angles other than 360deg unless otherwise desired.
-                 */
-                rotationAngleInclusive={false}
-            >
-                {Players.map(player => {
-                    return (<CircleMenuItem tooltip="Info" key={player.id}>
-                        <h1>{player.name}</h1>
-                    </CircleMenuItem>)
-                })}
-
-            </CircleMenu>
+            <Guesses>
+                <GuessCategories>
+                    <div>
+                        <WordCategory categories={categories} onCategoryInputChange={onCategoryInputChange} />
+                    </div>
+                </GuessCategories>
+            </Guesses>
+            <ActivePlayers players={players} />
         </Container>
-
     )
 }
