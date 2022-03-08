@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import countries from '../../countries.json'
 import { WordCategory } from './WordCategory'
 import { ActivePlayers } from "./ActivePlayers";
 import styled from 'styled-components'
@@ -63,10 +62,7 @@ export default function GameScreen({ players }: GameScreenProps) {
 
     const submitAnswers = (e: any) => {
         e.preventDefault()
-        const country = countries.find(country => {
-            console.log(country.name.official);
-            return country.name.official === "Sudan" || country.name.common === "Sudan"
-        });
+        
     }
 
     return (
