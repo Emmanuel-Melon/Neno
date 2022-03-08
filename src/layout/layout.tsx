@@ -9,6 +9,7 @@ const Main = styled.section`
   padding: 1rem;
   margin: 0;
   background: var(--grey-background);
+  height: 100vh;
 `
 
 export default function Layout({ children }: any) {

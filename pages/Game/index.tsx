@@ -5,6 +5,11 @@ import styled from 'styled-components'
 import { useGetActiveRooms, useInsertRoom } from '../../src/hooks/rooms'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
+<<<<<<< Updated upstream
+=======
+import { Auth } from '../../src/components/Auth'
+import Layout from '../../src/layout/layout'
+>>>>>>> Stashed changes
 
 const Container = styled.div`
   display: flex;
@@ -26,10 +31,11 @@ const Game: NextPage = () => {
   }
 
   function joinRoom() {
-    // add ability to join rooms
+    router.push('/Game/rooms')
   }
 
   return (
+<<<<<<< Updated upstream
     <Container>
       <Head>
         <title>Frodle - New Game</title>
@@ -37,7 +43,15 @@ const Game: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <GameMode createRoom={createRoom} joinRoom={joinRoom} />
+=======
+    <Layout>
+          <Container>
+      {
+        auth ? <GameMode createRoom={createRoom} joinRoom={joinRoom} /> : <Auth />
+      }
+>>>>>>> Stashed changes
     </Container>
+    </Layout>
   )
 }
 

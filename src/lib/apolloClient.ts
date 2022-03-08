@@ -1,8 +1,9 @@
 import { ApolloClient, InMemoryCache, createHttpLink, NormalizedCacheObject } from '@apollo/client'
-import { WebSocketLink } from '@apollo/client/link/ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
+import { createClient } from 'graphql-ws'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 const isBrowser = typeof window !== 'undefined'
@@ -15,6 +16,7 @@ type HttpOptions = {
   }
   token?: string
 }
+
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -67,6 +69,8 @@ export const setAuthToken = (token: string) => {
   }
 }
 
+
+
 function create(initialState: any, options: Options = {}) {
   const client = new ApolloClient({
     connectToDevTools: !isBrowser,
@@ -91,6 +95,37 @@ function create(initialState: any, options: Options = {}) {
 
     client.setLink(httpLink)
   }
+
+  if (isBrowser) {
+
+    const wsLink = new GraphQLWsLink(createClient({
+      url: 'wss://frodle.hasura.app/v1/subscriptions',
+    }));
+
+    const httpLink = createLink({
+      headers: {
+        'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET,
+        'x-hasura-role': 'user',
+        Authorization: 'secret'
+      }
+    })
+
+    const splitLink = split(
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink,
+    );
+
+    client.setLink(splitLink)
+  }
+   
+
 
   return client
 }
