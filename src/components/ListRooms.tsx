@@ -1,46 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Avatar } from '@chakra-ui/react'
+import { Avatar, Tag } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { Flex, VStack, Heading, Text, Divider} from "@chakra-ui/layout"
+import { CustomButton } from './ui/button'
 
-const Room = styled.div`
-background: rgba(72, 70, 109, 0.2);
-padding: var(--padding);
-border-radius: var(--border-radius);
-box-shadow: var(--box-shadow);
-border: solid 0.10rem rgba(72, 70, 109, 0.5);
-margin: 1rem;
-color: #333;
-cursor: pointer;
-display: flex;
-flex-direction: column;
-justify-content: center;
-
-&:hover {
-    background: rgba(72, 70, 109, 0.5);
-}
-
-& h3 {
-    color: var(--primary-color);
-}
-`
-
-const List = styled.div`
-    width: 45%;
-`
-
+import Image from 'next/image'
 type ListRoomsProps = {
     rooms: any
 }
-
-const Title = styled.h3`
-    color: red;
-`
-
-const RoomInfo = styled.div`
-    display: flex;
-    justify-content: space-between;
-`
 
 
 export const ListRooms = ({ rooms }: ListRoomsProps) => {
@@ -50,31 +17,51 @@ export const ListRooms = ({ rooms }: ListRoomsProps) => {
         router.push(`/Game/${roomId}`)
     }
     return (
-        <List>
-            {
-                rooms && rooms.map((room: any) => {
-                    return (
-                        <Room key={room.id} onClick={() => joinRoom(room.id)}>
-                            <RoomInfo>
-                                <div>
-                                    <Title>Room ID: {room.id}</Title>
-                                    <Title>Host: Emmanuel</Title>
-                                </div>
-                                <div>
-                                    <Title>5/8 </Title>
-                                    <Title>Mode: Classic</Title>
-                                </div>
-                            </RoomInfo>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
-                                <Avatar />
-                                <Avatar />
-                                <Avatar />
-                                <Avatar />
-                            </div>
-                        </Room>
-                    )
-                })
-            }
-        </List>
+        <Flex marginLeft='8'>
+            <VStack
+            >
+                {
+                    rooms && rooms.map((room: any) => {
+                        return (
+                            <Flex key={room.id} p='4' style={{
+                                background: 'rgba(39, 35, 67, 0.5)',
+                                boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
+                                borderRadius: '1rem',
+                                cursor: 'pointer'
+                            }}
+                                alignItems='flex-start'
+                                w='600px'
+                                justifyContent='space-between'
+                                _hover={{
+                                    background: 'rgba(72, 70, 109, 0.8)'
+                                }}
+                            >
+                                <Flex direction='column' >
+                                    <div>
+                                        <Heading as='h3' size='md' color='#B7E778'>Room ID: #45645</Heading>
+                                        <Heading as='h5' size='md' color='#fff'>Host: Emmanuel</Heading>
+                                    </div>
+                                    <Flex direction='column'>
+                                        <Tag color='#fff' bg='rgba(0, 68, 69, 0.4)' marginBottom='2' marginTop='2'>5/8 </Tag>
+                                        <Tag color='#fff' bg='rgba(148, 180, 159, 0.4)' marginBottom='2'>Mode: Classic</Tag>
+                                    </Flex>
+                                    <CustomButton onClick={() => joinRoom(room.id)} icon={<Image alt='logo' src='/icons/icons8-enter.svg' width='30' height='30' />}>Join</CustomButton>
+                                </Flex>
+                                <Flex marginLeft='4' justifyContent='space-between' width='220px' bg='rgba(25, 41, 101, 0.4)' p='2' style={{
+                                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px',
+                                    borderRadius: '1rem',
+                                    cursor: 'pointer'
+                                }}>
+                                    <Avatar src='/images/avatar1.png' />
+                                    <Avatar src='/images/stripy-face-5.svg' />
+                                    <Avatar src='/images/stripy-face-2.svg'/>
+                                    <Avatar src='/images/welcome-2.svg'/>
+                                </Flex>
+                            </Flex>
+                        )
+                    })
+                }
+            </VStack>
+        </Flex>
     )
 }
