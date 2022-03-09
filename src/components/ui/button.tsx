@@ -1,32 +1,28 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
-
-const Container = styled.button<ButtonProps>`
-    padding: var(--padding);
-    background: var(--primary-color);
-    outline: none;
-    border: none;
-    color: var(--white);
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-    &:hover {
-        background: var(--accent-color);
-    }
-    width: ${props => props.fullWidth ? '100%' : 'fit-content' }
-`
+import { Button } from '@chakra-ui/react'
 
 type ButtonProps = {
     size?: string;
-    onClick?: () => void;
+    onClick?: (e?: any) => void;
     fullWidth?: boolean;
+    icon?: any;
 }
 
-export const Button: FC<ButtonProps> = ({ children, onClick, fullWidth }) => {
+export const CustomButton: FC<ButtonProps> = ({ children, onClick, icon }) => {
     return (
-        <Container onClick={onClick} fullWidth={fullWidth}>
+        <Button
+            onClick={onClick}
+            variant='solid'
+            color='#D1F5D3'
+            bg='rgba(25, 41, 101, 0.4)'
+            size='lg'
+            outline={0}
+            leftIcon={icon}
+            _hover={{
+                background: '#192965'
+            }}
+        >
             {children}
-        </Container>
+        </Button>
     )
 }

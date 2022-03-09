@@ -1,17 +1,21 @@
 import React from "react";
-import styled from 'styled-components'
 import { useRouter } from "next/router";
+import { Container, Flex, Text, Switch } from '@chakra-ui/react'
 import MyTimer from '../Timer'
 import { useSession, signIn, signOut } from "next-auth/react"
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  Button,
+  MenuDivider,
+} from '@chakra-ui/react'
 
-const Nav = styled.ul`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: var(--padding);
-  background: #000;
-  color: var(--primary-color);
-`
+import { FiChevronDown, FiSettings, FiUsers, FiLogOut, FiSunset } from "react-icons/fi";
 
 
 export default function Navbar() {
@@ -22,23 +26,75 @@ export default function Navbar() {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 120)
 
-  function onExpire () {
-    alert("hello")
+  function onExpire() {
+    // alert("hello")
   }
   return (
     <header>
       <nav>
-        <Nav>
+        <Flex justifyContent='space-between' alignItems='center' p='2' bg='#192965' color='white'>
           {
             false ? (
               <>
-                        <li>5/8</li>
-          <MyTimer expiryTimestamp={new Date().setSeconds(time.getSeconds() + 120)} />
-          <li>Round #1</li>
+                <li>5/8</li>
+                <MyTimer expiryTimestamp={new Date().setSeconds(time.getSeconds() + 120)} />
+                <li>Round #1</li>
               </>
-            ) : <h1>Frodle</h1>
+            ) : <Text>Frodle</Text>
           }
-        </Nav>
+          {
+            session ? (
+              <Menu>
+                <MenuButton
+                  color='#D1F5D3'
+                  as={Button}
+                  rightIcon={<FiChevronDown />}
+                  bg='rgba(25, 41, 101, 1)'
+                  _hover={{
+                    background: '#65587F'
+                  }}
+                >
+                  {session?.user?.name}
+                </MenuButton>
+                <MenuList color='#D1F5D3' bg='rgba(25, 41, 101, 1)' _hover={{
+                  background: 'rgba(25, 41, 101, 0.8)'
+                }}
+                  _active={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                  _focus={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                >
+                  <MenuItem _active={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                    _focus={{
+                      background: 'rgba(25, 41, 101, 0.8)'
+                    }} icon={<FiSettings />}> Settings</MenuItem>
+                  <MenuItem _active={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                    _focus={{
+                      background: 'rgba(25, 41, 101, 0.8)'
+                    }} icon={<FiUsers />}> Friends</MenuItem>
+                  <MenuItem _active={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                    _focus={{
+                      background: 'rgba(25, 41, 101, 0.8)'
+                    }} icon={<FiSunset />}> Theme</MenuItem>
+                  <MenuItem _active={{
+                    background: 'rgba(25, 41, 101, 0.8)'
+                  }}
+                    _focus={{
+                      background: 'rgba(25, 41, 101, 0.8)'
+                    }} icon={<FiLogOut />} onClick={signOut}> Logout</MenuItem>
+                </MenuList>
+              </Menu>
+            ) : null
+          }
+        </Flex>
       </nav>
     </header>
   )
