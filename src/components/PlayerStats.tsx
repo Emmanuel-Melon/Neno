@@ -4,20 +4,6 @@ import styled from 'styled-components'
 import { Input } from '@chakra-ui/react'
 import { Button } from "./ui/button";
 
-const GuessOption = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--padding) 0 0 0;
-    margin: 0.5rem;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-`
-
-const Answers = styled.div`
-    flex: 1;
-
-`
 
 type WordCategoryProps = {
     onCategoryInputChange?: any;
@@ -51,47 +37,41 @@ const UserPane = styled.div`
 
 
 const Player = styled.div`
-    width: 35%;
+    width: 100%;
     padding: var(--padding);
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    border: solid 0.10rem var(--white);
     margin: 1rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    background: var(--secondary-color);
+    color: var(--white);
 `
 
-export const WordCategory = ({ categories, onCategoryInputChange, session }: WordCategoryProps) => {
+const Stats = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`
+
+export const PlayerStats = () => {
     return (
         <UserPane>
 
         <Player>
+            <Stats>
             <div style={{ width: "200px" }}>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Avatar_poe84it.png" alt="avatar" />
             </div>
             <div>
-                <h3>{session.user.name} 🇸🇸</h3>
+                <h1>Emmanuel 🇸🇸</h1>
                 <h3>Level 56</h3>
             </div>
+            </Stats>
+            <div>
+                <h4>Bio</h4>
+                <p>Ain't nothing to it but to do it!</p>
+            </div>
         </Player>
-
-        <Answers>
-            <Title>Answers</Title>
-            {
-                categories.map((category: any) => (
-                    <GuessOption key={category.id}>
-                        <Input
-                            placeholder={category.name}
-                            style={{ textAlign: 'center' }}
-                            id={category.name}
-                            onChange={onCategoryInputChange}
-                        />
-                    </GuessOption>
-                ))
-            }
-            <Button onClick={submitAnswers}>Done</Button>
-        </Answers>
         </UserPane>
     )
 }

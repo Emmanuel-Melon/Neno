@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import countries from '../../countries.json'
 import { WordCategory } from './WordCategory'
 import { ActivePlayers } from "./ActivePlayers";
 import styled from 'styled-components'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 const Container = styled.div`
     display: flex;
@@ -54,16 +54,15 @@ export default function GameScreen({ players }: GameScreenProps) {
         category5: ""
     })
 
+    const { data: session } = useSession()
+
     const onCategoryInputChange = (e: any) => {
         attempt[e.target.id] = e.target.value;
     }
 
     const submitAnswers = (e: any) => {
         e.preventDefault()
-        const country = countries.find(country => {
-            console.log(country.name.official);
-            return country.name.official === "Sudan" || country.name.common === "Sudan"
-        });
+        
     }
 
     return (
@@ -71,7 +70,7 @@ export default function GameScreen({ players }: GameScreenProps) {
             <Guesses>
                 <GuessCategories>
                     <div>
-                        <WordCategory categories={categories} onCategoryInputChange={onCategoryInputChange} />
+                        <WordCategory categories={categories} onCategoryInputChange={onCategoryInputChange} session={session}/>
                     </div>
                 </GuessCategories>
             </Guesses>

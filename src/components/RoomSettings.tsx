@@ -1,77 +1,73 @@
 import React, { FC } from "react";
-import styled from "styled-components";
-import { Button } from "./ui/button";
 import {
-    Editable,
-    EditableInput,
-    EditableTextarea,
-    EditablePreview,
     HStack,
-    Box,
-    useRadio,
     useRadioGroup,
+    VStack
 } from "@chakra-ui/react";
-
+import { Flex, Heading, Tag } from '@chakra-ui/react'
+import { useGetWordCategories } from "../hooks/game";
 import { RadioCard } from "./ui/radio";
-
-const Container = styled.div`
-    padding: var(--padding);
-    & h1 {
-        text-align: center;
-        color: var(--white);
-    }
-
-    & li {
-        cursor: pointer;
-        padding: var(--padding);
-        border-radius: var(--border-radius);
-        border-radius: var(--border-radius);
-        color: #fff;
-        background: var(--primary-color);
-        box-shadow: var(--box-shadow);
-        text-align: center;
-        margin: 1rem;
-        &:hover {
-            background: var(--accent-color);
-        }
-    }
-`
-
-const Option = styled.div`
-padding: var(--padding);
-background: var(--white);
-margin: 0.5rem;
-
-`
-
-const OptionBody = styled.div`
-    display: flex;
-    justify-content: flex-start;
-`
-
-const OptionHeader = styled.div`
-    
-`
-
-const FormControl = styled.div`
-    padding: 0.5rem;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-`
+import { CustomButton } from './ui/button'
 
 type RoomSettingsProps = {
     createRoom: () => void;
 }
 
+const RoomCapacity = () => {
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'roomCapacity',
+        defaultValue: 8,
+        onChange: console.log,
+    })
 
-export const RoomSettings: FC<RoomSettingsProps> = ({ createRoom }) => {
+    const group = getRootProps()
+    const numOfPlayers = [2, 4, 6, 8]
 
-    const options = ['public', 'private']
+    return (
+        <VStack p='4'>
+            <Flex>
+                <Heading as='h3' size='md' color='#B7E778'>Players</Heading>
+            </Flex>
+            <HStack {...group}>
+                {numOfPlayers.map((value) => {
+                    const radio = getRadioProps({ value })
+                    return (
+                        <RadioCard key={value} {...radio}>
+                            {value}
+                        </RadioCard>
+                    )
+                })}
+            </HStack>
+        </VStack>
+    )
+}
 
-    const players = [2, 4, 6, 8]
+type WordCategoriesProps = {
+    wordCategories: any
+}
 
-    const roomNames = ["Random", "Custom Name"]
+const WordCategories = ({ wordCategories }: WordCategoriesProps) => {
 
+    return (
+        <Flex direction='column' p='4' alignItems='center'>
+            <Flex>
+                <Heading as='h3' size='md' color='#B7E778'>Word categories</Heading>
+            </Flex>
+            <Flex justifyContent='space-between'>
+                {
+                    wordCategories && wordCategories.map((category: any, index: number) => {
+                        console.log(category.type)
+                        return <Tag key={index} size='lg' variant='subtle' color='#fff' bg='rgba(0, 68, 69, 0.4)' margin='2'>
+                            {category.type}
+                        </Tag>
+                    })
+                }
+            </Flex>
+        </Flex>
+    )
+}
+
+const RoomPrivacy = () => {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'roomType',
         defaultValue: 'public',
@@ -79,99 +75,37 @@ export const RoomSettings: FC<RoomSettingsProps> = ({ createRoom }) => {
     })
 
     const group = getRootProps()
+    const roomVisibilityOptions = ['public', 'private']
+
     return (
-        <>
-            <Container>
-            <Option>
-                    <OptionHeader>
-                        <p>Room Type</p>
-                    </OptionHeader>
-                    <OptionBody>
-                        <HStack {...group}>
-                            {roomNames.map((value) => {
-                                const radio = getRadioProps({ value })
-                                return (
-                                    <RadioCard key={value} {...radio}>
-                                        {value}
-                                    </RadioCard>
-                                )
-                            })}
-                        </HStack>
-                    </OptionBody>
-                </Option>
-                <Option>
-                    <OptionHeader>
-                        <p>Room Type</p>
-                    </OptionHeader>
-                    <OptionBody>
-                        <HStack {...group}>
-                            {options.map((value) => {
-                                const radio = getRadioProps({ value })
-                                return (
-                                    <RadioCard key={value} {...radio}>
-                                        {value}
-                                    </RadioCard>
-                                )
-                            })}
-                        </HStack>
-                    </OptionBody>
-                </Option>
-                <Option>
-                    <OptionHeader>
-                        <p>Word categories</p>
-                    </OptionHeader>
-                    <OptionBody>
-                        <FormControl>
-                            <Editable defaultValue='Animal'>
-                                <EditablePreview />
-                                <EditableInput />
-                            </Editable>
-                        </FormControl>
-                        <FormControl>
-                            <Editable defaultValue='Country'>
-                                <EditablePreview />
-                                <EditableInput />
-                            </Editable>
-                        </FormControl>
-                        <FormControl>
-                            <Editable defaultValue='Name'>
-                                <EditablePreview />
-                                <EditableInput />
-                            </Editable>
-                        </FormControl>
-                        <FormControl>
-                            <Editable defaultValue='Object'>
-                                <EditablePreview />
-                                <EditableInput />
-                            </Editable>
-                        </FormControl>
-                        <FormControl>
-                            <Editable defaultValue='Food'>
-                                <EditablePreview />
-                                <EditableInput />
-                            </Editable>
-                        </FormControl>
-                    </OptionBody>
-                </Option>
-                <Option>
-                    <OptionHeader>
-                        <p>Number of players</p>
-                    </OptionHeader>
-                    <OptionBody>
-                        <HStack {...group}>
-                            {players.map((value) => {
-                                const radio = getRadioProps({ value })
-                                return (
-                                    <RadioCard key={value} {...radio}>
-                                        {value}
-                                    </RadioCard>
-                                )
-                            })}
-                        </HStack>
-                    </OptionBody>
-                </Option>
-                <Button onClick={createRoom}>Create Room</Button>
-            </Container>
-        </>
+        <VStack p='4'>
+            <Flex>
+                <Heading as='h3' size='md' color='#B7E778'>Room Type</Heading>
+            </Flex>
+            <HStack {...group}>
+                {roomVisibilityOptions.map((value) => {
+                    const radio = getRadioProps({ value })
+                    return (
+                        <RadioCard key={value} {...radio}>
+                            {value}
+                        </RadioCard>
+                    )
+                })}
+            </HStack>
+        </VStack>
+    )
+}
+
+export const RoomSettings: FC<RoomSettingsProps> = ({ createRoom }) => {
+    const { wordCategories } = useGetWordCategories()
+    return (
+        <Flex direction='column' p='8' w='500px'>
+            <RoomPrivacy />
+            <WordCategories wordCategories={wordCategories} />
+            <RoomCapacity />
+            <Flex justifyContent='center' alignItems='center'>
+                <CustomButton onClick={createRoom}>Create Room</CustomButton>
+            </Flex>
+        </Flex>
     )
 }

@@ -1,11 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import  styled from  'styled-components';
 import Modal from 'react-modal';
-
-const Wrapper = styled.div`
-  border: none;
-`;
-
+import { Flex } from '@chakra-ui/react'
 
 Modal.setAppElement("#__next");
 
@@ -30,7 +25,7 @@ export const CustomModal: FunctionComponent<ModalProps> = ({show, close, childre
 
   const customStyles = {
   content : {
-    background: "#fff",
+    background: "#041C32",
     top                   : '50%',
     left                  : '50%',
     right                 : 'auto',
@@ -41,14 +36,15 @@ export const CustomModal: FunctionComponent<ModalProps> = ({show, close, childre
     padding: 0,
     borderRadius: "1rem",
     border: "none",
-    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+    outline: '0',
+    boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px"
   },
   overlay: {
-    background: "rgba(251, 128, 156, 0.3)"
+    background: "rgba(0, 68, 69, 0.4)"
   }
 };
   return (
-    <Wrapper>
+    <Flex>
       <Modal
         isOpen={show}
         onRequestClose={close}
@@ -56,6 +52,6 @@ export const CustomModal: FunctionComponent<ModalProps> = ({show, close, childre
       >
         {children}   
       </Modal>
-    </Wrapper>
+    </Flex>
   )
 }

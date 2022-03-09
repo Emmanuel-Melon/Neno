@@ -132,12 +132,14 @@ const Game: NextPage = () => {
         setGameStarted(currentState => !currentState)
     }
 
+    console.log(users)
+
 
     return (
         <Layout>
             <Container>
                 {
-                    gameStarted ? <GameScreen players={players}/> : (
+                    gameStarted ? <GameScreen players={users}/> : (
                         <Body>
                             <RoomChat />
                             <RoomMembers members={users} />

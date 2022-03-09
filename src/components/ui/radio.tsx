@@ -13,12 +13,16 @@ export const RadioCard = (props: any) => {
                 {...checkbox}
                 cursor='pointer'
                 borderWidth='1px'
-                borderRadius='md'
+                borderRadius='lg'
                 boxShadow='md'
+                border='none'
+                color='#fff'
+                _hover={{
+                    bg: 'rgba(0, 68, 69, 0.8)',
+                }}
                 _checked={{
-                    bg: 'teal.600',
-                    color: 'white',
-                    borderColor: 'teal.600',
+                    bg: 'rgba(0, 68, 69, 0.4)',
+                    color: '#B7E778',
                 }}
                 _focus={{
                     boxShadow: 'outline',
