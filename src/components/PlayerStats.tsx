@@ -1,77 +1,89 @@
-import React from 'react'
-import { FiEyeOff } from 'react-icons/fi'
-import styled from 'styled-components'
-import { Input } from '@chakra-ui/react'
-import { Button } from "./ui/button";
-
+import React from "react";
+import { FiEyeOff } from "react-icons/fi";
+import { Input, Flex, Heading, Text } from "@chakra-ui/react";
+import Image from "next/image";
+import { Avatar, Tag } from "@chakra-ui/react";
 
 type WordCategoryProps = {
-    onCategoryInputChange?: any;
-    categories?: any;
-    session: any;
-}
+  onCategoryInputChange?: any;
+  categories?: any;
+  session: any;
+};
 
 const submitAnswers = (e: any) => {
-    e.preventDefault()
-    const country = countries.find(country => {
-        console.log(country.name.official);
-        return country.name.official === "Sudan" || country.name.common === "Sudan"
-    });
-}
-
-const Title = styled.h3`
-    color: var(--primary-color);
-    font-size: 92px;
-    padding: 1rem;
-    border-radius: 50%;
-    text-align: center;
-`
-
-const UserPane = styled.div`
-    display: flex;
-    
-    justify-content: space-between;
-    align-items: center;
-
-`
-
-
-const Player = styled.div`
-    width: 100%;
-    padding: var(--padding);
-    border-radius: var(--border-radius);
-    margin: 1rem;
-    display: flex;
-    align-items: center;
-    background: var(--secondary-color);
-    color: var(--white);
-`
-
-const Stats = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`
+  e.preventDefault();
+};
 
 export const PlayerStats = () => {
-    return (
-        <UserPane>
-
-        <Player>
-            <Stats>
-            <div style={{ width: "200px" }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Avatar_poe84it.png" alt="avatar" />
-            </div>
+  return (
+    <Flex>
+      <Flex
+        direction="column"
+        p="4"
+        style={{
+          background: "rgba(39, 35, 67, 0.5)",
+          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          borderRadius: "1rem",
+        }}
+        height="fit-content"
+      >
+        <Flex alignItems="center">
+          <Flex
+            direction="column"
+            alignItems="center"
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px",
+              borderRadius: "1rem",
+            }}
+            p="4"
+            bg="rgba(25, 41, 101, 0.4)"
+          >
+            <Image
+              src="/images/avatar1.png"
+              alt="avatar"
+              height="150"
+              width="150"
+            />
             <div>
-                <h1>Emmanuel 🇸🇸</h1>
-                <h3>Level 56</h3>
+              <Heading as="h3" size="sm" color="#fff">
+                Emmanuel 🇸🇸
+              </Heading>
+              <Heading as="h5" size="sm" color="#D1F5D3">
+                Level 56
+              </Heading>
             </div>
-            </Stats>
+          </Flex>
+          <Flex
+            direction="column"
+            justifyContent="space-between"
+            p="2"
+            marginLeft="2"
+          >
             <div>
-                <h4>Bio</h4>
-                <p>Ain't nothing to it but to do it!</p>
+              <Heading as="h5" size="sm" color="#D1F5D3">
+                Bio
+              </Heading>
+              <Text color="#fff">Ain't nothing to it but to do it!</Text>
             </div>
-        </Player>
-        </UserPane>
-    )
-}
+            <Heading as="h5" size="sm" color="#D1F5D3" marginTop="2">
+              Badges
+            </Heading>
+            <Flex
+              justifyContent="space-between"
+              p="2"
+              style={{
+                borderRadius: "1rem",
+                cursor: "pointer",
+              }}
+            >
+              <Avatar src="/images/conifer-trophy-1.svg" />
+              <Avatar src="/images/geom-stamp.svg" />
+              <Avatar src="/images/mirage-66.svg" />
+            </Flex>
+          </Flex>
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+};

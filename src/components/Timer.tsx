@@ -1,20 +1,12 @@
-import React from 'react';
-import { useTimer } from 'react-timer-hook';
-import styled from 'styled-components'
-
-const Timer = styled.div`
-    font-size: 64px;
-    border: solid 0.15rem var(--secondary-color);
-    padding: 0.5rem;
-    width: 180px;
-    border-radius: var(--border-radius);
-`
+import React from "react";
+import { useTimer } from "react-timer-hook";
+import { Flex, Tag } from "@chakra-ui/react";
 
 type MyTimerProps = {
-    expiryTimestamp: any;
-}
+  expiryTimestamp: any;
+};
 
-export default function MyTimer({ expiryTimestamp }: MyTimerProps) {
+export const MyTimer = ({ expiryTimestamp }: MyTimerProps) => {
   const {
     seconds,
     minutes,
@@ -25,17 +17,20 @@ export default function MyTimer({ expiryTimestamp }: MyTimerProps) {
     pause,
     resume,
     restart,
-  } = useTimer({ expiryTimestamp, onExpire: () => console.warn('onExpire called'), autoStart: false });
-
+  } = useTimer({
+    expiryTimestamp,
+    onExpire: () => console.warn("onExpire called"),
+    autoStart: true,
+  });
 
   return (
-    <div style={{textAlign: 'center'}}>
-      <Timer>
+    <div style={{ textAlign: "center" }}>
+      <Tag width="100%">
         <span>{minutes}</span>:<span>{seconds}</span>
-      </Timer>
+      </Tag>
     </div>
   );
-}
+};
 
 /**
  * 

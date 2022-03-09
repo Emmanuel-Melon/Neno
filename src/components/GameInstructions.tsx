@@ -1,72 +1,49 @@
 import React from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-    padding: var(--padding);
-    box-shadow: var(--box-shadow);
-`
-
-const Examples = styled.div`
-    display: flex;
-    justify-content: space-evenly;
-    padding: var(--padding);
-    border: solid 0.15rem var(--grey-background);
-    border-radius: var(--border-radius);
-`
-
-const Letter = styled.h5`
-    padding: var(--padding);
-    text-align: center;
-    margin: 0 auto;
-    border-radius: var(--border-radius);
-    font-size: 2rem;
-`
-
-const Label = styled.p`
-    color: var(--primary-color);
-`
-
-const OptionsHeader = styled.div`
-    text-align: center;
-
-    h3 {
-        color: var(--primary-color);
-        font-size: 2rem;
-    }
-`
+import { Flex, Heading, Text, VStack, HStack } from "@chakra-ui/react";
 
 export const GameInstructions = () => {
-    return (
-        <Container>
-            <OptionsHeader>
-                <h3>How to play</h3>
-                <p>Players are given a letter and are required to come up with words that start with that letter.</p>
-            </OptionsHeader>
-            <Letter>
-                Letter S
-            </Letter>
-            <Examples>
-                <div>
-                    <Label>Country</Label>
-                    <p>Singapore</p>
-                </div>
-                <div>
-                    <Label>Name</Label>
-                    <p>Samantha</p>
-                </div>
-                <div>
-                    <Label>Animal</Label>
-                    <p>Shark</p>
-                </div>
-                <div>
-                    <Label>Food</Label>
-                    <p>Shrimp</p>
-                </div>
-                <div>
-                    <Label>Object</Label>
-                    <p>Sharpener</p>
-                </div>
-            </Examples>
-        </Container>
-    )
-}
+  return (
+    <Flex direction="column" bg="rgba(25, 41, 101, 0.4)" color="#fff">
+      <Flex direction="column" p="4">
+        <Heading as="h3" size="md" color="#fff">
+          How to play
+        </Heading>
+        <Text>
+          Players are given a letter and are required to come up with words that
+          start with that letter.
+        </Text>
+      </Flex>
+      <Flex p="4">
+        <Heading as="h3" size="md" color="#fff">
+          For example given the letter S
+        </Heading>
+      </Flex>
+      <Flex justifyContent="space-between" p="4">
+        <div>
+          <Heading as="h5" size="sm" color="#fff">
+            Location: (Country/ City)
+          </Heading>
+          <Text>Singapore</Text>
+        </div>
+        <div>
+          <Heading as="h5" size="sm" color="#fff">
+            Name
+          </Heading>
+          <Text>Samantha</Text>
+        </div>
+        <div>
+          <Heading as="h5" size="sm" color="#fff">
+            Nature: (Animal/ Plant)
+          </Heading>
+          <Text>Shark</Text>
+        </div>
+        <div>
+          <Heading as="h5" size="sm" color="#fff">
+            Food
+          </Heading>
+          <Text>Shrimp</Text>
+        </div>
+      </Flex>
+    </Flex>
+  );
+};
