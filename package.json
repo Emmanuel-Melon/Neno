@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "./node_modules/.bin/prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@apollo/client": "^3.5.5",
@@ -15,6 +19,7 @@
     "@chakra-ui/react": "^1.8.6",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@xstate/react": "^2.0.1",
     "apollo-link-ws": "^1.0.20",
     "feather-icons": "^4.28.0",
     "formik": "^2.2.9",
@@ -37,7 +42,8 @@
     "react-modal": "^3.14.4",
     "react-timer-hook": "^3.0.5",
     "subscriptions-transport-ws": "^0.11.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xstate": "^4.30.5"
   },
   "devDependencies": {
     "@types/node": "17.0.21",
@@ -53,5 +59,11 @@
     "lint-staged": "^12.1.2",
     "prettier": "^2.5.1",
     "typescript": "4.6.2"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn eslint",
+      "yarn prettier --write"
+    ]
   }
 }
