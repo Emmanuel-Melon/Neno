@@ -19,6 +19,7 @@
     "@chakra-ui/react": "^1.8.6",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@types/jsonwebtoken": "^8.5.8",
     "@xstate/react": "^2.0.1",
     "apollo-link-ws": "^1.0.20",
     "feather-icons": "^4.28.0",
