@@ -1,97 +1,73 @@
-import React from 'react'
-import { FiEyeOff } from 'react-icons/fi'
-import styled from 'styled-components'
-import { Input } from '@chakra-ui/react'
-import { Button } from "./ui/button";
-
-const GuessOption = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--padding) 0 0 0;
-    margin: 0.5rem;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-`
-
-const Answers = styled.div`
-    flex: 1;
-
-`
+import React from "react";
+import { FiEyeOff } from "react-icons/fi";
+import { Input, Flex } from "@chakra-ui/react";
+import { CustomButton } from "./ui/button";
+import Image from "next/image";
+import { MyTimer } from "../components/Timer";
 
 type WordCategoryProps = {
-    onCategoryInputChange?: any;
-    categories?: any;
-    session: any;
-}
+  onCategoryInputChange?: any;
+  categories?: any;
+  session: any;
+};
 
 const submitAnswers = (e: any) => {
-    e.preventDefault()
-    const country = countries.find(country => {
-        console.log(country.name.official);
-        return country.name.official === "Sudan" || country.name.common === "Sudan"
-    });
-}
+  e.preventDefault();
+};
 
-const Title = styled.h3`
-    color: var(--primary-color);
-    font-size: 92px;
-    padding: 1rem;
-    border-radius: 50%;
-    text-align: center;
-`
+export const WordCategory = ({
+  categories,
+  onCategoryInputChange,
+  session,
+}: WordCategoryProps) => {
+  // must be set on the server in case users refresh the page
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 120);
 
-const UserPane = styled.div`
-    display: flex;
-    
-    justify-content: space-between;
-    align-items: center;
+  // round is over when the timer reaches zero, move to the next round!
+  return (
+    <Flex>
+      <Flex direction="column">
+        <Flex
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            borderRadius: "1rem",
+            marginRight: "1rem",
+          }}
+        >
+          <Image
+            src="/images/icons8-t.svg"
+            alt="avatar"
+            height="150"
+            width="150"
+          />
+        </Flex>
+        <Flex justifyContent="center" marginTop="2">
+          <MyTimer expiryTimestamp={time} />
+        </Flex>
+      </Flex>
 
-`
-
-
-const Player = styled.div`
-    width: 35%;
-    padding: var(--padding);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    border: solid 0.10rem var(--white);
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
-
-export const WordCategory = ({ categories, onCategoryInputChange, session }: WordCategoryProps) => {
-    return (
-        <UserPane>
-
-        <Player>
-            <div style={{ width: "200px" }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Avatar_poe84it.png" alt="avatar" />
-            </div>
-            <div>
-                <h3>{session.user.name} 🇸🇸</h3>
-                <h3>Level 56</h3>
-            </div>
-        </Player>
-
-        <Answers>
-            <Title>Answers</Title>
-            {
-                categories.map((category: any) => (
-                    <GuessOption key={category.id}>
-                        <Input
-                            placeholder={category.name}
-                            style={{ textAlign: 'center' }}
-                            id={category.name}
-                            onChange={onCategoryInputChange}
-                        />
-                    </GuessOption>
-                ))
-            }
-            <Button onClick={submitAnswers}>Done</Button>
-        </Answers>
-        </UserPane>
-    )
-}
+      <Flex
+        direction="column"
+        justifyContent="space-between"
+        height="200px"
+        style={{
+          borderRadius: "1rem",
+          width: "400px",
+        }}
+      >
+        {categories.map((category: any) => (
+          <Flex key={category.id}>
+            <Input
+              placeholder={category.name}
+              style={{ textAlign: "center" }}
+              id={category.name}
+              onChange={onCategoryInputChange}
+            />
+          </Flex>
+        ))}
+        <CustomButton onClick={submitAnswers}>Done</CustomButton>
+      </Flex>
+    </Flex>
+  );
+};
