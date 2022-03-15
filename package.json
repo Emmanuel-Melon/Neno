@@ -1,5 +1,5 @@
 {
-  "name": "frodle",
+  "name": "neno",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,15 +10,28 @@
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "codegen": "graphql-codegen --config codegen.js",
+    "codegen:clean": "yarn codegen:clean-generated && yarn codegen:download && yarn codegen",
+    "codegen:clean-generated": "rm -rf src/lib/graphql/**/__generated__ src/lib/graphql/globalTypes.ts src/shared/__generated__",
+    "codegen:download": "apollo client:download-schema --config=src/lib/graphql/apollo.schema.config.js src/lib/graphql/schema.graphql"
   },
   "dependencies": {
     "@apollo/client": "^3.5.5",
     "@apollo/react-hooks": "^4.0.0",
     "@auth0/nextjs-auth0": "^1.6.1",
     "@chakra-ui/react": "^1.8.6",
-    "@emotion/react": "^11",
+    "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11",
+    "@fontsource/inter": "^4.5.5",
+    "@fontsource/montserrat": "^4.5.5",
+    "@fontsource/pangolin": "^4.5.3",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/near-operation-file-preset": "^2.2.7",
+    "@graphql-codegen/typescript": "^2.4.6",
+    "@graphql-codegen/typescript-operations": "^2.3.3",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.9",
     "@types/jsonwebtoken": "^8.5.8",
     "@xstate/react": "^2.0.1",
     "apollo-link-ws": "^1.0.20",
@@ -39,7 +52,6 @@
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
     "react-dom": "17.0.2",
-    "react-icons": "^4.3.1",
     "react-modal": "^3.14.4",
     "react-timer-hook": "^3.0.5",
     "subscriptions-transport-ws": "^0.11.0",
@@ -47,6 +59,7 @@
     "xstate": "^4.30.5"
   },
   "devDependencies": {
+    "@apollo/link-schema": "^2.0.0-beta.3",
     "@types/node": "17.0.21",
     "@types/object-hash": "^2.2.1",
     "@types/react": "17.0.39",
