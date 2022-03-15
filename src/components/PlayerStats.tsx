@@ -19,26 +19,17 @@ export const PlayerStats = () => {
     <Flex>
       <Flex
         direction="column"
-        p="4"
+        p="8"
+        alignItems="center"
         style={{
-          background: "rgba(39, 35, 67, 0.5)",
-          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-          borderRadius: "1rem",
+          background:
+            "radial-gradient( circle farthest-corner at 10% 20%,  rgba(147,67,67,1) 0%, rgba(111,27,27,1) 90% )",
+          boxShadow:
+            "rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset",
         }}
-        height="fit-content"
       >
         <Flex alignItems="center">
-          <Flex
-            direction="column"
-            alignItems="center"
-            style={{
-              boxShadow:
-                "rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px",
-              borderRadius: "1rem",
-            }}
-            p="4"
-            bg="rgba(25, 41, 101, 0.4)"
-          >
+          <Flex direction="column" alignItems="center" p="4">
             <Image
               src="/images/avatar1.png"
               alt="avatar"

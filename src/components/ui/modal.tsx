@@ -39,13 +39,13 @@ export const CustomModal: FunctionComponent<ModalProps> = ({
       transform: "translate(-50%, -50%)",
       width: "fit-content",
       padding: 0,
-      borderRadius: "1rem",
+      borderRadius: "2% 6% 5% 4% / 1% 1% 2% 4%",
       border: "none",
       outline: "0",
       boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
     },
     overlay: {
-      background: "rgba(0, 68, 69, 0.4)",
+      background: "rgba(51, 51, 51, 0.8)",
     },
   };
   return (

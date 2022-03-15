@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useTimer } from "react-timer-hook";
-import { Flex, Tag } from "@chakra-ui/react";
+import { Flex, Tag, Box, Text, Heading, Image } from "@chakra-ui/react";
+import { GameContext } from "../providers/game";
 
 type MyTimerProps = {
   expiryTimestamp: any;
+  expirationCallback: () => void;
 };
 
-export const MyTimer = ({ expiryTimestamp }: MyTimerProps) => {
+export const MyTimer = ({
+  expiryTimestamp,
+  expirationCallback,
+}: MyTimerProps) => {
+  const context = useContext(GameContext);
+
   const {
     seconds,
     minutes,
@@ -19,16 +26,30 @@ export const MyTimer = ({ expiryTimestamp }: MyTimerProps) => {
     restart,
   } = useTimer({
     expiryTimestamp,
-    onExpire: () => console.warn("onExpire called"),
+    onExpire: context.onExpire,
     autoStart: true,
   });
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <Tag width="100%">
-        <span>{minutes}</span>:<span>{seconds}</span>
-      </Tag>
-    </div>
+    <Flex
+      p="2"
+      color="#519259"
+      justifyContent="space-between"
+      alignItems="center"
+      direction="column"
+    >
+      <Text
+        borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+        border="3px solid #333333"
+        color="brand.primary"
+        bg="#fff"
+        width="120px"
+        textAlign="center"
+        fontSize="4xl"
+      >
+        {minutes}:{seconds}
+      </Text>
+    </Flex>
   );
 };
 
