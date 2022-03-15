@@ -1,7 +1,4 @@
-import {
-  extendTheme,
-  theme as chakraTheme,
-} from "@chakra-ui/react";
+import { extendTheme, theme as chakraTheme } from "@chakra-ui/react";
 
 // pink: #F875AA
 
@@ -37,7 +34,7 @@ const nenoTheme = extendTheme({
         secondary: "2% 6% 5% 4% / 1% 1% 2% 4%",
       },
     },
-  }
+  },
 });
 
 export default nenoTheme;

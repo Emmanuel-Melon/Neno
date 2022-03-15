@@ -21,7 +21,12 @@ const getButtonIcon = (provider: string) => {
     );
   } else if (provider === "Google") {
     return (
-      <Image alt="logo" src="/icons/icons8-google (3).svg" width="30" height="30" />
+      <Image
+        alt="logo"
+        src="/icons/icons8-google (3).svg"
+        width="30"
+        height="30"
+      />
     );
   }
 };
@@ -32,12 +37,11 @@ const SignUpPage: NextPage = ({ providers }: any) => {
       <Card>
         <Avatar
           src="/images/flame-artificial-intelligence-1.svg"
-          width='150'
-          height='150'
-          border='solid 5px rgba(240,246,238,1)'
-
+          width="150"
+          height="150"
+          border="solid 5px rgba(240,246,238,1)"
         />
-        <Heading as="h1" fontSize='4xl' size="lg" color="brand.primary">
+        <Heading as="h1" fontSize="4xl" size="lg" color="brand.primary">
           Play Neno
         </Heading>
         {providers &&
@@ -73,14 +77,18 @@ const SignUpPage: NextPage = ({ providers }: any) => {
           Have an account?
         </Heading>
         <Link href="/auth/signin" passHref>
-          <CustomButton icon={
-            <Image
-              alt="logo"
-              src="/icons/icons8-sign-up.svg"
-              width="30"
-              height="30"
-            />
-          }>Sign In</CustomButton>
+          <CustomButton
+            icon={
+              <Image
+                alt="logo"
+                src="/icons/icons8-sign-up.svg"
+                width="30"
+                height="30"
+              />
+            }
+          >
+            Sign In
+          </CustomButton>
         </Link>
       </Card>
     </Layout>

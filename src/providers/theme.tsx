@@ -2,7 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 import { Dict } from "@chakra-ui/utils";
 import { createContext, useContext, FC, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { frodleTheme } from "../theme";
+import { nenoTheme } from "../theme";
 import merge from "lodash/merge";
 import get from "lodash/get";
 
@@ -24,8 +24,8 @@ const ColorThemeContext = createContext<ColorThemeContext>({
 });
 
 const getTheme = (mode: ColorThemes) =>
-  merge({}, frodleTheme, {
-    colors: get(frodleTheme.colors.modes, mode, frodleTheme.colors),
+  merge({}, nenoTheme, {
+    colors: get(nenoTheme.colors.modes, mode, nenoTheme.colors),
   });
 
 const ColorThemeProvider: FC = ({ children }) => {
