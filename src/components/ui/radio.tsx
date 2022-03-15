@@ -12,8 +12,8 @@ export const RadioCard = (props: any) => {
       <Box
         {...checkbox}
         cursor="pointer"
-        borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-        boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+        border="border.secondary"
         color="brand.accent"
         _hover={{
           bg: "brand.accent",

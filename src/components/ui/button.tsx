@@ -27,17 +27,20 @@ export const CustomButton: FC<ButtonProps> = ({
       colorScheme="brand"
       isLoading={isLoading}
       loadingText={loadingText || "loading"}
+      boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
       style={{
         boxShadow: "brand.shadow",
       }}
+      px={5}
+      py={3}
       bg={bg || "brand.white"}
       color={color || "brand.primary"}
       size="lg"
       leftIcon={icon}
       _hover={{
-        background: "brand.primary",
+        background: "brand.accent",
         color: "brand.white",
-        border: "brand.border.50",
+        border: "border.secondary",
       }}
       borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
       border="3px groove #333333"
