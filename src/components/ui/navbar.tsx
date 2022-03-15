@@ -1,24 +1,18 @@
 import React from "react";
-import styled from 'styled-components'
-import { useRouter } from "next/router";
-
-const Nav = styled.ul`
-  display: flex;
-  justify-content: space-around;
-  padding: var(--padding);
-`
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
-  const router = useRouter()
+  const { data: session } = useSession();
+
   return (
     <header>
-      <nav>
-        <Nav>
-          <li onClick={() => router.back()}>Back</li>
-          <li>Exit Game</li>
-          <li>Players</li>
-        </Nav>
+      <nav
+        style={{
+          background: "transparent",
+        }}
+      >
+        {session ? <p>{session?.user?.name}</p> : null}
       </nav>
     </header>
-  )
+  );
 }

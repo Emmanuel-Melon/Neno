@@ -11,9 +11,9 @@
   --white: #fff;
   --grey: #f6f1f9;
   --padding: 1rem;
-  --primary-color: #f07b3f;
-  --secondary-color: #8785a2;
-  --accent-color: #c06c84;
+  --primary-color: #141e27;
+  --secondary-color: #94b49f;
+  --accent-color: #e5df88;
   --colored-background: #fae6ff;
   --text-color: white;
   --grey-text: #8d8d8d;
@@ -43,13 +43,16 @@ body {
   font-family: "Inconsolata", -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
-  height: 100%;
-  background: var(--secondary-color);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
+  background-image: linear-gradient(
+    171.8deg,
+    rgba(5, 111, 146, 1) 13.5%,
+    rgba(6, 57, 84, 1) 78.6%
+  );
 }
 
 h1,

@@ -1,10 +1,9 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const GET_ONLINE_USERS = gql`
-query getOnlineUsers {
+subscription getOnlineUsers {
   users {
     id
     name
-    guest
-}
+  }
 }`;
