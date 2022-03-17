@@ -153,7 +153,8 @@ export const generateRoundLetters = (
     result[target] = letters[x in taken ? taken[x] : x];
     taken[x] = --len in taken ? taken[len] : len;
   }
-  return result;
+
+  return result.filter((letter) => letter.hasOwnProperty("id"));
 };
 
 export const getRandomLetter = (arr: Letter[]) => {

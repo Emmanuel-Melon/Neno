@@ -11,7 +11,6 @@ import { SessionProvider } from "next-auth/react";
 import { ColorThemeProvider, useColorTheme } from "../src/providers/theme";
 import nenoTheme from "../src/theme";
 
-
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>

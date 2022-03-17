@@ -1,30 +1,32 @@
 import { createMachine } from "xstate";
 import { Player } from "./types";
 
-export const playerMachine = createMachine(
-  {
-    id: "player",
-    initial: "started",
-    context: {},
-    states: {
-      started: {
-        initial: "typing",
-        on: {
-          SUBMIT_ANSWERS: "evaluating",
-        },
+export const playerMachineFactory = () => {
+  return createMachine(
+    {
+      id: "player",
+      initial: "started",
+      context: {},
+      states: {
+        started: {
+          initial: "typing",
+          on: {
+            SUBMIT_ANSWERS: "evaluating",
+          },
 
-        states: {
-          typing: {
-            on: {},
+          states: {
+            typing: {
+              on: {},
+            },
           },
         },
+        evaluating: {},
+        result: {},
       },
-      evaluating: {},
-      result: {},
     },
-  },
-  {
-    actions: {},
-    guards: {},
-  }
-);
+    {
+      actions: {},
+      guards: {},
+    }
+  );
+};

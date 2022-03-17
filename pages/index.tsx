@@ -14,9 +14,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/icons8-n-32.png" />
       </Head>
       <GameProvider>
-        <GameConsumer>
-          {(value) => <Game context={value} />}
-        </GameConsumer>
+        <GameConsumer>{(value) => <Game context={value} />}</GameConsumer>
       </GameProvider>
     </Layout>
   );
