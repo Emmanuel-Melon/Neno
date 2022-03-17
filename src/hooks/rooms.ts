@@ -8,11 +8,10 @@ import {
 
 import {
   GET_ACTIVE_ROOMS,
-  GET_LIVE_ROOM_MESSAGES
+  GET_LIVE_ROOM_MESSAGES,
 } from "../lib/graphql/subscriptions/rooms";
 import { INSERT_MESSAGE, INSERT_ROOM } from "../lib/graphql/mutations/rooms";
 import { GET_ROOM_MESSAGES } from "../lib/graphql/queries/rooms";
-
 
 export const useGetActiveRooms = () => {
   const { error, data, loading } = useSubscription(GET_ACTIVE_ROOMS);
@@ -26,16 +25,20 @@ export const useGetRoomMessages = () => {
       loading,
       messages: data?.rooms_messages,
       error,
-      subscribeToMore: () => subscribeToMore({
-        document: GET_LIVE_ROOM_MESSAGES,
-        updateQuery: (previousQueryResult, { subscriptionData }) => {
-          const newMessage = subscriptionData.data;
-          return ({ 
-            ...previousQueryResult,
-            rooms_messages: [newMessage, ...previousQueryResult.rooms_messages]
-          })
-        }
-      })
+      subscribeToMore: () =>
+        subscribeToMore({
+          document: GET_LIVE_ROOM_MESSAGES,
+          updateQuery: (previousQueryResult, { subscriptionData }) => {
+            const newMessage = subscriptionData.data;
+            return {
+              ...previousQueryResult,
+              rooms_messages: [
+                newMessage,
+                ...previousQueryResult.rooms_messages,
+              ],
+            };
+          },
+        }),
     }),
     [loading, data?.rooms_messages, error, subscribeToMore]
   );
@@ -75,7 +78,4 @@ export const useInsertChatMessage = () => {
   );
 };
 
-export const getRoomMembers = () => {
-
-}
-
+export const getRoomMembers = () => {};

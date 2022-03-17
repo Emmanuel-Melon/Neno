@@ -1,6 +1,6 @@
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import FacebookProvider from "next-auth/providers/facebook"
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import jwt from "jsonwebtoken";
 
 // For more information on each option (and a full list of options) go to
@@ -9,13 +9,13 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+      clientId: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID || "",
+      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET || "",
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    })
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
@@ -34,11 +34,9 @@ export default NextAuth({
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `jwt` is automatically set to `true` if no database is specified.
-    jwt: true,
-
+    // jwt: true,
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
-
     // Seconds - Throttle how frequently to write to database to extend a session.
     // Use it to limit write operations. Set to 0 to always update the database.
     // Note: This option is ignored if using JSON Web Tokens
@@ -85,26 +83,29 @@ export default NextAuth({
   // pages is not specified for that route.
   // https://next-auth.js.org/configuration/pages
   pages: {
-    // signIn: '/api/auth/signin',  // Displays signin buttons
-    // signOut: '/api/auth/signout', // Displays form with sign out button
-    // error: '/api/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/api/auth/verify-request', // Used for check email page
-    // newUser: null // If set, new users will be directed here on first sign in
+    signIn: "/auth/signin", // Displays signin buttons
+    signOut: "/auth/signout", // Displays form with sign out button
+    error: "/auth/error", // Error code passed in query string as ?error=
+    verifyRequest: "/auth/verify-request", // Used for check email page
+    newUser: "/auth/new", // If set, new users will be directed here on first sign in
   },
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn(user, account, profile) { return true },
-    // async redirect(url, baseUrl) { return baseUrl },
-    /**
-     * async session(session, token) { 
-      const encodedToken = jwt.sign(token, process.env.SECRET, { algorithm: 'HS256'});
-      session.id = token.id;
-      session.token = encodedToken;
-      return Promise.resolve(session);
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
     },
+    // async redirect(url, baseUrl) { return baseUrl },
+    // async session(session, token) {
+    // const encodedToken = jwt.sign(token, process.env.SECRET, { algorithm: 'HS256'});
+    // session.id = token.id;
+    //session.token = encodedToken;
+    // return Promise.resolve(session);
+    // }
+    /**
+     * ,
     async jwt(token, user, account, profile, isNewUser) { 
       const isUserSignedIn = user ? true : false;
       // make a http call to our graphql api
@@ -123,4 +124,4 @@ export default NextAuth({
 
   // Enable debug messages in the console if you are having problems
   debug: true,
-})
+});

@@ -8,10 +8,10 @@ import { Dialog } from "../components/ui/dialog";
 import { Paper } from "../components/ui/paper";
 import { CustomModal } from "../components/ui/modal";
 
-type GameScreenProps = {
+export type GameScreenProps = {
   exitCurrentGame: () => void;
   letter: any;
-  submitAnswers: () => void;
+  submitAnswers: (answers: any) => void;
   context: any;
 };
 

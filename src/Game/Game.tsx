@@ -74,20 +74,15 @@ export const Game = ({ context }: GameProps) => {
 
   const calculateRoundScore = () => {};
 
-  const submitAnswers = (answers) => {
-    console.log(answers);
+  const submitAnswers = (answers: any) => {
     if (gameService.state.context.currentRound.remaining !== 0) {
-      console.log("amen!");
       const rounds = generateRoundLetters(8, LETTERS);
       const letter = getRandomLetter(rounds);
       const prevLetter = gameService.state.context.letter.value;
-      //if(letter.value === )
       gameService.send({ type: "ANSWERS_SUBMITTED", payload: letter });
       setAnswerSubmitted((prevState) => !prevState);
       console.log(gameService.state.context);
     }
-
-    // send queries with answers here?
   };
 
   const exitCurrentGame = () => {
