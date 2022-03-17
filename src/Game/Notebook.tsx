@@ -9,9 +9,13 @@ type NotebookProps = {
   submitAnswers: any;
 };
 
+type Categories = {
+  [key: string]: string;
+};
+
 // show an error if a user tries to submit anything that doesn't start with our target letter!
 export const Notebook = ({ categories, submitAnswers }: NotebookProps) => {
-  const [answers, setAnswers] = useState({
+  const [answers, setAnswers] = useState<Categories>({
     animal: "",
     food: "",
     name: "",
