@@ -7,15 +7,13 @@ import {
 } from "@apollo/client";
 
 import { GET_ONLINE_USERS } from "../lib/graphql/queries/user";
-import { INSERT_USER, UPDATE_ONLINE_STATUS } from "../lib/graphql/mutations/user";
+import {
+  INSERT_USER,
+  UPDATE_ONLINE_STATUS,
+} from "../lib/graphql/mutations/user";
 
-export const useGetOnlineUsers = (filters: any = null) => {
-  const { error, data, loading } = useSubscription(GET_ONLINE_USERS, {
-    variables: { filters },
-  });
-
-  console.log('why')
-  console.log(data)
+export const useGetOnlineUsers = () => {
+  const { error, data, loading } = useSubscription(GET_ONLINE_USERS);
 
   return useMemo(
     () => ({
@@ -27,7 +25,6 @@ export const useGetOnlineUsers = (filters: any = null) => {
   );
 };
 
-
 export const useUpdateOnlineStatus = () => {
   const [updateOnlineStatus] = useMutation(UPDATE_ONLINE_STATUS, {
     variables: { now: new Date() },
@@ -35,9 +32,8 @@ export const useUpdateOnlineStatus = () => {
 
   return useMemo(
     () => ({
-      updateOnlineStatus 
+      updateOnlineStatus,
     }),
-    [updateOnlineStatus ]
+    [updateOnlineStatus]
   );
 };
-

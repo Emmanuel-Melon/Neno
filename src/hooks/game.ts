@@ -3,13 +3,12 @@ import {
   useQuery,
   useMutation,
   OperationVariables,
-  useSubscription
+  useSubscription,
 } from "@apollo/client";
 
 import { GET_WORD_CATEGORIES } from "../lib/graphql/queries/game";
 import { INSERT_NEW_GAME } from "../lib/graphql/mutations/game";
 import { GET_CURRENT_GAME } from "../lib/graphql/subscriptions/game";
-
 
 export const useGetWordCategories = () => {
   const { error, data, loading } = useQuery(GET_WORD_CATEGORIES);
@@ -17,10 +16,10 @@ export const useGetWordCategories = () => {
   return useMemo(
     () => ({
       loading,
-      wordCategories: data?.word_categories,
+      wordCategories: data?.rooms_word_categories,
       error,
     }),
-    [loading, data?.word_categories, error]
+    [loading, data?.rooms_word_categories, error]
   );
 };
 
@@ -32,7 +31,7 @@ export const useInsertGame = () => {
       error,
       game: data?.insert_game?.affected_rows,
       insertGame: (game: OperationVariables | undefined) => {
-        console.log(game)
+        console.log(game);
         return insertGame({ variables: { ...game } }).then(
           ({ data }) => data?.insert_game
         );
