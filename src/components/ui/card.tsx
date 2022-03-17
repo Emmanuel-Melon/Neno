@@ -11,7 +11,7 @@ export const Card = ({ children }: CardProps) => {
       direction="column"
       p="8"
       alignItems="center"
-      borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+      borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
       bg="linear-gradient( 174.2deg,  #f0f0f0 7.1%, #F7F7F7 67.4% )"
       minWidth="400px"
       maxWidth="400px"

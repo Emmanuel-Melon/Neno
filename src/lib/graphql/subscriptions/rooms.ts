@@ -1,13 +1,20 @@
 import { gql } from "@apollo/client";
 
-export const GET_ROOM_MESSAGES = gql`
+export const GET_LIVE_ROOM_MESSAGES = gql`
   subscription getRoomMessages {
-      message {
-        createdAt
-        sender
+    rooms_messages {
+      createdAt
+      id
+      senderId
+      roomId
+      text
+      user {
         id
-        text
+        lastSeen
+        createdAt
+        email
       }
+    }
   }
 `;
 
