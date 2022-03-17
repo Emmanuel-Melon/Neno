@@ -4,9 +4,8 @@ import { CustomButton } from "../components/ui/button";
 import Image from "next/image";
 import { Card } from "../components/ui/card";
 
-
 type GameMenuProps = {
-  startGame: () => void;
+  handleClickPlay: () => void;
   viewOptions: () => void;
   viewInstructions: () => void;
   session: any;
@@ -16,7 +15,7 @@ type GameMenuProps = {
 export const GameMenu: FC<GameMenuProps> = ({
   viewOptions,
   viewInstructions,
-  context
+  handleClickPlay,
 }) => {
   return (
     <Flex justifyContent="center" height={"100%"} minHeight={"100vh"}>
@@ -35,14 +34,7 @@ export const GameMenu: FC<GameMenuProps> = ({
         </Text>
         <Flex direction="column" justifyContent="space-between" gap={6}>
           <CustomButton
-            onClick={() => {
-              context.send({
-                type: 'CLICK_PLAY'
-              });
-
-              console.log(context.state);
-        
-            }}
+            onClick={handleClickPlay}
             icon={
               <Image
                 alt="logo"

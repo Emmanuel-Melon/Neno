@@ -6,12 +6,12 @@ import Image from "next/image";
 import { CustomButton } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 
-type GameModeProps = {
-  createOwnRoom: () => void;
+export type GameModeProps = {
+  createOwnRoom: (room: any) => void;
   viewLiveRooms: () => void;
-}
+};
 
-export const GameMode = ({ createOwnRoom, viewLiveRooms}: GameModeProps) => {
+export const GameMode = ({ createOwnRoom, viewLiveRooms }: GameModeProps) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   function closeModal() {
