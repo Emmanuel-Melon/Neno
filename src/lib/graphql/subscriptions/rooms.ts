@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_LIVE_ROOM_MESSAGES = gql`
-  subscription getRoomMessages {
+  subscription getLiveRoomMessages {
     rooms_messages {
       createdAt
       id

@@ -1,18 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const INSERT_ROOM = gql`
-  mutation ($hostId: uuid, $capacity: Int, $privacy: rooms_privacy_enum) {
-    insert_rooms(
-      objects: { host: $hostId, privacy: $privacy, capacity: $capacity }
+  mutation ($room: rooms_insert_input!) {
+    insert_rooms_one(
+      object: $room
     ) {
-      affected_rows
-      returning {
-        createdAt
-        host
-        id
-        updatedAt
-        privacy
-      }
+      id
     }
   }
 `;
@@ -20,40 +13,18 @@ export const INSERT_ROOM = gql`
 export const INSERT_MESSAGE = gql`
   mutation ($message: rooms_messages_insert_input!) {
     insert_rooms_messages_one(object: $message) {
-      createdAt
-      text
+      id
     }
   }
 `;
 
 export const JOIN_ROOM = gql`
-  mutation ($userId: uuid, $roomId: uuid, $id: uuid) {
-    insert_room_members(
-      objects: { userId: $userId, id: $id, roomId: $roomId }
+  mutation ($member: rooms_members_insert_input!) {
+    insert_rooms_members_one(
+      object: $member
     ) {
-      affected_rows
-      returning {
-        createdAt
-        host
-        id
-        updatedAt
-        users
-      }
+      id
     }
   }
 `;
 
-export const LEAVE_ROOM = gql`
-  mutation ($userId: uuid, $roomId: uuid) {
-    update_rooms(objects: { userId: $userId, id: $id }) {
-      affected_rows
-      returning {
-        createdAt
-        host
-        id
-        updatedAt
-        users
-      }
-    }
-  }
-`;
