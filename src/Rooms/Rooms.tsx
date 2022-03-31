@@ -1,28 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGetActiveRooms } from "../../src/hooks/rooms";
 import { ListRooms } from "./ListRooms";
 import { Heading, Text } from "@chakra-ui/layout";
 import { CustomButton } from "../../src/components/ui/button";
 import { Grid, GridItem, VStack } from "@chakra-ui/react";
-import { Card } from "../components/ui/card";
 import Image from "next/image";
-import {
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
-} from "@chakra-ui/react";
+import { Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
 import { Paper } from "../components/ui/paper";
 import { CustomModal } from "../components/ui/modal";
 import { RoomOptions } from "../Rooms/RoomOptions";
 
-export type RoomsProps = {
-  joinLiveRoom: (roomId: string) => void;
-  createOwnRoom: (room: any) => void;
-};
-
-export const Rooms = ({ createOwnRoom, joinLiveRoom }: RoomsProps) => {
-  const { rooms, loading, error } = useGetActiveRooms();
+export const Rooms = () => {
+  const { rooms, loading, error, subscribeToMore } = useGetActiveRooms();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   function closeModal() {
@@ -32,6 +21,11 @@ export const Rooms = ({ createOwnRoom, joinLiveRoom }: RoomsProps) => {
   function openModal() {
     setModalOpen((currentState) => !currentState);
   }
+
+  useEffect(() => {
+    const unsubscribe = subscribeToMore();
+    return unsubscribe;
+  }, []);
   return (
     <>
       <Grid templateColumns="repeat(3, 1fr)" gap={4}>
@@ -41,7 +35,7 @@ export const Rooms = ({ createOwnRoom, joinLiveRoom }: RoomsProps) => {
           }}
           height="fit-content"
         >
-          <Card>
+          <Paper>
             <Heading color="brand.primary" as="h3" size="md">
               Create your own room!
             </Heading>
@@ -61,9 +55,14 @@ export const Rooms = ({ createOwnRoom, joinLiveRoom }: RoomsProps) => {
             >
               Create Room
             </CustomButton>
-          </Card>
+          </Paper>
         </GridItem>
         <GridItem>
+          {rooms && rooms.length === 0 ? (
+            <Paper width="100%">
+              <Text>There are no active rooms at the moment.</Text>
+            </Paper>
+          ) : null}
           {error ? (
             <Stack
               width="750px"
@@ -116,12 +115,12 @@ export const Rooms = ({ createOwnRoom, joinLiveRoom }: RoomsProps) => {
               </Skeleton>
             </VStack>
           ) : (
-            <ListRooms rooms={rooms} joinLiveRoom={joinLiveRoom} />
+            <ListRooms rooms={rooms} />
           )}
         </GridItem>
       </Grid>
       <CustomModal show={isModalOpen} close={closeModal}>
-        <RoomOptions closeModal={closeModal} createOwnRoom={createOwnRoom} />
+        <RoomOptions closeModal={closeModal} />
       </CustomModal>
     </>
   );
