@@ -9,10 +9,10 @@ module.exports = {
     service: {
       name: "hasura",
       url:
-        process.env.HASURA_ENDPOINT || "https://frodle.hasura.app/v1/graphql",
+        process.env.HASURA_GRAPHQL_ENDPOINT || "https://neno.hasura.app/v1/graphql",
       headers: {
         "x-hasura-admin-secret":
-          process.env.HASURA_ADMIN_SECRET ||
+          process.env.HASURA_GRAPHQL_ADMIN_SECRET ||
           "IiiRhd7dcnRtFZ4DHWwYu7uAQxUXOPUaqJF7OY6G8tCJqigg0nqUrZMKcx4vQddY",
         "x-hasura-role": "admin",
       },

@@ -7,3 +7,13 @@ export const GET_ONLINE_USERS = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+  query getUser ($email: String) {
+    users(where: {email: {_eq: $email }}) {
+      id
+      email
+      username
+    }
+  }
+`;
