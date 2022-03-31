@@ -1,19 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useTimer } from "react-timer-hook";
 import { Flex, Tag, Box, Text, Heading, Image } from "@chakra-ui/react";
 import { GameContext } from "../providers/game";
+import { time } from "console";
 
 type MyTimerProps = {
   expiryTimestamp: any;
-  expirationCallback: () => void;
+  expirationCallback?: () => void;
+  pauseTimer: (callback) => void;
+  onExpireHandler: any;
 };
 
 export const MyTimer = ({
   expiryTimestamp,
   expirationCallback,
+  pauseTimer,
+  onExpireHandler,
 }: MyTimerProps) => {
-  const context = useContext(GameContext);
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 5);
 
+  console.log("this formats!");
+  console.log(expiryTimestamp);
   const {
     seconds,
     minutes,
@@ -25,9 +33,11 @@ export const MyTimer = ({
     resume,
     restart,
   } = useTimer({
-    expiryTimestamp,
-    onExpire: context.onExpire,
+    expiryTimestamp: expiryTimestamp,
     autoStart: true,
+    onExpire: () => {
+      onExpireHandler();
+    },
   });
 
   return (
@@ -52,16 +62,3 @@ export const MyTimer = ({
     </Flex>
   );
 };
-
-/**
- * 
- *       <button onClick={start}>Start</button>
-      <button onClick={pause}>Pause</button>
-      <button onClick={resume}>Resume</button>
-      <button onClick={() => {
-        // Restarts to 5 minutes timer
-        const time = new Date();
-        time.setSeconds(time.getSeconds() + 300);
-        restart(time)
-      }}>Restart</button>
- */

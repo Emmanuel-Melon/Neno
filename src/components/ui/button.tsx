@@ -3,13 +3,14 @@ import { Button } from "@chakra-ui/react";
 
 type ButtonProps = {
   size?: string;
-  onClick?: (e?: any) => void;
+  onClick?: (e?: React.MouseEvent) => void;
   fullWidth?: boolean;
   icon?: any;
   color?: string;
   bg?: string;
   loadingText?: string;
   isLoading?: boolean;
+  disabled?: boolean;
 };
 
 export const CustomButton: FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ export const CustomButton: FC<ButtonProps> = ({
   color,
   isLoading = false,
   loadingText,
+  disabled = false,
 }) => {
   return (
     <Button
@@ -28,11 +30,9 @@ export const CustomButton: FC<ButtonProps> = ({
       isLoading={isLoading}
       loadingText={loadingText || "loading"}
       boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-      style={{
-        boxShadow: "brand.shadow",
-      }}
       px={5}
       py={3}
+      disabled={disabled}
       bg={bg || "brand.white"}
       color={color || "brand.primary"}
       size="lg"
@@ -40,10 +40,9 @@ export const CustomButton: FC<ButtonProps> = ({
       _hover={{
         background: "brand.accent",
         color: "brand.white",
-        border: "border.secondary",
       }}
-      borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-      border="3px groove #333333"
+      borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+      border="border.primary"
       _before={{
         content: '""',
         border: "3px groove",
@@ -55,7 +54,7 @@ export const CustomButton: FC<ButtonProps> = ({
         top: "50%",
         left: "50%",
         transform: "translate3d(-50%, -50%, 0) scale(1.025) rotate(1deg)",
-        borderRadius: "1% 1% 2% 4% / 2% 6% 5% 4%",
+        borderRadius: "4% 12% 10% 8% / 5% 5% 10% 8%",
       }}
     >
       {children}
