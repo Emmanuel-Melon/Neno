@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useInsertRoomMember } from "../hooks/rooms";
 import { GameContext } from "../providers/game";
 import { Paper } from "../components/ui/paper";
-import { Rooms } from '../lib/graphql/globalTypes';
+import { Rooms } from "../lib/graphql/globalTypes";
 
 type RoomCardProps = {
   room: Rooms;

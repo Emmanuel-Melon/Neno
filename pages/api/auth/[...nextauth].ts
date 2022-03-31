@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
-import jwt from "jsonwebtoken";
+import { handleSignIn } from "../../../src/shared/auth";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options

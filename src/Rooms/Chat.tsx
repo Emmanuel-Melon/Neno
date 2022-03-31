@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { GameContext } from "../providers/game";
 import { Card } from "../components/ui/card";
-import { Users, Rooms_Messages } from '../lib/graphql/globalTypes';
+import { Users, Rooms_Messages } from "../lib/graphql/globalTypes";
 
 type ChatBubbleProps = {
   text: string;
@@ -61,11 +61,10 @@ const ChatBubble = ({ text, id, user }: ChatBubbleProps) => {
   );
 };
 
-
 type ChatMessagesProps = {
   messages?: Rooms_Messages[];
   sender: Users;
-}
+};
 
 const ChatMessages = ({ messages, sender }: ChatMessagesProps) => {
   const { data: session } = useSession();

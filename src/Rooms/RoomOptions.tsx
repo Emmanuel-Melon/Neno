@@ -18,7 +18,7 @@ import { useInsertRoom, useInsertRoomMember } from "../hooks/rooms";
 import { Paper } from "../components/ui/paper";
 import { ErrorComponent } from "../components/ui/error";
 import { GameContext } from "../providers/game";
-import { Rooms_Word_Categories } from '../lib/graphql/globalTypes';
+import { Rooms_Word_Categories } from "../lib/graphql/globalTypes";
 
 const RoomCapacity = () => {
   const { getRootProps, getRadioProps } = useRadioGroup({

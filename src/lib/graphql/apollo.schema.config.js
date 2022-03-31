@@ -9,7 +9,8 @@ module.exports = {
     service: {
       name: "hasura",
       url:
-        process.env.HASURA_GRAPHQL_ENDPOINT || "https://neno.hasura.app/v1/graphql",
+        process.env.HASURA_GRAPHQL_ENDPOINT ||
+        "https://neno.hasura.app/v1/graphql",
       headers: {
         "x-hasura-admin-secret":
           process.env.HASURA_GRAPHQL_ADMIN_SECRET ||

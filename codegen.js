@@ -1,6 +1,6 @@
 const {
   HASURA_GRAPHQL_ADMIN_SECRET = "IiiRhd7dcnRtFZ4DHWwYu7uAQxUXOPUaqJF7OY6G8tCJqigg0nqUrZMKcx4vQddY",
-  HASURA_ENDPOINT = "https://frodle.hasura.app/v1/graphql",
+  HASURA_GRAPHQL_ENDPOINT = "https://neno.hasura.app/v1/graphql",
 } = process.env;
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
   schema: [
     "src/lib/graphql/schema.graphql",
     {
-      [HASURA_ENDPOINT]: {
+      [HASURA_GRAPHQL_ENDPOINT]: {
         headers: {
           "x-hasura-access-key": HASURA_GRAPHQL_ADMIN_SECRET,
         },
@@ -29,7 +29,6 @@ module.exports = {
   },
   config: {
     dedupeOperationSuffix: true,
-    withResultType: true,
     preResolveTypes: true,
     immutableTypes: false,
     transformUnderscore: true,
@@ -71,11 +70,6 @@ module.exports = {
         extension: ".ts",
       },
       plugins: ["typescript-operations", "typescript-react-apollo"],
-      config: {
-        withComponent: false,
-        withHOC: true,
-        withHooks: true,
-      },
     },
     "src/lib/__mocks__/schema.json": {
       plugins: ["introspection"],

@@ -1,4 +1,5 @@
 // @ts-ignore
+import { useContext } from "react";
 import type { NextPage } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import Layout from "../../src/layout/layout";
@@ -8,6 +9,7 @@ import Image from "next/image";
 import { CustomButton } from "../../src/components/ui/button";
 import Link from "next/link";
 import { Card } from "../../src/components/ui/card";
+import { GameContext } from "../../src/providers/game";
 
 const getButtonIcon = (provider: string) => {
   if (provider === "Facebook") {
@@ -32,14 +34,15 @@ const getButtonIcon = (provider: string) => {
 };
 
 const SignUpPage: NextPage = ({ providers }: any) => {
+  const { gameService } = useContext(GameContext);
   return (
     <Layout>
       <Card>
         <Avatar
-          src="/images/flame-artificial-intelligence-1.svg"
+          src="/images/letters/icons8-n.svg"
+          bg="brand.secondary"
           width="150"
           height="150"
-          border="solid 5px rgba(240,246,238,1)"
         />
         <Heading as="h1" fontSize="4xl" size="lg" color="brand.primary">
           Play Neno

@@ -175,13 +175,13 @@ export const useGetRoomMembers = (roomId: string) => {
         document: GET_LIVE_ROOM_MEMEMBERS,
         variables: { roomId },
         updateQuery: (previousQueryResult, { subscriptionData }) => {
-          console.log(previousQueryResult.rooms_members);
+          console.log(previousQueryResult);
           console.log(subscriptionData.data);
           const newMember = subscriptionData.data.rooms_members;
           console.log(newMember);
           const info = {
             ...previousQueryResult,
-            rooms_members: [],
+            rooms_members: [...previousQueryResult.rooms_members, ...newMember],
           };
 
           console.log(info);

@@ -1,146 +1,146 @@
 type Letter = {
   id: number;
-  value: string;
+  letter: string;
   icon: string;
 };
 
-export const LETTERS: Letter[] = [
+export const letters: Letter[] = [
   {
     id: 1,
-    value: "A",
+    letter: "A",
     icon: "/images/letters/icons8-a.svg",
   },
   {
     id: 2,
-    value: "B",
+    letter: "B",
     icon: "/images/letters/icons8-b.svg",
   },
   {
     id: 3,
-    value: "C",
+    letter: "C",
     icon: "/images/letters/icons8-c.svg",
   },
   {
     id: 4,
-    value: "D",
+    letter: "D",
     icon: "/images/letters/icons8-f.svg",
   },
   {
     id: 5,
-    value: "E",
+    letter: "E",
     icon: "/images/letters/icons8-e.svg",
   },
   {
     id: 6,
-    value: "F",
+    letter: "F",
     icon: "/images/letters/icons8-f.svg",
   },
   {
     id: 7,
-    value: "G",
+    letter: "G",
     icon: "/images/letters/icons8-g.svg",
   },
   {
     id: 8,
-    value: "H",
+    letter: "H",
     icon: "/images/letters/icons8-h.svg",
   },
   {
     id: 9,
-    value: "I",
+    letter: "I",
     icon: "/images/letters/icons8-i.svg",
   },
   {
     id: 10,
-    value: "J",
+    letter: "J",
     icon: "/images/letters/icons8-j.svg",
   },
   {
     id: 11,
-    value: "K",
+    letter: "K",
     icon: "/images/letters/icons8-k.svg",
   },
   {
     id: 12,
-    value: "L",
+    letter: "L",
     icon: "/images/letters/icons8-l.svg",
   },
   {
     id: 13,
-    value: "M",
+    letter: "M",
     icon: "/images/letters/icons8-m.svg",
   },
   {
     id: 14,
-    value: "N",
+    letter: "N",
     icon: "/images/letters/icons8-n.svg",
   },
   {
     id: 15,
-    value: "O",
+    letter: "O",
     icon: "/images/letters/icons8-o.svg",
   },
   {
     id: 16,
-    value: "P",
+    letter: "P",
     icon: "/images/letters/icons8-p.svg",
   },
   {
     id: 17,
-    value: "Q",
+    letter: "Q",
     icon: "/images/letters/icons8-q.svg",
   },
   {
     id: 18,
-    value: "R",
+    letter: "R",
     icon: "/images/letters/icons8-r.svg",
   },
   {
     id: 19,
-    value: "S",
+    letter: "S",
     icon: "/images/letters/icons8-s.svg",
   },
   {
     id: 20,
-    value: "T",
+    letter: "T",
     icon: "/images/letters/icons8-t.svg",
   },
   {
     id: 21,
-    value: "U",
+    letter: "U",
     icon: "/images/letters/icons8-u.svg",
   },
   {
     id: 22,
-    value: "V",
+    letter: "V",
     icon: "/images/letters/icons8-v.svg",
   },
   {
     id: 23,
-    value: "W",
+    letter: "W",
     icon: "/images/letters/icons8-w.svg",
   },
   {
     id: 24,
-    value: "X",
+    letter: "X",
     icon: "/images/letters/icons8-x.svg",
   },
   {
     id: 25,
-    value: "Y",
+    letter: "Y",
     icon: "/images/letters/icons8-y.svg",
   },
   {
     id: 26,
-    value: "Z",
+    letter: "Z",
     icon: "/images/letters/icons8-z.svg",
   },
 ];
 
-export const generateRoundLetters = (
-  numOfPlayers: number,
-  letters: Letter[]
-) => {
+export const generateRoundLetters = (numOfPlayers: number) => {
+  if (numOfPlayers === 1) {
+    return [getRandomLetter(letters, 1)];
+  }
   let result = new Array(numOfPlayers),
     len = letters.length,
     taken = new Array(len);
@@ -157,8 +157,13 @@ export const generateRoundLetters = (
   return result.filter((letter) => letter.hasOwnProperty("id"));
 };
 
-export const getRandomLetter = (arr: Letter[]) => {
-  return arr[Math.floor(Math.random() * Math.floor(arr.length))];
+export const getRandomLetter = (arr: Letter[], max = arr.length) => {
+  return arr[Math.floor(Math.random() * Math.floor(max))];
 };
 
 export const calculateScore = () => {};
+
+export const getLetterByValue = (target: string) => {
+  const [res] = letters.filter(({ letter }) => target === letter);
+  return res;
+};

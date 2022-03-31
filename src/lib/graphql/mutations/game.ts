@@ -33,4 +33,3 @@ export const INSERT_ROUND_ANSWERS = gql`
     }
   }
 `;
-

@@ -24,7 +24,7 @@ type HttpOptions = {
 
 const createLink = (opts: HttpOptions = {}) => {
   return createHttpLink({
-    uri: process.env.NEXT_PUBLIC_HASURA_ENDPOINT,
+    uri: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT,
     credentials: "include",
     headers: {
       ...opts.headers,
@@ -41,14 +41,13 @@ const httpLink = createLink({
     "x-hasura-admin-secret":
       process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET,
     "x-hasura-role": "user",
-    Authorization: "secret",
   },
 });
 
 const wsLink = isBrowser
   ? new GraphQLWsLink(
       createClient({
-        url: "ws://frodle.hasura.app/v1/graphql",
+        url: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_WS || "localhost:3000",
         connectionParams: {
           headers: {
             "x-hasura-admin-secret":

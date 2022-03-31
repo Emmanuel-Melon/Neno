@@ -8,6 +8,7 @@ import Image from "next/image";
 import { CustomButton } from "../../src/components/ui/button";
 import Link from "next/link";
 import { Card } from "../../src/components/ui/card";
+import { useInsertNewUser } from "../../src/hooks/users";
 
 const getButtonIcon = (provider: string) => {
   if (provider === "Facebook") {
@@ -32,14 +33,15 @@ const getButtonIcon = (provider: string) => {
 };
 
 const SignInPage: NextPage = ({ providers }: any) => {
+  const { insertNewUser } = useInsertNewUser();
   return (
     <Layout>
       <Card>
         <Avatar
-          src="/images/flame-artificial-intelligence-1.svg"
+          src="/images/letters/icons8-n.svg"
+          bg="brand.secondary"
           width="150"
           height="150"
-          border="solid 5px rgba(240,246,238,1)"
         />
         <Heading as="h1" size="lg" fontSize="4xl" color="brand.primary">
           Play Neno
@@ -54,10 +56,10 @@ const SignInPage: NextPage = ({ providers }: any) => {
               >
                 <VStack spacing={1}>
                   <CustomButton
-                    onClick={() =>
+                    onClick={() => {
                       // @ts-ignore
-                      signIn(provider?.id)
-                    }
+                      signIn(provider?.id);
+                    }}
                     icon={
                       // @ts-ignore
                       getButtonIcon(provider?.name)

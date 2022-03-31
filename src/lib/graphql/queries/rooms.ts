@@ -31,7 +31,7 @@ export const GET_ACTIVE_ROOMS = gql`
 
 export const GET_ROOM_MESSAGES = gql`
   query getRoomMessages($roomId: uuid) {
-    rooms_messages(where: {roomId: {_eq: $roomId }}) {
+    rooms_messages(where: { roomId: { _eq: $roomId } }) {
       createdAt
       id
       senderId
@@ -49,7 +49,7 @@ export const GET_ROOM_MESSAGES = gql`
 
 export const GET_ROOM_MEMEMBERS = gql`
   query getRoomMembers($roomId: uuid) {
-    rooms_members(where: {roomId: {_eq: $roomId }}) {
+    rooms_members(where: { roomId: { _eq: $roomId } }) {
       id
       role
       roomId

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_LIVE_ROOM_MESSAGES = gql`
   subscription getLiveRoomMessages($roomId: uuid) {
-    rooms_messages(where: {roomId: {_eq: $roomId }}) {
+    rooms_messages(where: { roomId: { _eq: $roomId } }) {
       createdAt
       id
       senderId
@@ -48,17 +48,17 @@ export const GET_ACTIVE_LIVE_ROOMS = gql`
 `;
 
 export const GET_LIVE_ROOM_MEMEMBERS = gql`
-query getLiveRoomMembers($roomId: uuid) {
-  rooms_members(where: {roomId: {_eq: $roomId }}) {
-    id
-    role
-    roomId
-    member {
+  query getLiveRoomMembers($roomId: uuid) {
+    rooms_members(where: { roomId: { _eq: $roomId } }) {
       id
-      lastSeen
-      createdAt
-      email
+      role
+      roomId
+      member {
+        id
+        lastSeen
+        createdAt
+        email
+      }
     }
   }
-}
 `;

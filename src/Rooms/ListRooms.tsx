@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, VStack } from "@chakra-ui/layout";
 import { RoomCard } from "./RoomCard";
-import { Rooms } from '../lib/graphql/globalTypes';
+import { Rooms } from "../lib/graphql/globalTypes";
 
 type ListRoomsProps = {
   rooms?: Rooms[];
