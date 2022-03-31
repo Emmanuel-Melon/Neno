@@ -1,21 +1,48 @@
 import { useMemo } from "react";
-import {
-  useQuery,
-  useMutation,
-  OperationVariables,
-  useSubscription,
-} from "@apollo/client";
+import { useQuery, useMutation, OperationVariables } from "@apollo/client";
 
-import { GET_WORD_CATEGORIES } from "../lib/graphql/queries/game";
-import { INSERT_NEW_GAME } from "../lib/graphql/mutations/game";
-import { GET_CURRENT_GAME } from "../lib/graphql/subscriptions/game";
+import {
+  GET_WORD_CATEGORIES,
+  GET_CURRENT_GAME,
+  GET_GAME_ROUNDS,
+  GET_ROUND_ANSWERS,
+} from "../lib/graphql/queries/game";
+import {
+  INSERT_NEW_GAME,
+  INSERT_GAME_ROUNDS,
+  INSERT_ROUND_ANSWERS,
+} from "../lib/graphql/mutations/game";
+import {
+  GET_CURRENT_LIVE_GAME,
+  GET_GAME_LIVE_ROUNDS,
+} from "../lib/graphql/subscriptions/game";
+
+import {
+  InsertGameRoundsMutation,
+  InsertNewGameMutation,
+  InsertGameRoundsMutationVariables,
+  InsertNewGameMutationVariables,
+  InsertRoundAnswersMutation,
+  InsertRoundAnswersMutationVariables,
+} from "../lib/graphql/mutations/__generated__/game";
+
+import {
+  GetCurrentGameQuery,
+  GetCurrentGameQueryVariables,
+  GetGameRoundsordCategoriesQuery,
+  GetGameRoundsordCategoriesQueryVariables,
+  GetWordCategoriesQuery,
+  GetWordCategoriesQueryVariables,
+} from "../lib/graphql/queries/__generated__/game";
 
 export const useGetWordCategories = () => {
-  const { error, data, loading } = useQuery(GET_WORD_CATEGORIES);
-
+  const { error, data, loading } = useQuery<
+    GetWordCategoriesQuery,
+    GetWordCategoriesQueryVariables
+  >(GET_WORD_CATEGORIES);
   return useMemo(
     () => ({
-      loading,
+      loadingCategories: loading,
       wordCategories: data?.rooms_word_categories,
       error,
     }),
@@ -24,32 +51,137 @@ export const useGetWordCategories = () => {
 };
 
 export const useInsertGame = () => {
-  const [insertGame, { data, loading, error }] = useMutation(INSERT_NEW_GAME);
+  const [insertGame, { data, loading, error }] = useMutation<
+    InsertNewGameMutation,
+    InsertNewGameMutationVariables
+  >(INSERT_NEW_GAME);
   return useMemo(
     () => ({
       loading,
       error,
-      game: data?.insert_game?.affected_rows,
-      insertGame: (game: OperationVariables | undefined) => {
-        console.log(game);
-        return insertGame({ variables: { ...game } }).then(
-          ({ data }) => data?.insert_game
+      game: data?.insert_rooms_games_one,
+      insertGame: (game: OperationVariables) => {
+        return insertGame({ variables: { game } }).then(
+          ({ data }) => data?.insert_rooms_games_one
         );
       },
     }),
-    [loading, error, data?.insert_game?.affected_rows, insertGame]
+    [loading, error, data?.insert_rooms_games_one, insertGame]
   );
 };
 
-export const useGetCurrentGame = () => {
-  const { error, data, loading } = useSubscription(GET_CURRENT_GAME);
+export const useInsertGameRounds = () => {
+  const [insertGameRounds, { data, loading, error }] = useMutation<
+    InsertGameRoundsMutation,
+    InsertGameRoundsMutationVariables
+  >(INSERT_GAME_ROUNDS);
+  return useMemo(
+    () => ({
+      loading,
+      error,
+      game: data?.insert_games_rounds,
+      insertGameRounds: (rounds: OperationVariables) => {
+        return insertGameRounds({ variables: { rounds } }).then(
+          ({ data }) => data?.insert_games_rounds
+        );
+      },
+    }),
+    [loading, error, data?.insert_games_rounds, insertGameRounds]
+  );
+};
+
+export const useGetCurrentGame = (roomId: string) => {
+  const { error, data, loading, subscribeToMore } = useQuery<
+    GetCurrentGameQuery,
+    GetCurrentGameQueryVariables
+  >(GET_CURRENT_GAME, {
+    variables: {
+      roomId,
+    },
+  });
 
   return useMemo(
     () => ({
       loading,
-      game: data?.game,
+      game: data?.rooms_games,
+      error,
+      subscribeToMoreGames: () =>
+        subscribeToMore({
+          document: GET_CURRENT_LIVE_GAME,
+          updateQuery: (previousQueryResult, { subscriptionData }) => {
+            const newGame = subscriptionData.data;
+            return {
+              ...previousQueryResult.rooms_games,
+              rooms_games: [newGame, ...previousQueryResult.rooms_games],
+            };
+          },
+          variables: { roomId },
+        }),
+    }),
+    [loading, data?.rooms_games, error, subscribeToMore]
+  );
+};
+
+export const useInsertRoundAnswers = () => {
+  const [insertAnswers, { data, loading, error }] = useMutation<
+    InsertRoundAnswersMutation,
+    InsertRoundAnswersMutationVariables
+  >(INSERT_ROUND_ANSWERS);
+  return useMemo(
+    () => ({
+      loadingAnswers: loading,
+      error,
+      answers: data?.insert_rounds_answers,
+      insertAnswers: (answers: OperationVariables | undefined) => {
+        return insertAnswers({ variables: { answers } }).then(
+          ({ data }) => data?.insert_rounds_answers
+        );
+      },
+    }),
+    [loading, error, data?.insert_rounds_answers, insertAnswers]
+  );
+};
+
+export const useGetGameRounds = (gameId: string) => {
+  const { error, data, loading, subscribeToMore } = useQuery<
+    GetGameRoundsordCategoriesQuery,
+    GetGameRoundsordCategoriesQueryVariables
+  >(GET_GAME_ROUNDS, {
+    variables: {
+      gameId,
+    },
+  });
+
+  return useMemo(
+    () => ({
+      loadingRounds: loading,
+      rounds: data?.games_rounds,
+      error,
+      subscribeToMoreRounds: () =>
+        subscribeToMore({
+          document: GET_GAME_LIVE_ROUNDS,
+          variables: { gameId },
+          updateQuery: (previousQueryResult, { subscriptionData }) => {
+            const newGame = subscriptionData.data;
+            return {
+              ...(previousQueryResult.games_rounds || {}),
+              games_rounds: [...previousQueryResult.games_rounds, newGame],
+            };
+          },
+        }),
+    }),
+    [loading, data?.games_rounds, error, subscribeToMore]
+  );
+};
+
+export const useCheckRoundAnswers = () => {
+  const { data, loading, error } = useQuery(GET_ROUND_ANSWERS);
+  return useMemo(
+    () => ({
+      loadingResults: loading,
+      results: data?.animals,
       error,
     }),
-    [loading, data?.game, error]
+    [loading, data?.animals, error]
   );
 };
