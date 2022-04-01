@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   Flex,
   Heading,
   Tag,
-  Box,
   HStack,
   useRadioGroup,
-  Text,
   Skeleton,
   SkeletonText,
 } from "@chakra-ui/react";
@@ -20,15 +18,20 @@ import { ErrorComponent } from "../components/ui/error";
 import { GameContext } from "../providers/game";
 import { Rooms_Word_Categories } from "../lib/graphql/globalTypes";
 
-const RoomCapacity = () => {
+type RoomCapacityProps = {
+  updateRoomCapacity: (capacity: string) => void;
+  capacity: string;
+};
+
+const RoomCapacity = ({ capacity, updateRoomCapacity }: RoomCapacityProps) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "roomCapacity",
-    defaultValue: 8,
-    onChange: () => {},
+    defaultValue: capacity,
+    onChange: (nextValue) => updateRoomCapacity(nextValue),
   });
 
   const group = getRootProps();
-  const numOfPlayers = [2, 4, 6, 8];
+  const numOfPlayers = ["2", "4", "6", "8"];
 
   return (
     <Flex direction="column" p="4" gap={6} width="100%" alignItems="center">
@@ -52,7 +55,7 @@ const RoomCapacity = () => {
 };
 
 type WordCategoriesProps = {
-  wordCategories: Rooms_Word_Categories[];
+  wordCategories?: Rooms_Word_Categories[];
   loadingCategories: boolean;
 };
 
@@ -116,12 +119,16 @@ const WordCategories = ({
   );
 };
 
-const RoomPrivacy = () => {
-  const [value, setValue] = useState<string>("public");
+type RoomPrivacyProps = {
+  privacy: string;
+  updatePrivacy: (privacy: string) => void;
+};
+
+const RoomPrivacy = ({ privacy, updatePrivacy }: RoomPrivacyProps) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "roomType",
-    defaultValue: value,
-    onChange: (e: React.ChangeEvent) => {},
+    defaultValue: privacy,
+    onChange: (nextValue) => updatePrivacy(nextValue),
   });
 
   const group = getRootProps();
@@ -160,9 +167,11 @@ type RoomOptionsProps = {
 };
 
 export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
-  const [err, setErr] = useState(false);
   const { wordCategories, loadingCategories } = useGetWordCategories();
   const { insertRoom, error, loading, room } = useInsertRoom();
+  const [privacy, setPrivacy] = useState<string>("public");
+  const [capacity, setCapacity] = useState<string>("8");
+  const [role, _setRole] = useState<string>("host");
   const { insertRoomMember, memberLoading, memberError } =
     useInsertRoomMember();
   const { gameService } = useContext(GameContext);
@@ -171,14 +180,15 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
     if (gameService?.state?.context?.playerId) {
       const newRoom = {
         hostId: gameService?.state?.context?.playerId,
-        capacity: 8,
-        privacy: "public",
+        capacity: parseInt(capacity, 10),
+        privacy,
+        active: true,
       };
       const res = await insertRoom(newRoom);
       insertRoomMember({
         userId: newRoom.hostId,
         roomId: res?.id,
-        role: "host",
+        role,
       });
       gameService.send({
         type: "CREATE_ROOM",
@@ -190,6 +200,14 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
       });
       closeModal();
     }
+  };
+
+  const updatePrivacy = (privacy: string) => {
+    setPrivacy(privacy);
+  };
+
+  const updateRoomCapacity = (capacity: string) => {
+    setCapacity(capacity);
   };
 
   if (error || memberError) {
@@ -214,12 +232,15 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
   return (
     <Paper width="400px">
       <Flex direction="column">
-        <RoomPrivacy />
+        <RoomPrivacy updatePrivacy={updatePrivacy} privacy={privacy} />
         <WordCategories
           wordCategories={wordCategories}
           loadingCategories={loadingCategories}
         />
-        <RoomCapacity />
+        <RoomCapacity
+          updateRoomCapacity={updateRoomCapacity}
+          capacity={capacity}
+        />
       </Flex>
       <Flex justifyContent="center">
         <CustomButton

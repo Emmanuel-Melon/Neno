@@ -9,7 +9,7 @@ type ListRoomsProps = {
 
 export const ListRooms = ({ rooms }: ListRoomsProps) => {
   return (
-    <Flex maxHeight="750px" overflowY="scroll">
+    <Flex>
       <VStack>
         {rooms &&
           rooms.map((room) => {

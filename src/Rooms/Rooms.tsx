@@ -26,9 +26,46 @@ export const Rooms = () => {
     const unsubscribe = subscribeToMore();
     return unsubscribe;
   }, []);
+
+  if (loading) {
+    return (
+      <VStack gap={6} width="600px">
+        <Skeleton
+          height="200px"
+          border="border.primary"
+          borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+          boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        >
+          <Paper width="600px">
+            <SkeletonText />
+          </Paper>
+        </Skeleton>
+        <Skeleton
+          height="200px"
+          border="border.primary"
+          borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+          boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        >
+          <Paper width="600px">
+            <SkeletonText />
+          </Paper>
+        </Skeleton>
+        <Skeleton
+          height="200px"
+          border="border.primary"
+          borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+          boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        >
+          <Paper width="600px">
+            <SkeletonText />
+          </Paper>
+        </Skeleton>
+      </VStack>
+    );
+  }
   return (
     <>
-      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+      <Grid templateColumns="repeat(3, 1fr)" gap={2}>
         <GridItem
           style={{
             borderRadius: "1rem",
@@ -36,28 +73,30 @@ export const Rooms = () => {
           height="fit-content"
         >
           <Paper>
-            <Heading color="brand.primary" as="h3" size="md">
-              Create your own room!
-            </Heading>
-            <Text>Show Friends and what they're are playing</Text>
-            <Text>Add ability to inspect friends</Text>
-            <Text>Invite for next game</Text>
-            <CustomButton
-              icon={
-                <Image
-                  alt="logo"
-                  src="/icons/icons8-plus-math.svg"
-                  width="30"
-                  height="30"
-                />
-              }
-              onClick={openModal}
-            >
-              Create Room
-            </CustomButton>
+            <VStack gap={2}>
+              <Heading color="brand.primary" as="h3" size="md">
+                Create your own room!
+              </Heading>
+              <Text>Show Friends and what they're are playing</Text>
+              <Text>Add ability to inspect friends</Text>
+              <Text>Invite for next game</Text>
+              <CustomButton
+                icon={
+                  <Image
+                    alt="logo"
+                    src="/icons/icons8-plus-math.svg"
+                    width="30"
+                    height="30"
+                  />
+                }
+                onClick={openModal}
+              >
+                Create Room
+              </CustomButton>
+            </VStack>
           </Paper>
         </GridItem>
-        <GridItem>
+        <GridItem rowSpan={2}>
           {rooms && rooms.length === 0 ? (
             <Paper width="100%">
               <Text>There are no active rooms at the moment.</Text>
@@ -65,7 +104,7 @@ export const Rooms = () => {
           ) : null}
           {error ? (
             <Stack
-              width="750px"
+              width="100%"
               p="4"
               bg="brand.grey"
               height="200px"
@@ -81,42 +120,7 @@ export const Rooms = () => {
               </Text>
             </Stack>
           ) : null}
-          {loading ? (
-            <VStack gap={6}>
-              <Skeleton
-                height="200px"
-                border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-                boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-              >
-                <Paper width="750px">
-                  <SkeletonText />
-                </Paper>
-              </Skeleton>
-              <Skeleton
-                height="200px"
-                border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-                boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-              >
-                <Paper width="750px">
-                  <SkeletonText />
-                </Paper>
-              </Skeleton>
-              <Skeleton
-                height="200px"
-                border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-                boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-              >
-                <Paper width="750px">
-                  <SkeletonText />
-                </Paper>
-              </Skeleton>
-            </VStack>
-          ) : (
-            <ListRooms rooms={rooms} />
-          )}
+          <ListRooms rooms={rooms} />
         </GridItem>
       </Grid>
       <CustomModal show={isModalOpen} close={closeModal}>

@@ -31,7 +31,7 @@ export const RoomCard = ({ room }: RoomCardProps) => {
   };
 
   return (
-    <Paper width="750px">
+    <Paper width="600px">
       <Flex direction="column" gap={6} marginBottom={2}>
         <Flex justifyContent="space-between" alignItems="center" gap={6}>
           <Flex gap={2} alignItems="center">
@@ -40,14 +40,7 @@ export const RoomCard = ({ room }: RoomCardProps) => {
               border="border.primary"
             />
             <Heading as="h3" size="md" color="brand.secondary">
-              {room.host.username}'s room -{" "}
-              <Box as="span" color="brand.primary">
-                (
-              </Box>
-              ID - {room.id.slice(26)}
-              <Box as="span" color="brand.primary">
-                )
-              </Box>
+              {room.host.username}'s room
             </Heading>
           </Flex>
           <Flex
