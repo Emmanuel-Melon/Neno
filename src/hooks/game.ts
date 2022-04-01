@@ -14,7 +14,6 @@ import {
 } from "../lib/graphql/mutations/game";
 import {
   GET_CURRENT_LIVE_GAME,
-  GET_GAME_LIVE_ROUNDS,
 } from "../lib/graphql/subscriptions/game";
 
 import {
@@ -34,6 +33,7 @@ import {
   GetWordCategoriesQuery,
   GetWordCategoriesQueryVariables,
 } from "../lib/graphql/queries/__generated__/game";
+import { client } from "../lib/apolloClient";
 
 export const useGetWordCategories = () => {
   const { error, data, loading } = useQuery<
@@ -102,21 +102,30 @@ export const useGetCurrentGame = (roomId: string) => {
 
   return useMemo(
     () => ({
-      loading,
+      loadingGame: loading,
       game: data?.rooms_games,
       error,
-      subscribeToMoreGames: () =>
-        subscribeToMore({
-          document: GET_CURRENT_LIVE_GAME,
-          updateQuery: (previousQueryResult, { subscriptionData }) => {
-            const newGame = subscriptionData.data;
-            return {
-              ...previousQueryResult.rooms_games,
-              rooms_games: [newGame, ...previousQueryResult.rooms_games],
-            };
-          },
-          variables: { roomId },
-        }),
+      subscribeToMoreGames: subscribeToMore({
+        document: GET_CURRENT_LIVE_GAME,
+        updateQuery: (previousQueryResult, { subscriptionData }) => {
+          const newRoom = subscriptionData.data;
+          client.cache.writeQuery({
+            query: GET_CURRENT_GAME,
+            variables: {
+              roomId
+            },
+            data: {
+              ...previousQueryResult,
+              games: [
+                newRoom,
+                ...previousQueryResult.games,
+              ],
+            },
+            overwrite: true,
+          });
+          return previousQueryResult;
+        },
+      })
     }),
     [loading, data?.rooms_games, error, subscribeToMore]
   );
@@ -132,7 +141,7 @@ export const useInsertRoundAnswers = () => {
       loadingAnswers: loading,
       error,
       answers: data?.insert_rounds_answers,
-      insertAnswers: (answers: OperationVariables | undefined) => {
+      insertAnswers: (answers: OperationVariables) => {
         return insertAnswers({ variables: { answers } }).then(
           ({ data }) => data?.insert_rounds_answers
         );
@@ -143,7 +152,7 @@ export const useInsertRoundAnswers = () => {
 };
 
 export const useGetGameRounds = (gameId: string) => {
-  const { error, data, loading, subscribeToMore } = useQuery<
+  const { error, data, loading } = useQuery<
     GetGameRoundsordCategoriesQuery,
     GetGameRoundsordCategoriesQueryVariables
   >(GET_GAME_ROUNDS, {
@@ -156,21 +165,9 @@ export const useGetGameRounds = (gameId: string) => {
     () => ({
       loadingRounds: loading,
       rounds: data?.games_rounds,
-      error,
-      subscribeToMoreRounds: () =>
-        subscribeToMore({
-          document: GET_GAME_LIVE_ROUNDS,
-          variables: { gameId },
-          updateQuery: (previousQueryResult, { subscriptionData }) => {
-            const newGame = subscriptionData.data;
-            return {
-              ...(previousQueryResult.games_rounds || {}),
-              games_rounds: [...previousQueryResult.games_rounds, newGame],
-            };
-          },
-        }),
+      error
     }),
-    [loading, data?.games_rounds, error, subscribeToMore]
+    [loading, data?.games_rounds, error]
   );
 };
 

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { OperationVariables, useMutation, useQuery } from "@apollo/client";
+import { OperationVariables, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { client } from "../lib/apolloClient";
 
 import {
@@ -11,11 +11,15 @@ import {
   INSERT_MESSAGE,
   INSERT_ROOM,
   INSERT_ROOM_MEMBER,
+  DELETE_ROOM_MEMBER,
+  DELETE_ROOM
 } from "../lib/graphql/mutations/rooms";
 import {
   GET_ROOM_MESSAGES,
   GET_ROOM_MEMEMBERS,
   GET_ACTIVE_ROOMS,
+  GET_ROOM_MEMBER_COUNT,
+  GET_ROOM_BY_ID
 } from "../lib/graphql/queries/rooms";
 
 import {
@@ -25,6 +29,10 @@ import {
   InsertRoomMemberMutationVariables,
   InsertRoomMutation,
   InsertRoomMutationVariables,
+  DeleteRoomMemberMutation,
+  DeleteRoomMemberMutationVariables,
+  DeleteRoomMutation,
+  DeleteRoomMutationVariables
 } from "../lib/graphql/mutations/__generated__/rooms";
 
 import {
@@ -42,7 +50,11 @@ export const useGetActiveRooms = () => {
   const { error, data, loading, subscribeToMore } = useQuery<
     GetActiveRoomsQuery,
     GetActiveRoomsQueryVariables
-  >(GET_ACTIVE_ROOMS);
+  >(GET_ACTIVE_ROOMS, {
+    variables: {
+      privacy: "public"
+    }
+  });
   return useMemo(
     () => ({
       loading,
@@ -53,10 +65,21 @@ export const useGetActiveRooms = () => {
           document: GET_ACTIVE_LIVE_ROOMS,
           updateQuery: (previousQueryResult, { subscriptionData }) => {
             const newRoom = subscriptionData.data;
-            return {
-              ...previousQueryResult.rooms,
-              rooms: [newRoom, ...previousQueryResult.rooms],
-            };
+            client.cache.writeQuery({
+              query: GET_ACTIVE_ROOMS,
+              variables: {
+                privacy: "public"
+              },
+              data: {
+                ...previousQueryResult,
+                rooms: [
+                  newRoom,
+                  ...previousQueryResult.rooms,
+                ],
+              },
+              overwrite: true,
+            });
+            return previousQueryResult;
           },
         }),
     }),
@@ -85,7 +108,8 @@ export const useGetRoomMessages = (roomId: string) => {
             roomId,
           },
           onError: (e) => {},
-          updateQuery: (previousQueryResult, { subscriptionData }) => {
+          /**
+           * updateQuery: (previousQueryResult, { subscriptionData }) => {
             const newMessage = subscriptionData.data;
             client.cache.writeQuery({
               query: GET_ROOM_MESSAGES,
@@ -101,7 +125,9 @@ export const useGetRoomMessages = (roomId: string) => {
               },
               overwrite: true,
             });
+            return previousQueryResult;
           },
+           */
         }),
     }),
     [loading, data?.rooms_messages, error, subscribeToMore]
@@ -170,34 +196,7 @@ export const useGetRoomMembers = (roomId: string) => {
     () => ({
       loading,
       members: data?.rooms_members,
-      error,
-      subscribeToMoreMembers: subscribeToMore({
-        document: GET_LIVE_ROOM_MEMEMBERS,
-        variables: { roomId },
-        updateQuery: (previousQueryResult, { subscriptionData }) => {
-          console.log(previousQueryResult);
-          console.log(subscriptionData.data);
-          const newMember = subscriptionData.data.rooms_members;
-          console.log(newMember);
-          const info = {
-            ...previousQueryResult,
-            rooms_members: [...previousQueryResult.rooms_members, ...newMember],
-          };
-
-          console.log(info);
-          client.cache.writeQuery({
-            query: GET_ROOM_MEMEMBERS,
-            data: {
-              ...previousQueryResult,
-              rooms_members: [],
-            },
-            variables: {
-              roomId,
-            },
-            overwrite: true,
-          });
-        },
-      }),
+      error
     }),
     [loading, data?.rooms_members, error]
   );
@@ -222,3 +221,79 @@ export const useInsertRoomMember = () => {
     [loading, error, data?.insert_rooms_members_one, insertRoomMember]
   );
 };
+
+export const useGetLiveMembers = (roomId: string) => {
+  const { error, data, loading } = useSubscription(GET_LIVE_ROOM_MEMEMBERS, {
+    variables: {
+      roomId
+    }
+  })
+  return useMemo(() => ({
+    loading,
+    error,
+    members: data?.rooms_members
+  }), [error, data, loading]);
+}
+
+export const useGetRoomMemberCount = (roomId: string) => {
+  const { error, data, loading } = useSubscription(GET_ROOM_MEMBER_COUNT, {
+    variables: {
+      roomId
+    }
+  })
+  return useMemo(() => ({
+    loading,
+    error,
+    memberCount: data?.rooms_members_aggregate?.aggregate.count,
+  }), [error, data, loading]);
+}
+
+export const useDeleteRoomMember = () => {
+  const [deleteRoomMember, { data, loading, error }] = useMutation<DeleteRoomMemberMutation, DeleteRoomMemberMutationVariables>(DELETE_ROOM_MEMBER);
+  return useMemo(
+    () => ({
+      memberDeletionLoading: loading,
+      memberDeletionError: error,
+      deletedMember: data?.delete_rooms_members,
+      deleteRoomMember: ({ playerId, roomId }: DeleteRoomMemberMutationVariables) => {
+        return deleteRoomMember({ variables: { 
+          playerId,
+          roomId
+        } }).then(
+          ({ data }) => data?.delete_rooms_members
+        );
+      },
+    }),
+    [loading, error, data?.delete_rooms_members, deleteRoomMember]
+  );
+}
+
+export const useDeleteRoomById = () => {
+  const [deleteRoomById, { data, loading, error }] = useMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DELETE_ROOM);
+  return useMemo(
+    () => ({
+      roomLoading: loading,
+      roomDeletionError: error,
+      deletedRoom: data?.delete_rooms_by_pk,
+      deleteRoomById: ({ roomId }: DeleteRoomMutationVariables) => {
+        return deleteRoomById({ variables: { roomId } }).then(
+          ({ data }) => data?.delete_rooms_by_pk
+        );
+      },
+    }),
+    [loading, error, data?.delete_rooms_by_pk, deleteRoomById]
+  );
+}
+
+export const useGetRoomById = (roomId: string) => {
+  const { error, data, loading } = useQuery(GET_ROOM_BY_ID, {
+    variables: {
+      roomId
+    }
+  })
+  return useMemo(() => ({
+    loading,
+    error,
+    room: data?.rooms_by_pk,
+  }), [error, data, loading]);
+}
