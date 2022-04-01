@@ -2,7 +2,7 @@ import React from "react";
 import { Flex } from "@chakra-ui/react";
 
 type CardProps = {
-  children: any;
+  children: ReactChild | ReactChild[];
 };
 
 export const Card = ({ children }: CardProps) => {

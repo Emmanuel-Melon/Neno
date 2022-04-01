@@ -1,7 +1,11 @@
-import React from "react";
+import React, { ReactChild } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 
-export default function Layout({ children }: any) {
+type LayoutProps = {
+  children: ReactChild | ReactChild[];
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <Box
       width="100%"

@@ -2,8 +2,8 @@ import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 
 type MyTimerProps = {
-  minutes: any;
-  seconds: any;
+  minutes: string;
+  seconds: string;
 };
 
 export const MyTimer = ({ minutes, seconds }: MyTimerProps) => {

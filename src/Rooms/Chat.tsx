@@ -91,10 +91,9 @@ export const Chat = () => {
   const [disableSend, setDisableSend] = useState<boolean>(true);
   const { insertMessage, loading } = useInsertChatMessage();
   const { gameService } = useContext(GameContext);
-  const { messages, subscribeToMore } = useGetRoomMessages(
+  const { messages } = useGetRoomMessages(
     gameService.state.context.room.roomId
   );
-  const { data: session } = useSession();
   const handleInputchange = (e: any) => {
     setText(e.target.value);
     if (text !== "") {
@@ -111,16 +110,6 @@ export const Chat = () => {
       setText("");
     }
   };
-
-  useEffect(() => {}, [text]);
-
-  useEffect(() => {
-    const unsubscribe = subscribeToMore();
-
-    return unsubscribe;
-  }, [messages]);
-
-  useEffect(() => {}, [messages]);
 
   return (
     <Card>

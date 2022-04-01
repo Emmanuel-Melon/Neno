@@ -49,7 +49,7 @@ import {
   GetRoomMessagesQueryVariables,
 } from "../lib/graphql/queries/__generated__/rooms";
 
-import {} from "../lib/graphql/subscriptions/__generated__/rooms";
+import { GetLiveRoomMessagesSubscription, GetLiveRoomMessagesSubscriptionVariables } from "../lib/graphql/subscriptions/__generated__/rooms";
 
 export const useGetActiveRooms = () => {
   const { error, data, loading, subscribeToMore } = useQuery<
@@ -90,10 +90,10 @@ export const useGetActiveRooms = () => {
 };
 
 export const useGetRoomMessages = (roomId: string) => {
-  const { error, data, loading, subscribeToMore } = useQuery<
-    GetRoomMessagesQuery,
-    GetRoomMessagesQueryVariables
-  >(GET_ROOM_MESSAGES, {
+  const { error, data, loading } = useSubscription<
+    GetLiveRoomMessagesSubscription,
+    GetLiveRoomMessagesSubscriptionVariables
+  >(GET_LIVE_ROOM_MESSAGES, {
     variables: {
       roomId,
     },
@@ -102,37 +102,9 @@ export const useGetRoomMessages = (roomId: string) => {
     () => ({
       loading,
       messages: data?.rooms_messages,
-      error,
-      subscribeToMore: () =>
-        subscribeToMore({
-          document: GET_LIVE_ROOM_MESSAGES,
-          variables: {
-            roomId,
-          },
-          onError: (e) => {},
-          /**
-           * updateQuery: (previousQueryResult, { subscriptionData }) => {
-            const newMessage = subscriptionData.data;
-            client.cache.writeQuery({
-              query: GET_ROOM_MESSAGES,
-              data: {
-                ...previousQueryResult,
-                rooms_messages: [
-                  newMessage,
-                  ...previousQueryResult.rooms_messages,
-                ],
-              },
-              variables: {
-                roomId,
-              },
-              overwrite: true,
-            });
-            return previousQueryResult;
-          },
-           */
-        }),
+      error
     }),
-    [loading, data?.rooms_messages, error, subscribeToMore]
+    [loading, data?.rooms_messages, error]
   );
 };
 

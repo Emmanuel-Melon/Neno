@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, ReactChild } from "react";
 import Modal from "react-modal";
 import { Flex } from "@chakra-ui/react";
 
@@ -6,8 +6,8 @@ Modal.setAppElement("#__next");
 
 type ModalProps = {
   show: boolean;
-  children: any;
-  close: any;
+  children: ReactChild | ReactChild[];
+  close: () => void;
 };
 
 export const CustomModal: FunctionComponent<ModalProps> = ({

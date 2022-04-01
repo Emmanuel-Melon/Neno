@@ -49,11 +49,10 @@ const GameScreen = ({ exitCurrentGame, pauseTimer }: GameScreenProps) => {
   const { gameService } = useContext(GameContext);
   const roomId = gameService?.state?.context?.room?.roomId;
   const gameId = gameService?.state?.context?.room?.gameId;
-
   const { rounds, loadingRounds } = useGetGameRounds(gameId);
   const { insertAnswers, loadingAnswers } = useInsertRoundAnswers();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [game, setGame] = useState<GameState>({
+  const [game, setGame] = useState({
     gameWon: false,
     rounds: [],
     roundId: "",
@@ -155,6 +154,10 @@ const GameScreen = ({ exitCurrentGame, pauseTimer }: GameScreenProps) => {
     return <LoadingScreen />;
   }
 
+  console.log(rounds);
+
+  console.log(game);
+
   const moveToNextRound = () => {
     closeModal();
   };
@@ -178,7 +181,7 @@ const GameScreen = ({ exitCurrentGame, pauseTimer }: GameScreenProps) => {
             <Heading as="h5" color="brand.primary" size="md">
               Game Info
             </Heading>
-            <Text>Round 5</Text>
+            <Text>Round</Text>
           </Paper>
 
           <Paper>

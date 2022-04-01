@@ -22,14 +22,8 @@ import {
 } from "../hooks/rooms";
 import { LoadingScreen } from "./LoadingScreen";
 
-import { useExitPrompt } from "../hooks/useExistPrompt";
-import { GET_LIVE_ROOM_MEMEMBERS } from "../lib/graphql/subscriptions/rooms";
-import { client } from "../lib/apolloClient";
-import { GET_CURRENT_GAME } from "../lib/graphql/queries/game";
-import { GET_CURRENT_LIVE_GAME } from "../lib/graphql/subscriptions/game";
-
 export const GameLobby = () => {
-  const [gameId, setGameId] = useState<string | undefined>("");
+  const [gameId, setGameId] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { gameService } = useContext(GameContext);
   const roomId = gameService?.state?.context?.room?.roomId;
@@ -37,7 +31,7 @@ export const GameLobby = () => {
   const { members } = useGetRoomMembers(roomId);
   const { insertGame, loading } = useInsertGame();
   const { insertGameRounds } = useInsertGameRounds();
-  const { game, subscribeToMoreGames, loadingGame } = useGetCurrentGame(roomId);
+  const { game, loadingGame } = useGetCurrentGame(roomId);
   const { memberCount } = useGetRoomMemberCount(roomId);
   const { deleteRoomById } = useDeleteRoomById();
   const { deleteRoomMember, memberDeletionLoading } = useDeleteRoomMember();
@@ -69,20 +63,20 @@ export const GameLobby = () => {
       };
     });
 
-    await insertGameRounds(input);
+    insertGameRounds(input).then(() => { setGameId(newGame?.id) });
 
-    setGameId(newGame?.id);
-    gameService.send({
-      type: "GAME_STARTED",
-      payload: {
-        gameId: newGame?.id,
-      },
-    });
+    if (gameId !== "") {
+      gameService.send({
+        type: "GAME_STARTED",
+        payload: {
+          gameId: newGame?.id,
+        },
+      });
+    }
   };
 
   useEffect(() => {
-    const unsubscribe = subscribeToMoreGames();
-    if (game && game[0]?.roomId === roomId) {
+    if (game && gameId !== "" && game[0]?.roomId === roomId) {
       gameService.send({
         type: "GAME_STARTED",
         payload: {
@@ -90,11 +84,11 @@ export const GameLobby = () => {
         },
       });
     }
+  }, [game]);
 
-    return unsubscribe;
-  }, []);
+  useEffect(() => {
 
-  // subscribeToMoreMembers
+  }, [gameId])
 
   useEffect(() => {
     window.addEventListener("beforeunload", alertUser);
@@ -136,7 +130,7 @@ export const GameLobby = () => {
           <ActivePlayers roomId={roomId} />
           <Flex gap={6}>
             {gameService?.state?.context.playerId ===
-            gameService?.state?.context.room.host ? (
+              gameService?.state?.context.room.host ? (
               <CustomButton
                 onClick={startNewGame}
                 loadingText="Starting game"

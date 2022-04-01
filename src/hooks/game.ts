@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery, useMutation, OperationVariables } from "@apollo/client";
+import { useQuery, useMutation, OperationVariables, useSubscription } from "@apollo/client";
 
 import {
   GET_WORD_CATEGORIES,
@@ -32,6 +32,7 @@ import {
   GetWordCategoriesQueryVariables,
 } from "../lib/graphql/queries/__generated__/game";
 import { client } from "../lib/apolloClient";
+import { GetCurrentLiveGameSubscription, GetCurrentLiveGameSubscriptionVariables } from "../lib/graphql/subscriptions/__generated__/game";
 
 export const useGetWordCategories = () => {
   const { error, data, loading } = useQuery<
@@ -89,10 +90,10 @@ export const useInsertGameRounds = () => {
 };
 
 export const useGetCurrentGame = (roomId: string) => {
-  const { error, data, loading, subscribeToMore } = useQuery<
-    GetCurrentGameQuery,
-    GetCurrentGameQueryVariables
-  >(GET_CURRENT_GAME, {
+  const { error, data, loading } = useSubscription<
+    GetCurrentLiveGameSubscription,
+    GetCurrentLiveGameSubscriptionVariables
+  >(GET_CURRENT_LIVE_GAME, {
     variables: {
       roomId,
     },
@@ -103,26 +104,8 @@ export const useGetCurrentGame = (roomId: string) => {
       loadingGame: loading,
       game: data?.rooms_games,
       error,
-      subscribeToMoreGames: subscribeToMore({
-        document: GET_CURRENT_LIVE_GAME,
-        updateQuery: (previousQueryResult, { subscriptionData }) => {
-          const newRoom = subscriptionData.data;
-          client.cache.writeQuery({
-            query: GET_CURRENT_GAME,
-            variables: {
-              roomId,
-            },
-            data: {
-              ...previousQueryResult,
-              games: [newRoom, ...previousQueryResult.games],
-            },
-            overwrite: true,
-          });
-          return previousQueryResult;
-        },
-      }),
     }),
-    [loading, data?.rooms_games, error, subscribeToMore]
+    [loading, data?.rooms_games, error]
   );
 };
 
@@ -155,7 +138,6 @@ export const useGetGameRounds = (gameId: string) => {
       gameId,
     },
   });
-
   return useMemo(
     () => ({
       loadingRounds: loading,
