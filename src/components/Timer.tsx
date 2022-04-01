@@ -1,45 +1,12 @@
-import React, { useContext, useEffect } from "react";
-import { useTimer } from "react-timer-hook";
-import { Flex, Tag, Box, Text, Heading, Image } from "@chakra-ui/react";
-import { GameContext } from "../providers/game";
-import { time } from "console";
+import React from "react";
+import { Flex, Text } from "@chakra-ui/react";
 
 type MyTimerProps = {
-  expiryTimestamp: any;
-  expirationCallback?: () => void;
-  pauseTimer: (callback) => void;
-  onExpireHandler: any;
+  minutes: any;
+  seconds: any;
 };
 
-export const MyTimer = ({
-  expiryTimestamp,
-  expirationCallback,
-  pauseTimer,
-  onExpireHandler,
-}: MyTimerProps) => {
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 5);
-
-  console.log("this formats!");
-  console.log(expiryTimestamp);
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    expiryTimestamp: expiryTimestamp,
-    autoStart: true,
-    onExpire: () => {
-      onExpireHandler();
-    },
-  });
-
+export const MyTimer = ({ minutes, seconds }: MyTimerProps) => {
   return (
     <Flex
       p="2"

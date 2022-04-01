@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/react";
 
 type ButtonProps = {
   size?: string;
-  onClick?: (e?: React.MouseEvent) => void;
+  onClick: (e: React.MouseEvent) => void;
   fullWidth?: boolean;
   icon?: any;
   color?: string;

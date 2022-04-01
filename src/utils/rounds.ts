@@ -1,3 +1,4 @@
+import { Games_Rounds } from "../lib/graphql/globalTypes";
 type Letter = {
   id: number;
   letter: string;
@@ -154,10 +155,12 @@ export const generateRoundLetters = (numOfPlayers: number) => {
     taken[x] = --len in taken ? taken[len] : len;
   }
 
-  return result.filter((letter) => letter.hasOwnProperty("id"));
+  return result.length > 0
+    ? result.filter((letter) => letter.hasOwnProperty("id"))
+    : [];
 };
 
-export const getRandomLetter = (arr: Letter[], max = arr.length) => {
+export const getRandomLetter = <T>(arr: T[], max = arr.length) => {
   return arr[Math.floor(Math.random() * Math.floor(max))];
 };
 

@@ -17,6 +17,8 @@ type DialogProps = {
   body: string;
   cancelText: string;
   actionText: string;
+  loading?: boolean;
+  loadingText?: string;
 };
 
 export const Dialog = ({
@@ -27,6 +29,8 @@ export const Dialog = ({
   body,
   actionText,
   cancelText,
+  loading,
+  loadingText,
 }: DialogProps) => {
   const cancelRef = React.useRef();
   return (
@@ -53,11 +57,14 @@ export const Dialog = ({
             </CustomButton>
             <CustomButton
               bg="border.danger"
+              loadingText={loadingText}
+              isLoading={loading}
               onClick={() => {
                 action();
-                onClose();
+                if (loading === false) {
+                  onClose();
+                }
               }}
-              ml={3}
             >
               {actionText}
             </CustomButton>

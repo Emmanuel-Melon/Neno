@@ -19,32 +19,49 @@ export const gameMachineFactory = () => {
         round: 1,
         currentRound: {
           roundNumber: 1,
-          remaining: 3, // decrement remaining until it's zero
+          remaining: 3,
           roundsTotal: 4,
+          timeRemaining: null,
+          winner: "",
+          leaderboard: [],
+          letter: "",
         },
         room: {
           roomId: "",
           capacity: null,
+          gameId: "",
           privacy: "",
           wordCategories: [],
+          host: "",
+        },
+        user: {
+          email: "",
+          userId: "",
+          avatar: "",
+          username: "",
         },
       },
       states: {
+        unauthenticated: {},
+        authenticated: {},
         home: {
           on: {
-            CLICK_PLAY: {
-              target: "mode",
+            USER_ACTIVE: {
               actions: [
                 assign({
                   playerEmail: (context: any, event: any) =>
                     (context.playerEmail = event?.payload?.playerEmail),
                   playerName: (context: any, event: any) =>
                     (context.playerName = event?.payload?.playerName),
+                  playerId: (context: any, event: any) => {
+                    return (context.playerId = event?.payload?.playerId);
+                  },
                 }),
               ],
             },
-            CLICK_OPTIONS: "options",
-            CLICK_GUIDE: "guide",
+            CLICK_PLAY: {
+              target: "mode",
+            },
           },
         },
         started: {
@@ -56,39 +73,9 @@ export const gameMachineFactory = () => {
             EXIT_CURRENT_GAME: {
               target: "mode",
             },
-            ANSWERS_SUBMITTED: {
-              actions: [
-                assign({
-                  currentRound: (context: any, event: any) => {
-                    return {
-                      remaining:
-                        context.currentRound.remaining > 0
-                          ? (context.currentRound.remaining =
-                              context.currentRound.remaining - 1)
-                          : context.currentRound.remaining,
-
-                      roundNumber:
-                        context.currentRound.roundNumber <
-                        context.currentRound.roundsTotal
-                          ? (context.currentRound.roundNumber =
-                              context.currentRound.roundNumber + 1)
-                          : context.currentRound.roundsTotal,
-                      roundsTotal: context.currentRound.roundsTotal,
-                    };
-                  },
-                  letter: (context: any, event: any) =>
-                    (context.letter = {
-                      value: event?.payload?.value,
-                      id: event?.payload?.id,
-                      icon: event?.payload?.icon,
-                    }),
-                }),
-              ],
-            },
+            ANSWERS_SUBMITTED: {},
           },
         },
-        options: {},
-        guide: {},
         menu: {},
         mode: {
           on: {
@@ -96,14 +83,20 @@ export const gameMachineFactory = () => {
               target: "lobby",
               actions: [
                 assign({
-                  room: (context: any, event: any) => {
-                    console.log("lord have mercy");
-                    console.log(event.payload);
+                  room: (_context: any, event: any) => {
+                    const {
+                      capacity,
+                      hostId,
+                      privacy,
+                      roomId,
+                      wordCategories,
+                    } = event.payload;
                     return {
-                      ...context.room,
-                      capacity: event?.payload?.capacity,
-                      privacy: event?.payload?.privacy,
-                      wordCategories: event?.payload?.wordCategories,
+                      roomId,
+                      capacity,
+                      privacy,
+                      wordCategories,
+                      host: hostId,
                     };
                   },
                 }),
@@ -119,13 +112,12 @@ export const gameMachineFactory = () => {
               actions: [
                 assign({
                   room: (context: any, event: any) => {
-                    console.log("what?");
-                    console.log(event.payload);
                     return {
-                      ...context.room,
+                      roomId: event?.payload?.roomId,
                       capacity: event?.payload?.capacity,
                       privacy: event?.payload?.privacy,
                       wordCategories: event?.payload?.wordCategories,
+                      role: event?.payload?.role,
                     };
                   },
                 }),
@@ -137,9 +129,31 @@ export const gameMachineFactory = () => {
           on: {
             SEND_MESSAGE: "",
             VIEW_PROFILE: "",
-            CREATE_ROOM: "",
+            CREATE_ROOM: "lobby",
             START_GAME: "",
-            EXISTING_ROOM: "lobby",
+            EXISTING_ROOM: {
+              target: "lobby",
+              actions: [
+                assign({
+                  room: (context: any, event: any) => {
+                    const {
+                      capacity,
+                      hostId,
+                      privacy,
+                      roomId,
+                      wordCategories,
+                    } = event.payload;
+                    return {
+                      roomId,
+                      capacity,
+                      privacy,
+                      wordCategories,
+                      host: hostId,
+                    };
+                  },
+                }),
+              ],
+            },
           },
         },
         over: {},
@@ -150,12 +164,12 @@ export const gameMachineFactory = () => {
               target: "started",
               actions: [
                 assign({
-                  letter: (context: any, event: any) =>
-                    (context.letter = {
-                      value: event?.payload?.value,
-                      id: event?.payload?.id,
-                      icon: event?.payload?.icon,
-                    }),
+                  room: (context: any, event: any) => {
+                    return {
+                      ...context.room,
+                      gameId: event.payload.gameId,
+                    };
+                  },
                 }),
               ],
             },

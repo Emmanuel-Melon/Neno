@@ -214,8 +214,8 @@ The `GET_ACTIVE_ROOMS` query is used here:
 
 ```tsx
 const { loading, data } = useQuery<
-    GetActiveRoomsQuery,
-    GetActiveRoomsQueryVariables
+  GetActiveRoomsQuery,
+  GetActiveRoomsQueryVariables
 >(GET_ACTIVE_ROOMS, {
   variables: {
     // variables
