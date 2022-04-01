@@ -12,9 +12,7 @@ import {
   INSERT_GAME_ROUNDS,
   INSERT_ROUND_ANSWERS,
 } from "../lib/graphql/mutations/game";
-import {
-  GET_CURRENT_LIVE_GAME,
-} from "../lib/graphql/subscriptions/game";
+import { GET_CURRENT_LIVE_GAME } from "../lib/graphql/subscriptions/game";
 
 import {
   InsertGameRoundsMutation,
@@ -112,20 +110,17 @@ export const useGetCurrentGame = (roomId: string) => {
           client.cache.writeQuery({
             query: GET_CURRENT_GAME,
             variables: {
-              roomId
+              roomId,
             },
             data: {
               ...previousQueryResult,
-              games: [
-                newRoom,
-                ...previousQueryResult.games,
-              ],
+              games: [newRoom, ...previousQueryResult.games],
             },
             overwrite: true,
           });
           return previousQueryResult;
         },
-      })
+      }),
     }),
     [loading, data?.rooms_games, error, subscribeToMore]
   );
@@ -165,7 +160,7 @@ export const useGetGameRounds = (gameId: string) => {
     () => ({
       loadingRounds: loading,
       rounds: data?.games_rounds,
-      error
+      error,
     }),
     [loading, data?.games_rounds, error]
   );

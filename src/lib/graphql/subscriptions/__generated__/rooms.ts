@@ -27,7 +27,7 @@ export type GetLiveRoomMessagesSubscription = {
 };
 
 export type GetActiveLiveRoomsSubscriptionVariables = Types.Exact<{
-  [key: string]: never;
+  privacy?: Types.InputMaybe<Types.Rooms_Privacy_Enum>;
 }>;
 
 export type GetActiveLiveRoomsSubscription = {
@@ -62,12 +62,12 @@ export type GetActiveLiveRoomsSubscription = {
   }>;
 };
 
-export type GetLiveRoomMembersQueryVariables = Types.Exact<{
+export type GetLiveRoomMembersSubscriptionVariables = Types.Exact<{
   roomId?: Types.InputMaybe<Types.Scalars["uuid"]>;
 }>;
 
-export type GetLiveRoomMembersQuery = {
-  __typename?: "query_root";
+export type GetLiveRoomMembersSubscription = {
+  __typename?: "subscription_root";
   rooms_members: Array<{
     __typename?: "rooms_members";
     id: string;
@@ -135,8 +135,8 @@ export type GetLiveRoomMessagesSubscriptionHookResult = ReturnType<
 export type GetLiveRoomMessagesSubscriptionResult =
   Apollo.SubscriptionResult<GetLiveRoomMessagesSubscription>;
 export const GetActiveLiveRoomsDocument = gql`
-  subscription getActiveLiveRooms {
-    rooms {
+  subscription getActiveLiveRooms($privacy: rooms_privacy_enum) {
+    rooms(where: { privacy: { _eq: $privacy }, active: { _eq: true } }) {
       active
       id
       host {
@@ -175,6 +175,7 @@ export const GetActiveLiveRoomsDocument = gql`
  * @example
  * const { data, loading, error } = useGetActiveLiveRoomsSubscription({
  *   variables: {
+ *      privacy: // value for 'privacy'
  *   },
  * });
  */
@@ -196,7 +197,7 @@ export type GetActiveLiveRoomsSubscriptionHookResult = ReturnType<
 export type GetActiveLiveRoomsSubscriptionResult =
   Apollo.SubscriptionResult<GetActiveLiveRoomsSubscription>;
 export const GetLiveRoomMembersDocument = gql`
-  query getLiveRoomMembers($roomId: uuid) {
+  subscription getLiveRoomMembers($roomId: uuid) {
     rooms_members(where: { roomId: { _eq: $roomId } }) {
       id
       role
@@ -212,52 +213,35 @@ export const GetLiveRoomMembersDocument = gql`
 `;
 
 /**
- * __useGetLiveRoomMembersQuery__
+ * __useGetLiveRoomMembersSubscription__
  *
- * To run a query within a React component, call `useGetLiveRoomMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetLiveRoomMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetLiveRoomMembersSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetLiveRoomMembersSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetLiveRoomMembersQuery({
+ * const { data, loading, error } = useGetLiveRoomMembersSubscription({
  *   variables: {
  *      roomId: // value for 'roomId'
  *   },
  * });
  */
-export function useGetLiveRoomMembersQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetLiveRoomMembersQuery,
-    GetLiveRoomMembersQueryVariables
+export function useGetLiveRoomMembersSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    GetLiveRoomMembersSubscription,
+    GetLiveRoomMembersSubscriptionVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetLiveRoomMembersQuery,
-    GetLiveRoomMembersQueryVariables
+  return Apollo.useSubscription<
+    GetLiveRoomMembersSubscription,
+    GetLiveRoomMembersSubscriptionVariables
   >(GetLiveRoomMembersDocument, options);
 }
-export function useGetLiveRoomMembersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetLiveRoomMembersQuery,
-    GetLiveRoomMembersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetLiveRoomMembersQuery,
-    GetLiveRoomMembersQueryVariables
-  >(GetLiveRoomMembersDocument, options);
-}
-export type GetLiveRoomMembersQueryHookResult = ReturnType<
-  typeof useGetLiveRoomMembersQuery
+export type GetLiveRoomMembersSubscriptionHookResult = ReturnType<
+  typeof useGetLiveRoomMembersSubscription
 >;
-export type GetLiveRoomMembersLazyQueryHookResult = ReturnType<
-  typeof useGetLiveRoomMembersLazyQuery
->;
-export type GetLiveRoomMembersQueryResult = Apollo.QueryResult<
-  GetLiveRoomMembersQuery,
-  GetLiveRoomMembersQueryVariables
->;
+export type GetLiveRoomMembersSubscriptionResult =
+  Apollo.SubscriptionResult<GetLiveRoomMembersSubscription>;

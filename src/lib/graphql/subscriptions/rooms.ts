@@ -19,8 +19,11 @@ export const GET_LIVE_ROOM_MESSAGES = gql`
 `;
 
 export const GET_ACTIVE_LIVE_ROOMS = gql`
-  subscription getActiveLiveRooms {
-    rooms {
+  subscription getActiveLiveRooms($privacy: rooms_privacy_enum) {
+    rooms(
+      where: { privacy: { _eq: $privacy }, active: { _eq: true } }
+      order_by: { createdAt: desc }
+    ) {
       active
       id
       host {
@@ -48,7 +51,7 @@ export const GET_ACTIVE_LIVE_ROOMS = gql`
 `;
 
 export const GET_LIVE_ROOM_MEMEMBERS = gql`
-  query getLiveRoomMembers($roomId: uuid) {
+  subscription getLiveRoomMembers($roomId: uuid) {
     rooms_members(where: { roomId: { _eq: $roomId } }) {
       id
       role

@@ -1,5 +1,10 @@
 import { useMemo } from "react";
-import { OperationVariables, useMutation, useQuery, useSubscription } from "@apollo/client";
+import {
+  OperationVariables,
+  useMutation,
+  useQuery,
+  useSubscription,
+} from "@apollo/client";
 import { client } from "../lib/apolloClient";
 
 import {
@@ -12,14 +17,14 @@ import {
   INSERT_ROOM,
   INSERT_ROOM_MEMBER,
   DELETE_ROOM_MEMBER,
-  DELETE_ROOM
+  DELETE_ROOM,
 } from "../lib/graphql/mutations/rooms";
 import {
   GET_ROOM_MESSAGES,
   GET_ROOM_MEMEMBERS,
   GET_ACTIVE_ROOMS,
   GET_ROOM_MEMBER_COUNT,
-  GET_ROOM_BY_ID
+  GET_ROOM_BY_ID,
 } from "../lib/graphql/queries/rooms";
 
 import {
@@ -32,7 +37,7 @@ import {
   DeleteRoomMemberMutation,
   DeleteRoomMemberMutationVariables,
   DeleteRoomMutation,
-  DeleteRoomMutationVariables
+  DeleteRoomMutationVariables,
 } from "../lib/graphql/mutations/__generated__/rooms";
 
 import {
@@ -52,8 +57,8 @@ export const useGetActiveRooms = () => {
     GetActiveRoomsQueryVariables
   >(GET_ACTIVE_ROOMS, {
     variables: {
-      privacy: "public"
-    }
+      privacy: "public",
+    },
   });
   return useMemo(
     () => ({
@@ -68,14 +73,11 @@ export const useGetActiveRooms = () => {
             client.cache.writeQuery({
               query: GET_ACTIVE_ROOMS,
               variables: {
-                privacy: "public"
+                privacy: "public",
               },
               data: {
                 ...previousQueryResult,
-                rooms: [
-                  newRoom,
-                  ...previousQueryResult.rooms,
-                ],
+                rooms: [newRoom, ...previousQueryResult.rooms],
               },
               overwrite: true,
             });
@@ -196,7 +198,7 @@ export const useGetRoomMembers = (roomId: string) => {
     () => ({
       loading,
       members: data?.rooms_members,
-      error
+      error,
     }),
     [loading, data?.rooms_members, error]
   );
@@ -225,51 +227,66 @@ export const useInsertRoomMember = () => {
 export const useGetLiveMembers = (roomId: string) => {
   const { error, data, loading } = useSubscription(GET_LIVE_ROOM_MEMEMBERS, {
     variables: {
-      roomId
-    }
-  })
-  return useMemo(() => ({
-    loading,
-    error,
-    members: data?.rooms_members
-  }), [error, data, loading]);
-}
+      roomId,
+    },
+  });
+  return useMemo(
+    () => ({
+      loading,
+      error,
+      members: data?.rooms_members,
+    }),
+    [error, data, loading]
+  );
+};
 
 export const useGetRoomMemberCount = (roomId: string) => {
   const { error, data, loading } = useSubscription(GET_ROOM_MEMBER_COUNT, {
     variables: {
-      roomId
-    }
-  })
-  return useMemo(() => ({
-    loading,
-    error,
-    memberCount: data?.rooms_members_aggregate?.aggregate.count,
-  }), [error, data, loading]);
-}
+      roomId,
+    },
+  });
+  return useMemo(
+    () => ({
+      loading,
+      error,
+      memberCount: data?.rooms_members_aggregate?.aggregate.count,
+    }),
+    [error, data, loading]
+  );
+};
 
 export const useDeleteRoomMember = () => {
-  const [deleteRoomMember, { data, loading, error }] = useMutation<DeleteRoomMemberMutation, DeleteRoomMemberMutationVariables>(DELETE_ROOM_MEMBER);
+  const [deleteRoomMember, { data, loading, error }] = useMutation<
+    DeleteRoomMemberMutation,
+    DeleteRoomMemberMutationVariables
+  >(DELETE_ROOM_MEMBER);
   return useMemo(
     () => ({
       memberDeletionLoading: loading,
       memberDeletionError: error,
       deletedMember: data?.delete_rooms_members,
-      deleteRoomMember: ({ playerId, roomId }: DeleteRoomMemberMutationVariables) => {
-        return deleteRoomMember({ variables: { 
-          playerId,
-          roomId
-        } }).then(
-          ({ data }) => data?.delete_rooms_members
-        );
+      deleteRoomMember: ({
+        playerId,
+        roomId,
+      }: DeleteRoomMemberMutationVariables) => {
+        return deleteRoomMember({
+          variables: {
+            playerId,
+            roomId,
+          },
+        }).then(({ data }) => data?.delete_rooms_members);
       },
     }),
     [loading, error, data?.delete_rooms_members, deleteRoomMember]
   );
-}
+};
 
 export const useDeleteRoomById = () => {
-  const [deleteRoomById, { data, loading, error }] = useMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DELETE_ROOM);
+  const [deleteRoomById, { data, loading, error }] = useMutation<
+    DeleteRoomMutation,
+    DeleteRoomMutationVariables
+  >(DELETE_ROOM);
   return useMemo(
     () => ({
       roomLoading: loading,
@@ -283,17 +300,20 @@ export const useDeleteRoomById = () => {
     }),
     [loading, error, data?.delete_rooms_by_pk, deleteRoomById]
   );
-}
+};
 
 export const useGetRoomById = (roomId: string) => {
   const { error, data, loading } = useQuery(GET_ROOM_BY_ID, {
     variables: {
-      roomId
-    }
-  })
-  return useMemo(() => ({
-    loading,
-    error,
-    room: data?.rooms_by_pk,
-  }), [error, data, loading]);
-}
+      roomId,
+    },
+  });
+  return useMemo(
+    () => ({
+      loading,
+      error,
+      room: data?.rooms_by_pk,
+    }),
+    [error, data, loading]
+  );
+};

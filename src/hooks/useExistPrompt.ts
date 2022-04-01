@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const initBeforeUnLoad = (showExitPrompt: boolean) => {
   window.onbeforeunload = (event) => {
@@ -6,9 +6,9 @@ const initBeforeUnLoad = (showExitPrompt: boolean) => {
       const e = event || window.event;
       e.preventDefault();
       if (e) {
-        e.returnValue = '';
+        e.returnValue = "";
       }
-      return '';
+      return "";
     }
   };
 };
@@ -17,7 +17,7 @@ const initBeforeUnLoad = (showExitPrompt: boolean) => {
 export const useExitPrompt = (exit: boolean) => {
   const [showExitPrompt, setShowExitPrompt] = useState(exit);
 
-  window.onload = function() {
+  window.onload = function () {
     initBeforeUnLoad(showExitPrompt);
   };
 
@@ -26,4 +26,4 @@ export const useExitPrompt = (exit: boolean) => {
   }, [showExitPrompt]);
 
   return [showExitPrompt, setShowExitPrompt];
-}
+};

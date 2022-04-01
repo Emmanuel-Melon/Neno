@@ -35,3 +35,23 @@ export const INSERT_ROOM_MEMBER = gql`
     }
   }
 `;
+
+export const DELETE_ROOM_MEMBER = gql`
+  mutation deleteRoomMember($roomId: uuid, $playerId: uuid) {
+    delete_rooms_members(
+      where: { roomId: { _eq: $roomId }, userId: { _eq: $playerId } }
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const DELETE_ROOM = gql`
+  mutation deleteRoom($roomId: uuid!) {
+    delete_rooms_by_pk(id: $roomId) {
+      id
+    }
+  }
+`;
