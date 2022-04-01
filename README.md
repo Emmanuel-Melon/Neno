@@ -277,18 +277,12 @@ These are the folders you have to know now.
 
 ## Access Levels (Roles)
 
-There are 3 access levels in the application right now (the list might grow), each access level has its own restrictions, meaning there is a limited set of actions each role can perform. Below are the access levels:
+Below are the access levels:
 
-- Admin
-- Sales
-- Clinic
+- User
 
 ### User
 
-The admin role is the topmost access level because it has permissions to perform most of **Sales** The persons with the admin role have access to perform the below actions:
-
-- can view all rooms
-- create, update clinic
-- can update clinic status and activities
-- approve new rooms created through self-registration
-- create, approve and request modifications on contracts
+- can create/join rooms
+- Can chat with others
+- Can answer questions
