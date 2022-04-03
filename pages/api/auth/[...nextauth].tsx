@@ -11,12 +11,12 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
     FacebookProvider({
-      clientId: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID || "",
-      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET || "",
+      clientId: process.env.FACEBOOK_ID || "",
+      clientSecret: process.env.FACEBOOK_SECRET || "",
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: process.env.GOOGLE_ID || "",
+      clientSecret: process.env.GOOGLE_SECRET || "",
     }),
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
@@ -97,10 +97,8 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log('hey');
-      console.log(user);
       return true;
-   },
+    },
     // async redirect(url: string, baseUrl: string) { return url },
     // async session(session, token) {
     // const encodedToken = jwt.sign(token, process.env.SECRET, { algorithm: 'HS256'});
