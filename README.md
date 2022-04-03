@@ -257,7 +257,7 @@ Here, the folder you should know for now is the `graphql` folder under this.
 `lib/graphql/queries`
 
 - **games.ts**: Contains queries for fetching games.
-- **rooms.ts**: Contains queries for fetching employees.
+- **rooms.ts**: Contains queries for fetching rooms.
 - **users.ts**: contains queries for fetching users.
 
 `lib/graphql/mutations.ts`
