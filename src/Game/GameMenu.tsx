@@ -48,13 +48,12 @@ export const GameMenu = () => {
   }, [session, users]);
   return (
     <>
-      <Flex justifyContent="center" height={"100%"} minHeight={"100vh"}>
-        <Card>
+        <Card width="320px">
           <Avatar
             src="/images/letters/icons8-n.svg"
             bg="brand.secondary"
-            width="150"
-            height="150"
+            width="100"
+            height="100"
           />
           <Heading as="h1" size="lg" color="brand.primary" fontSize="4xl">
             Neno
@@ -107,7 +106,6 @@ export const GameMenu = () => {
             </CustomButton>
           </Flex>
         </Card>
-      </Flex>
       <CustomModal show={showOptions} close={viewOptions}>
         <GameOptions />
       </CustomModal>

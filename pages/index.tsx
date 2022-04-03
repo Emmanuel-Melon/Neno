@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Layout from "../src/layout/layout";
-import { GameConsumer, GameProvider, GameContext } from "../src/providers/game";
+import { GameConsumer, GameProvider } from "../src/providers/game";
 import { Game } from "../src/Game/Game";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(!session) {
+      router.push("/auth/signin");
+    }
+  });
   return (
     <Layout>
       <Head>

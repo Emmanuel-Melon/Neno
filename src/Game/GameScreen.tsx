@@ -15,11 +15,12 @@ import { CompletedScreen } from "./CompletedScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { Games_Rounds } from "../lib/graphql/globalTypes";
 import data from "../../data.json";
+import { useGetRoomById } from "../hooks/rooms";
 
 export type Category = {
   value: string;
   category: string;
-}
+};
 
 export type Answers = {
   animal: Category;
@@ -52,6 +53,7 @@ const GameScreen = () => {
   const { rounds, loadingRounds } = useGetGameRounds(gameId);
   const { insertAnswers, loadingAnswers } = useInsertRoundAnswers();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const { room } = useGetRoomById(roomId);
   const [game, setGame] = useState<GameState>({
     won: false,
     rounds: [],
@@ -62,7 +64,7 @@ const GameScreen = () => {
         icon: "/icons/icons8-question-mark.svg",
       },
       expiration: "",
-      won: false
+      won: false,
     },
   });
 
@@ -83,7 +85,7 @@ const GameScreen = () => {
   const verifyAnswers = ({ category, value }: Category) => {
     const solutions: Record<string, string[]> = data;
     return value !== "" ? solutions[category]?.includes(value) : false;
-  }
+  };
 
   const submitAnswers = (answers: Answers) => {
     const input = Object.values(answers).map((answer) => ({
@@ -92,7 +94,6 @@ const GameScreen = () => {
       playerId: rounds?.[0]?.playerId,
       correct: verifyAnswers(answer),
     }));
-    const results = input.filter(answer => answer.correct === false);
     insertAnswers(input);
     setSubmit((currentState) => !currentState);
     setGame((currentState) => {
@@ -107,8 +108,8 @@ const GameScreen = () => {
           won: true,
           round: {
             ...currentState.round,
-            won: true
-          }
+            won: true,
+          },
         };
       } else {
         const round = getRandomLetter(newRounds, newRounds?.length);
@@ -124,7 +125,7 @@ const GameScreen = () => {
             letter: {
               icon,
             },
-            won: true
+            won: true,
           },
         };
       }
@@ -149,7 +150,7 @@ const GameScreen = () => {
         },
       };
     });
-  }, []);
+  }, [loadingRounds]);
 
   if (loadingRounds) {
     return <LoadingScreen />;
@@ -158,6 +159,8 @@ const GameScreen = () => {
   const moveToNextRound = () => {
     closeModal();
   };
+
+  console.log(game);
 
   return (
     <>
@@ -180,15 +183,21 @@ const GameScreen = () => {
             </Heading>
             <Flex justifyContent="space-between">
               <Text>Round</Text>
-              <Text>{gameService?.state?.context?.currentRound?.roundNumber}</Text>
+              <Text>
+                {gameService?.state?.context?.currentRound?.roundNumber}
+              </Text>
             </Flex>
             <Flex justifyContent="space-between">
               <Text>Remaining</Text>
-              <Text>{gameService?.state?.context?.currentRound?.remaining}</Text>
+              <Text>
+                {gameService?.state?.context?.currentRound?.remaining}
+              </Text>
             </Flex>
             <Flex justifyContent="space-between">
               <Text>Game Rounds</Text>
-              <Text>{gameService?.state?.context?.currentRound?.roundsTotal}</Text>
+              <Text>
+                {gameService?.state?.context?.currentRound?.roundsTotal}
+              </Text>
             </Flex>
           </Paper>
 
@@ -208,7 +217,7 @@ const GameScreen = () => {
           />
         </Flex>
         <Flex direction="column" justifyContent="space-between" gap={6} p="4">
-          <ActivePlayers roomId={roomId} />
+          <ActivePlayers room={room} />
           <CustomButton
             bg="brand.danger"
             color="#fff"

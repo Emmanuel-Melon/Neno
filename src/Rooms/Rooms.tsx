@@ -29,15 +29,15 @@ export const Rooms = () => {
 
   return (
     <>
-      <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-        <GridItem
-          style={{
-            borderRadius: "1rem",
-          }}
-          height="fit-content"
-        >
-          <VStack gap={1} p="0">
-            <Paper>
+      <Grid
+        templateColumns="repeat(3, 1fr)"
+        gap={4}
+        width="75%"
+        p="4"
+      >
+        <GridItem colSpan={1}>
+          <VStack gap={1} width="100%">
+            <Paper width="100%">
               <Flex gap={4} direction="column">
                 <Heading color="brand.primary" as="h3" size="md">
                   Create your own room!
@@ -59,17 +59,16 @@ export const Rooms = () => {
                 </CustomButton>
               </Flex>
             </Paper>
-            <Paper>
+            <Paper width="100%">
               <Flex gap={4} direction="column">
                 <Heading color="brand.primary" as="h3" size="md">
                   Friend Activity
                 </Heading>
-                <Text>Show Friends and what they're are playing</Text>
               </Flex>
             </Paper>
           </VStack>
         </GridItem>
-        <GridItem rowSpan={2}>
+        <GridItem colSpan={2}>
           {rooms && rooms.length === 0 ? (
             <Paper width="100%">
               <Text>There are no active rooms at the moment.</Text>
@@ -94,7 +93,7 @@ export const Rooms = () => {
             </Stack>
           ) : null}
           {loading ? (
-            <VStack gap={6} width="600px">
+            <VStack gap={6} width="100%">
               <Skeleton
                 height="200px"
                 border="border.primary"
@@ -126,9 +125,9 @@ export const Rooms = () => {
                 </Paper>
               </Skeleton>
             </VStack>
-          ) :
+          ) : (
             <ListRooms rooms={rooms} />
-          }
+          )}
         </GridItem>
       </Grid>
       <CustomModal show={isModalOpen} close={closeModal}>

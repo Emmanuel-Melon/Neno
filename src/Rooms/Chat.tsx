@@ -112,8 +112,10 @@ export const Chat = () => {
     <Paper>
       <Flex direction="column" gap={2}>
         <Flex justifyContent="space-between">
-            <Heading  as="h3" size="md" color="brand.secondary">Messages</Heading>
-            <Text>Settings</Text>
+          <Heading as="h3" size="md" color="brand.secondary">
+            Messages
+          </Heading>
+          <Text>Settings</Text>
         </Flex>
         <Divider />
         <ChatMessages

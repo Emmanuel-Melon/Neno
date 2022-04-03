@@ -1,7 +1,17 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Chat } from "../Rooms/Chat";
 import { ActivePlayers } from "./ActivePlayers";
-import { Flex, Text, VStack, Heading, useDisclosure, IconButton, Tag, Divider, Avatar } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  VStack,
+  Heading,
+  useDisclosure,
+  IconButton,
+  Tag,
+  Divider,
+  Avatar,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { CustomButton } from "../components/ui/button";
 import { Paper } from "../components/ui/paper";
@@ -70,7 +80,7 @@ export const GameLobby = () => {
       type: "GAME_STARTED",
       payload: {
         gameId: newGame?.id,
-        wordCategories: room?.word_categories
+        wordCategories: room?.word_categories,
       },
     });
   };
@@ -81,7 +91,7 @@ export const GameLobby = () => {
         type: "GAME_STARTED",
         payload: {
           gameId: game[0]?.id,
-          wordCategories: room?.word_categories
+          wordCategories: room?.word_categories,
         },
       });
     }
@@ -104,14 +114,14 @@ export const GameLobby = () => {
   }
 
   const copyRoomId = async (text: string) => {
-    if ('clipboard' in navigator) {
+    if ("clipboard" in navigator) {
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
     } else {
-      return document.execCommand('copy', true, text);
+      return document.execCommand("copy", true, text);
     }
     setIsCopied(true);
-  }
+  };
 
   return (
     <>
@@ -121,8 +131,12 @@ export const GameLobby = () => {
         </VStack>
         <VStack gap={2}>
           <Paper width="100%">
-            <VStack gap={1} >
-              <Flex justifyContent="space-between" width="100%" alignItems="center">
+            <VStack gap={1}>
+              <Flex
+                justifyContent="space-between"
+                width="100%"
+                alignItems="center"
+              >
                 <Flex alignItems="center" gap={2}>
                   <Avatar
                     src={room?.host?.image}
@@ -147,27 +161,24 @@ export const GameLobby = () => {
               </Flex>
             </VStack>
           </Paper>
-          {
-            room?.privacy === "private" ? (
-              <Flex alignItems="center" gap={2}>
-                <Tag
-                  borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-                  bg="brand.secondary"
-                  color="brand.white"
-                >{room?.id}</Tag>
-                <CustomButton
-                  onClick={() => copyRoomId(room.id)}
-                  size="xs"
-                >
-                  {isCopied ? "Copied!" : "Copy"}
-                </CustomButton>
-              </Flex>
-            ) : null
-          }
+          {room?.privacy === "private" ? (
+            <Flex alignItems="center" gap={2}>
+              <Tag
+                borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                bg="brand.secondary"
+                color="brand.white"
+              >
+                {room?.id}
+              </Tag>
+              <CustomButton onClick={() => copyRoomId(room.id)} size="xs">
+                {isCopied ? "Copied!" : "Copy"}
+              </CustomButton>
+            </Flex>
+          ) : null}
           <ActivePlayers room={room} />
           <Flex gap={6}>
             {gameService?.state?.context.playerId ===
-              gameService?.state?.context.room.host ? (
+            gameService?.state?.context.room.host ? (
               <CustomButton
                 onClick={startNewGame}
                 loadingText="Starting game"

@@ -15,27 +15,27 @@ type NotebookProps = {
   loadingAnswers: boolean;
   roundExpiration: Date;
   submitAnswers: any;
-  gameWon: boolean;
+  won: boolean;
 };
 
 export const Notebook = ({
   categories,
   submitAnswers,
   roundExpiration,
-  gameWon,
+  won,
 }: NotebookProps) => {
   const [answers, setAnswers] = useState<Answers>({
     animal: {
       value: "",
-      category: ""
+      category: "",
     },
     food: {
       value: "",
-      category: ""
+      category: "",
     },
     city: {
       value: "",
-      category: ""
+      category: "",
     },
   });
 
@@ -49,7 +49,7 @@ export const Notebook = ({
           ...currentState,
           [name]: {
             value,
-            category: name
+            category: name,
           },
         };
       });
@@ -108,43 +108,45 @@ export const Notebook = ({
             direction="column"
           >
             {categories &&
-              categories.map((category: Rooms_Word_Categories, index: number) => {
-                return (
-                  <Flex
-                    key={index}
-                    style={{
-                      borderRadius: "1rem",
-                      width: "600px",
-                    }}
-                  >
-                    <Input
-                      autoComplete="off"
-                      placeholder={category.type}
+              categories.map(
+                (category: Rooms_Word_Categories, index: number) => {
+                  return (
+                    <Flex
+                      key={index}
                       style={{
-                        outline: "none",
-                        borderWidth: "0px 0px 1px 0px",
-                        borderColor: "#216583",
-                        borderStyle: "dashed",
-                        cursor: "pointer",
-                        borderRadius: "0",
+                        borderRadius: "1rem",
+                        width: "600px",
                       }}
-                      value={answers[category.type].value}
-                      name={category.type}
-                      id={category.type}
-                      onChange={handleInputchange}
-                      _hover={{
-                        background: "#f0f0f0",
-                      }}
-                      _focus={{
-                        outline: "none",
-                      }}
-                      _last={{
-                        borderBottom: "solid 0.15rem red",
-                      }}
-                    />
-                  </Flex>
-                )
-              })}
+                    >
+                      <Input
+                        autoComplete="off"
+                        placeholder={category.type}
+                        style={{
+                          outline: "none",
+                          borderWidth: "0px 0px 1px 0px",
+                          borderColor: "#216583",
+                          borderStyle: "dashed",
+                          cursor: "pointer",
+                          borderRadius: "0",
+                        }}
+                        value={answers[category.type].value}
+                        name={category.type}
+                        id={category.type}
+                        onChange={handleInputchange}
+                        _hover={{
+                          background: "#f0f0f0",
+                        }}
+                        _focus={{
+                          outline: "none",
+                        }}
+                        _last={{
+                          borderBottom: "solid 0.15rem red",
+                        }}
+                      />
+                    </Flex>
+                  );
+                }
+              )}
           </Flex>
         </Flex>
       </Flex>
@@ -155,7 +157,7 @@ export const Notebook = ({
             onClick={() => {
               submitAnswers(answers);
             }}
-            disabled={gameWon}
+            disabled={won}
             icon={
               <Image
                 alt="logo"

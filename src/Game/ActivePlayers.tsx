@@ -10,14 +10,14 @@ type ActivePlayersProps = {
 const InviteBox = ({ privacy }: Pick<Rooms, "privacy">) => {
   return (
     <Flex>
-      {
-        privacy === "private" ? (
-          <Heading>Invite Friends!</Heading>
-        ) : <Heading>Waiting!</Heading>
-      }
+      {privacy === "private" ? (
+        <Heading>Invite Friends!</Heading>
+      ) : (
+        <Heading>Waiting!</Heading>
+      )}
     </Flex>
-  )
-}
+  );
+};
 
 export const ActivePlayers = ({ room }: ActivePlayersProps) => {
   const { members, loading } = useGetLiveMembers(room?.id);
@@ -68,43 +68,43 @@ export const ActivePlayers = ({ room }: ActivePlayersProps) => {
         ) : (
           members &&
           members.map((player) => {
-            console.log(player.role);
             return (
               <>
-                {
-                  player.role !== "host" ? (
-                    <Flex
-                      key={player.id}
-                      borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-                      cursor="pointer"
-                      bg="#fff"
-                      _hover={{
-                        bg: "brand.secondary",
-                      }}
-                    >
-                      <Flex alignItems="center" p="2" gap={2}>
-                        <Avatar
-                          src={player?.member?.image}
-                          border="border.primary"
-                        />
-                        <Flex direction="column" gap={2}>
-                          <Heading color="brand.primary" as="h5" size="sm">
-                            {player?.member?.username}
-                          </Heading>
-                          <Tag
-                            borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-                            color="brand.white"
-                            border="border.secondary"
-                            bg="brand.secondary"
-                            width="fit-content"
-                          >
-                            0:40
-                          </Tag>
-                        </Flex>
+                {player.role !== "host" ? (
+                  <Flex
+                    key={player.id}
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    cursor="pointer"
+                    bg="#fff"
+                    _hover={{
+                      bg: "brand.secondary",
+                    }}
+                  >
+                    <Flex alignItems="center" p="2" gap={2}>
+                      <Avatar
+                        src={player?.member?.image}
+                        border="border.primary"
+                      />
+                      <Flex direction="column" gap={2}>
+                        <Heading color="brand.primary" as="h5" size="sm">
+                          {player?.member?.username}
+                        </Heading>
+                        <Tag
+                          borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                          color="brand.white"
+                          border="border.secondary"
+                          bg="brand.secondary"
+                          width="fit-content"
+                        >
+                          0:40
+                        </Tag>
                       </Flex>
                     </Flex>
-                  ) : members.length <= 1 ? <InviteBox privacy={room.privacy} /> : null
-                }</>
+                  </Flex>
+                ) : members.length <= 1 ? (
+                  <InviteBox privacy={room.privacy} />
+                ) : null}
+              </>
             );
           })
         )}

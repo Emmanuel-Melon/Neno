@@ -12,7 +12,11 @@ import { useGetWordCategories } from "../hooks/game";
 import { RadioCard } from "../components/ui/radio";
 import { CustomButton } from "../components/ui/button";
 import Image from "next/image";
-import { useInsertRoom, useInsertRoomMember, useInsertWordCategories } from "../hooks/rooms";
+import {
+  useInsertRoom,
+  useInsertRoomMember,
+  useInsertWordCategories,
+} from "../hooks/rooms";
 import { Paper } from "../components/ui/paper";
 import { ErrorComponent } from "../components/ui/error";
 import { GameContext } from "../providers/game";
@@ -183,15 +187,15 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
         hostId: gameService?.state?.context?.playerId,
         capacity: parseInt(capacity, 10),
         privacy,
-        active: true
+        active: true,
       };
       const res = await insertRoom(newRoom);
 
-      const categories = wordCategories.map(category => {
-        return ({
+      const categories = wordCategories.map((category) => {
+        return {
           roomId: res?.id,
-          type: category.type
-        });
+          type: category.type,
+        };
       });
 
       insertCategories(categories);
@@ -234,8 +238,8 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
   }
 
   return (
-    <Paper width="400px">
-      <Flex direction="column">
+    <Paper>
+      <Flex direction="column" gap={2}>
         <RoomPrivacy updatePrivacy={updatePrivacy} privacy={privacy} />
         <WordCategories
           wordCategories={wordCategories}
