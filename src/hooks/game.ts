@@ -3,7 +3,6 @@ import { useQuery, useMutation, OperationVariables, useSubscription } from "@apo
 
 import {
   GET_WORD_CATEGORIES,
-  GET_CURRENT_GAME,
   GET_GAME_ROUNDS,
   GET_ROUND_ANSWERS,
 } from "../lib/graphql/queries/game";
@@ -24,14 +23,9 @@ import {
 } from "../lib/graphql/mutations/__generated__/game";
 
 import {
-  GetCurrentGameQuery,
-  GetCurrentGameQueryVariables,
-  GetGameRoundsordCategoriesQuery,
-  GetGameRoundsordCategoriesQueryVariables,
   GetWordCategoriesQuery,
   GetWordCategoriesQueryVariables,
 } from "../lib/graphql/queries/__generated__/game";
-import { client } from "../lib/apolloClient";
 import { GetCurrentLiveGameSubscription, GetCurrentLiveGameSubscriptionVariables } from "../lib/graphql/subscriptions/__generated__/game";
 
 export const useGetWordCategories = () => {
@@ -42,10 +36,10 @@ export const useGetWordCategories = () => {
   return useMemo(
     () => ({
       loadingCategories: loading,
-      wordCategories: data?.rooms_word_categories,
+      wordCategories: data?.word_categories,
       error,
     }),
-    [loading, data?.rooms_word_categories, error]
+    [loading, data?.word_categories, error]
   );
 };
 
@@ -130,10 +124,7 @@ export const useInsertRoundAnswers = () => {
 };
 
 export const useGetGameRounds = (gameId: string) => {
-  const { error, data, loading } = useQuery<
-    GetGameRoundsordCategoriesQuery,
-    GetGameRoundsordCategoriesQueryVariables
-  >(GET_GAME_ROUNDS, {
+  const { error, data, loading } = useQuery(GET_GAME_ROUNDS, {
     variables: {
       gameId,
     },
