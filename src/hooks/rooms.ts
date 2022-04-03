@@ -17,6 +17,7 @@ import {
   INSERT_ROOM,
   INSERT_ROOM_MEMBER,
   DELETE_ROOM_MEMBER,
+  INSERT_WORD_CATEGORIES,
   DELETE_ROOM,
 } from "../lib/graphql/mutations/rooms";
 import {
@@ -49,7 +50,10 @@ import {
   GetRoomMessagesQueryVariables,
 } from "../lib/graphql/queries/__generated__/rooms";
 
-import { GetLiveRoomMessagesSubscription, GetLiveRoomMessagesSubscriptionVariables } from "../lib/graphql/subscriptions/__generated__/rooms";
+import {
+  GetLiveRoomMessagesSubscription,
+  GetLiveRoomMessagesSubscriptionVariables,
+} from "../lib/graphql/subscriptions/__generated__/rooms";
 
 export const useGetActiveRooms = () => {
   const { error, data, loading, subscribeToMore } = useQuery<
@@ -102,7 +106,7 @@ export const useGetRoomMessages = (roomId: string) => {
     () => ({
       loading,
       messages: data?.rooms_messages,
-      error
+      error,
     }),
     [loading, data?.rooms_messages, error]
   );
@@ -128,6 +132,23 @@ export const useInsertRoom = () => {
   );
 };
 
+export const useInsertWordCategories = () => {
+  const [insertCategories, { data, loading, error }] = useMutation(INSERT_WORD_CATEGORIES);
+  return useMemo(
+    () => ({
+      memberLoading: loading,
+      memberError: error,
+      insertedCategories: data?.insert_rooms_word_categories.returning,
+      insertCategories: (categories: OperationVariables) => {
+        return insertCategories({ variables: { categories } }).then(
+          ({ data }) => data?.insert_rooms_word_categories.returning
+        );
+      },
+    }),
+    [loading, error, data?.insert_rooms_word_categories, insertCategories]
+  );
+};
+
 export const useInsertChatMessage = () => {
   const [insertMessage, { data, loading, error }] = useMutation<
     InsertMessageMutation,
@@ -139,7 +160,7 @@ export const useInsertChatMessage = () => {
         insert_rooms_messages_one: {
           text,
           roomId,
-          senderId,
+          senderId
         },
       };
     },

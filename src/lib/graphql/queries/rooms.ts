@@ -12,6 +12,8 @@ export const GET_ACTIVE_ROOMS = gql`
         email
         lastSeen
         username
+        image
+        id
       }
       rooms_members {
         id
@@ -21,6 +23,8 @@ export const GET_ACTIVE_ROOMS = gql`
           id
           lastSeen
           username
+          image
+          
         }
         joinedAt
       }
@@ -28,6 +32,9 @@ export const GET_ACTIVE_ROOMS = gql`
       createdAt
       hostId
       privacy
+      word_categories {
+        type
+      }
     }
   }
 `;
@@ -61,6 +68,8 @@ export const GET_ROOM_MEMEMBERS = gql`
         lastSeen
         createdAt
         email
+        image
+        username
       }
     }
   }
@@ -81,9 +90,16 @@ export const GET_ROOM_BY_ID = gql`
     rooms_by_pk(id: $roomId) {
       capacity
       active
-      categories
       createdAt
       hostId
+      host {
+        id
+        lastSeen
+        createdAt
+        email
+        image
+        username
+      }
       id
       privacy
       updatedAt
@@ -91,10 +107,16 @@ export const GET_ROOM_BY_ID = gql`
         id
         role
         member {
-          email
+          id
           lastSeen
+          createdAt
+          email
+          image
           username
         }
+      }
+      word_categories {
+        type
       }
     }
   }

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_WORD_CATEGORIES = gql`
   query getWordCategories {
-    rooms_word_categories {
+    word_categories {
       type
     }
   }
@@ -18,10 +18,6 @@ export const GET_GAME_ROUNDS = gql`
       timeRemaining
       letterId
       playerId
-      letters {
-        letter
-        name
-      }
     }
   }
 `;

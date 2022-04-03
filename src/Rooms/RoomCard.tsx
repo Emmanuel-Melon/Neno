@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Flex, Avatar, Heading, Box, Tag } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Flex, Avatar, Heading, Tag, Button } from "@chakra-ui/react";
 import { CustomButton } from "../components/ui/button";
 import Image from "next/image";
 import { useInsertRoomMember } from "../hooks/rooms";
@@ -12,32 +12,41 @@ type RoomCardProps = {
 };
 
 export const RoomCard = ({ room }: RoomCardProps) => {
-  const { insertRoomMember, memberLoading } = useInsertRoomMember();
+  const { insertRoomMember, memberLoading, memberError } = useInsertRoomMember();
   const { gameService } = useContext(GameContext);
 
-  const joinRoomById = async () => {
-    gameService.send({
-      type: "EXISTING_ROOM",
-      payload: {
-        ...room,
-        roomId: room.id,
-      },
-    });
-    const newMember = await insertRoomMember({
+  const joinRoomById = () => {
+    insertRoomMember({
       roomId: room.id,
       role: "player",
       userId: gameService.state.context.playerId,
     });
+    
+
+    if(!memberError) {
+      gameService.send({
+        type: "EXISTING_ROOM",
+        payload: {
+          ...room,
+          roomId: room.id,
+        },
+      });
+    }
   };
 
+  const hideRoom = (roomId: string) => {}
+
+  const showPlayerCard = (userId: string) => {}
   return (
     <Paper width="600px">
       <Flex direction="column" gap={6} marginBottom={2}>
         <Flex justifyContent="space-between" alignItems="center" gap={6}>
           <Flex gap={2} alignItems="center">
             <Avatar
-              src="/images/avatars/icons8-walter-white.svg"
-              border="border.primary"
+              src={room.host.image}
+              border="border.secondary"
+              onMouseOver={() => showPlayerCard(room.hostId)}
+              cursor="pointer"
             />
             <Heading as="h3" size="md" color="brand.secondary">
               {room.host.username}'s room
@@ -46,36 +55,63 @@ export const RoomCard = ({ room }: RoomCardProps) => {
           <Flex
             borderRadius="2rem"
             wrap="wrap"
-            boxShadow="rgba(0, 0, 0, 0.05) 0px 0px 0px 1px"
             cursor="pointer"
             _hover={{
               bg: "brand.highlight1",
             }}
           >
             {room &&
-              room.rooms_members.map((member) => (
-                <Avatar
-                  key={member.id}
-                  src="/images/avatars/icons8-walter-white.svg"
-                  border="solid 3px #333"
-                />
+              room.rooms_members.map(({ member, id }) => (
+                <>
+                  {
+                    member.username !== room.host.username ? <Avatar
+                      key={id}
+                      src={member?.image}
+                      border="border.primary"
+                      marginLeft="-10px"
+                      boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+                      onMouseOver={() => showPlayerCard(member.id)}
+                      cursor="pointer"
+                    /> : null
+                  }
+                </>
               ))}
           </Flex>
         </Flex>
       </Flex>
-      <Flex direction="column" gap={4} width="200px">
-        <Tag
-          borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-          color="brand.secondary"
-          border="border.secondary"
-          bg="brand.grey"
-          width="fit-content"
-        >
-          {`${room.rooms_members.length}/${room.capacity} players`}
-        </Tag>
+      <Flex direction="column" gap={4}>
+        <Flex gap={2}>
+          <Tag
+            borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+            color="brand.secondary"
+            border="border.primary"
+            bg="brand.grey"
+            width="fit-content"
+          >
+            {`${room.rooms_members.length}/${room.capacity} players`}
+          </Tag>
+
+          {
+            room.word_categories.map((category, index) => (
+              <Tag
+              borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+              color="brand.secondary"
+              border="border.primary"
+              bg="brand.grey"
+              width="fit-content"
+              key={`${index}-${category.type}`}
+            >
+              {category.type}
+            </Tag>
+            ))
+          }
+        </Flex>
+        <Flex justifyContent="space-between">
         <CustomButton
           onClick={joinRoomById}
           isLoading={memberLoading}
+          size="md"
+          width="150px"
           icon={
             <Image
               alt="logo"
@@ -87,6 +123,16 @@ export const RoomCard = ({ room }: RoomCardProps) => {
         >
           Join Room
         </CustomButton>
+        <Button
+          onClick={() => hideRoom(room.id)}
+          isLoading={memberLoading}
+          size="md"
+          variant="ghost"
+          color="brand.danger"
+        >
+          Hide
+        </Button>
+        </Flex>
       </Flex>
     </Paper>
   );

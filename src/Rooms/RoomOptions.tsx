@@ -12,7 +12,7 @@ import { useGetWordCategories } from "../hooks/game";
 import { RadioCard } from "../components/ui/radio";
 import { CustomButton } from "../components/ui/button";
 import Image from "next/image";
-import { useInsertRoom, useInsertRoomMember } from "../hooks/rooms";
+import { useInsertRoom, useInsertRoomMember, useInsertWordCategories } from "../hooks/rooms";
 import { Paper } from "../components/ui/paper";
 import { ErrorComponent } from "../components/ui/error";
 import { GameContext } from "../providers/game";
@@ -175,6 +175,7 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
   const { insertRoomMember, memberLoading, memberError } =
     useInsertRoomMember();
   const { gameService } = useContext(GameContext);
+  const { insertCategories } = useInsertWordCategories();
 
   const createNewRoom = async () => {
     if (gameService?.state?.context?.playerId) {
@@ -182,9 +183,18 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
         hostId: gameService?.state?.context?.playerId,
         capacity: parseInt(capacity, 10),
         privacy,
-        active: true,
+        active: true
       };
       const res = await insertRoom(newRoom);
+
+      const categories = wordCategories.map(category => {
+        return ({
+          roomId: res?.id,
+          type: category.type
+        });
+      });
+
+      insertCategories(categories);
       insertRoomMember({
         userId: newRoom.hostId,
         roomId: res?.id,
@@ -194,7 +204,6 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
         type: "CREATE_ROOM",
         payload: {
           ...newRoom,
-          wordCategories,
           roomId: res?.id,
         },
       });
@@ -202,13 +211,8 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
     }
   };
 
-  const updatePrivacy = (privacy: string) => {
-    setPrivacy(privacy);
-  };
-
-  const updateRoomCapacity = (capacity: string) => {
-    setCapacity(capacity);
-  };
+  const updatePrivacy = (privacy: string) => setPrivacy(privacy);
+  const updateRoomCapacity = (capacity: string) => setCapacity(capacity);
 
   if (error || memberError) {
     return (

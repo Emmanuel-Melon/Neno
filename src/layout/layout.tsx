@@ -1,9 +1,10 @@
 import React, { ReactChild } from "react";
 import { Box, Flex } from "@chakra-ui/react";
+import Navbar from "../components/ui/navbar";
 
 type LayoutProps = {
   children: ReactChild | ReactChild[];
-}
+};
 
 export default function Layout({ children }: LayoutProps) {
   return (
@@ -20,6 +21,7 @@ export default function Layout({ children }: LayoutProps) {
       }}
       p="8"
     >
+      <Navbar />
       <Flex width="100%" height="100%" direction="column" alignItems="center">
         {children}
       </Flex>

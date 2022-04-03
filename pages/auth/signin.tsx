@@ -1,14 +1,14 @@
 // @ts-ignore
+import { useEffect } from "react";
 import type { NextPage } from "next";
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import Layout from "../../src/layout/layout";
 import { Flex } from "@chakra-ui/layout";
-import { Heading, VStack, Divider, Avatar } from "@chakra-ui/react";
+import { Heading, VStack, Avatar } from "@chakra-ui/react";
 import Image from "next/image";
 import { CustomButton } from "../../src/components/ui/button";
-import Link from "next/link";
 import { Card } from "../../src/components/ui/card";
-import { useInsertNewUser } from "../../src/hooks/users";
+import { useRouter } from "next/router";
 
 const getButtonIcon = (provider: string) => {
   if (provider === "Facebook") {
@@ -33,7 +33,15 @@ const getButtonIcon = (provider: string) => {
 };
 
 const SignInPage: NextPage = ({ providers }: any) => {
-  const { insertNewUser } = useInsertNewUser();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(session) {
+      router.push("/");
+    }
+  }, [session]);
+
   return (
     <Layout>
       <Card>
@@ -57,7 +65,6 @@ const SignInPage: NextPage = ({ providers }: any) => {
                 <VStack spacing={1}>
                   <CustomButton
                     onClick={() => {
-                      // @ts-ignore
                       signIn(provider?.id);
                     }}
                     icon={
@@ -76,22 +83,8 @@ const SignInPage: NextPage = ({ providers }: any) => {
             );
           })}
         <Heading as="h3" size="md" color="brand.secondary">
-          Don't have an account?
+          No passwords required
         </Heading>
-        <Link href="/auth/signup" passHref>
-          <CustomButton
-            icon={
-              <Image
-                alt="logo"
-                src="/icons/icons8-sign-up.svg"
-                width="30"
-                height="30"
-              />
-            }
-          >
-            Join Now!
-          </CustomButton>
-        </Link>
       </Card>
     </Layout>
   );

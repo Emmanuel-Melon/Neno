@@ -26,7 +26,7 @@ export const GameMode = (props: GameModeProps) => {
   };
   return (
     <Flex width={"100%"} height={"100%"} justifyContent="center">
-      <Paper width="350px" height="500px">
+      <Card>
         <VStack gap={6}>
           <Flex direction="column" alignItems="center">
             <Avatar
@@ -76,7 +76,7 @@ export const GameMode = (props: GameModeProps) => {
             <RoomOptions closeModal={closeModal} />
           </CustomModal>
         </VStack>
-      </Paper>
+      </Card>
     </Flex>
   );
 };

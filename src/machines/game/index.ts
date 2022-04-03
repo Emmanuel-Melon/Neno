@@ -30,15 +30,9 @@ export const gameMachineFactory = () => {
           roomId: "",
           capacity: null,
           gameId: "",
-          privacy: "",
           wordCategories: [],
+          privacy: "",
           host: "",
-        },
-        user: {
-          email: "",
-          userId: "",
-          avatar: "",
-          username: "",
         },
       },
       states: {
@@ -84,18 +78,11 @@ export const gameMachineFactory = () => {
               actions: [
                 assign({
                   room: (_context: any, event: any) => {
-                    const {
-                      capacity,
-                      hostId,
-                      privacy,
-                      roomId,
-                      wordCategories,
-                    } = event.payload;
+                    const { capacity, hostId, privacy, roomId } = event.payload;
                     return {
                       roomId,
                       capacity,
                       privacy,
-                      wordCategories,
                       host: hostId,
                     };
                   },
@@ -116,7 +103,6 @@ export const gameMachineFactory = () => {
                       roomId: event?.payload?.roomId,
                       capacity: event?.payload?.capacity,
                       privacy: event?.payload?.privacy,
-                      wordCategories: event?.payload?.wordCategories,
                       role: event?.payload?.role,
                     };
                   },
@@ -136,18 +122,11 @@ export const gameMachineFactory = () => {
               actions: [
                 assign({
                   room: (context: any, event: any) => {
-                    const {
-                      capacity,
-                      hostId,
-                      privacy,
-                      roomId,
-                      wordCategories,
-                    } = event.payload;
+                    const { capacity, hostId, privacy, roomId } = event.payload;
                     return {
                       roomId,
                       capacity,
                       privacy,
-                      wordCategories,
                       host: hostId,
                     };
                   },
@@ -168,6 +147,7 @@ export const gameMachineFactory = () => {
                     return {
                       ...context.room,
                       gameId: event.payload.gameId,
+                      wordCategories: event.payload.wordCategories,
                     };
                   },
                 }),

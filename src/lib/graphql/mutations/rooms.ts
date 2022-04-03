@@ -36,6 +36,17 @@ export const INSERT_ROOM_MEMBER = gql`
   }
 `;
 
+export const INSERT_WORD_CATEGORIES = gql`
+  mutation insertWordCategories($categories: [rooms_word_categories_insert_input!]!) {
+    insert_rooms_word_categories(objects: $categories) {
+      returning {
+        roomId
+        type
+      }
+    }
+  }
+`;
+
 export const DELETE_ROOM_MEMBER = gql`
   mutation deleteRoomMember($roomId: uuid, $playerId: uuid) {
     delete_rooms_members(

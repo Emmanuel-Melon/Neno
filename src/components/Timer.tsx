@@ -2,27 +2,27 @@ import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 
 type MyTimerProps = {
-  minutes: string;
-  seconds: string;
+  minutes: number;
+  seconds: number;
 };
 
 export const MyTimer = ({ minutes, seconds }: MyTimerProps) => {
   return (
     <Flex
       p="2"
-      color="#519259"
       justifyContent="space-between"
       alignItems="center"
       direction="column"
     >
       <Text
-        borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
-        border="3px solid #333333"
-        color="brand.primary"
-        bg="#fff"
+        borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+        border="border.primary"
+        color="brand.white"
+        bg="brand.secondary"
         width="120px"
         textAlign="center"
-        fontSize="4xl"
+        boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+        fontSize="2xl"
       >
         {minutes}:{seconds}
       </Text>

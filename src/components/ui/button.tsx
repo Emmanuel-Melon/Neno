@@ -10,7 +10,9 @@ type ButtonProps = {
   bg?: string;
   loadingText?: string;
   isLoading?: boolean;
+  width?: string;
   disabled?: boolean;
+  variant?: string;
 };
 
 export const CustomButton: FC<ButtonProps> = ({
@@ -22,6 +24,9 @@ export const CustomButton: FC<ButtonProps> = ({
   isLoading = false,
   loadingText,
   disabled = false,
+  size = "lg",
+  width,
+  variant
 }) => {
   return (
     <Button
@@ -31,11 +36,14 @@ export const CustomButton: FC<ButtonProps> = ({
       loadingText={loadingText || "loading"}
       boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
       px={5}
+      width={width}
       py={3}
+      variant={variant}
+      outline="none"
       disabled={disabled}
       bg={bg || "brand.white"}
       color={color || "brand.primary"}
-      size="lg"
+      size={size}
       leftIcon={icon}
       _hover={{
         background: "brand.accent",
@@ -55,6 +63,10 @@ export const CustomButton: FC<ButtonProps> = ({
         left: "50%",
         transform: "translate3d(-50%, -50%, 0) scale(1.025) rotate(1deg)",
         borderRadius: "4% 12% 10% 8% / 5% 5% 10% 8%",
+      }}
+      _focus={{
+        outline: "none",
+        boxShadow: "none"
       }}
     >
       {children}

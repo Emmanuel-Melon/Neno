@@ -9,11 +9,13 @@ type CompletedScreenProps = {
   type?: string;
   message?: string;
   user?: Users;
-  action: () => void;
+  primaryAction: () => void;
+  secondaryAction?: () => void;
 };
 
 export const CompletedScreen = ({
-  action,
+  primaryAction,
+  secondaryAction,
   message,
   type,
 }: CompletedScreenProps) => {
@@ -35,7 +37,11 @@ export const CompletedScreen = ({
                     height="30"
                   />
                 }
-                onClick={() => {}}
+                onClick={() => {
+                  if (secondaryAction) {
+                    secondaryAction();
+                  }
+                }}
               >
                 Exit
               </CustomButton>
@@ -50,7 +56,7 @@ export const CompletedScreen = ({
                 />
               }
               onClick={() => {
-                action();
+                primaryAction();
               }}
             >
               {type === "game" ? "Play Again!" : "Next Round!"}

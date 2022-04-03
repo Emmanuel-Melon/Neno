@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CustomButton } from "../components/ui/button";
 import { useInsertChatMessage, useGetRoomMessages } from "../hooks/rooms";
-import { Avatar, Flex, Text, Input } from "@chakra-ui/react";
+import { Avatar, Flex, Text, Input, Heading, Divider } from "@chakra-ui/react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { GameContext } from "../providers/game";
 import { Card } from "../components/ui/card";
 import { Users, Rooms_Messages } from "../lib/graphql/globalTypes";
+import { Paper } from "../components/ui/paper";
 
 type ChatBubbleProps = {
   text: string;
@@ -37,11 +38,7 @@ const ChatBubble = ({ text, id, user }: ChatBubbleProps) => {
       <Avatar
         width="10"
         height="10"
-        src={
-          session?.user?.email !== user?.email
-            ? "/images/avatars/icons8-walter-white.svg"
-            : "/images/avatars/icons8-naruto.svg"
-        }
+        src={user.image}
         border={
           session?.user?.email !== user?.email
             ? "solid 3px #333"
@@ -73,7 +70,7 @@ const ChatMessages = ({ messages, sender }: ChatMessagesProps) => {
       bg="brand.grey"
       borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
       p="4"
-      height="500px"
+      height="400px"
       overflowY="scroll"
       direction="column"
       gap={4}
@@ -112,20 +109,25 @@ export const Chat = () => {
   };
 
   return (
-    <Card>
-      <Flex direction="column">
+    <Paper>
+      <Flex direction="column" gap={2}>
+        <Flex justifyContent="space-between">
+            <Heading  as="h3" size="md" color="brand.secondary">Messages</Heading>
+            <Text>Settings</Text>
+        </Flex>
+        <Divider />
         <ChatMessages
           messages={messages}
           sender={gameService.state.context.playerEmail}
         />
-        <Flex alignItems="center" gap={2} width="100%" p="4">
+        <Flex alignItems="center" gap={2} width="100%" py="2">
           <Flex width="75%">
             <Input
               type="text"
               placeholder="type message"
-              bg="#f0f0f0"
+              bg="brand.grey"
               borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-              border="solid 3px #000"
+              border="border.primary"
               size="lg"
               value={text}
               variant="outline"
@@ -150,6 +152,6 @@ export const Chat = () => {
           </CustomButton>
         </Flex>
       </Flex>
-    </Card>
+    </Paper>
   );
 };

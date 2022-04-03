@@ -13,6 +13,8 @@ export const GET_LIVE_ROOM_MESSAGES = gql`
         lastSeen
         createdAt
         email
+        image
+        username
       }
     }
   }
@@ -30,6 +32,7 @@ export const GET_ACTIVE_LIVE_ROOMS = gql`
         email
         lastSeen
         username
+        image
       }
       rooms_members {
         role
@@ -39,6 +42,7 @@ export const GET_ACTIVE_LIVE_ROOMS = gql`
           id
           lastSeen
           username
+          image
         }
         joinedAt
       }
@@ -61,6 +65,8 @@ export const GET_LIVE_ROOM_MEMEMBERS = gql`
         lastSeen
         createdAt
         email
+        image
+        username
       }
     }
   }
