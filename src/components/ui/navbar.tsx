@@ -9,9 +9,6 @@ import {
   MenuItem,
   MenuList,
   forwardRef,
-  ChakraComponent,
-  UseSliderProps,
-  background,
 } from "@chakra-ui/react";
 import { CustomButton } from "./button";
 import { GameContext } from "../../providers/game";
@@ -19,7 +16,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const User = forwardRef((props, ref) => {
-  const { gameService } = useContext(GameContext);
+  const { gameService } = useContext(GameContext) || {};
   return (
     <Button
       bg="brand.secondary"
