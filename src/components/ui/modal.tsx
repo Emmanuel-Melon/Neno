@@ -54,10 +54,8 @@ export const CustomModal: FunctionComponent<ModalProps> = ({
     },
   };
   return (
-    <Flex>
-      <Modal isOpen={show} onRequestClose={close} style={customStyles}>
-        {children}
-      </Modal>
-    </Flex>
+    <Modal isOpen={show} onRequestClose={close} style={customStyles}>
+      {children}
+    </Modal>
   );
 };

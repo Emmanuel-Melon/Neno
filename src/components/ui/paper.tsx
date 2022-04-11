@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, ScaleFade } from "@chakra-ui/react";
 
 type PaperProps = {
   width?: string | string[];
@@ -13,7 +13,7 @@ export const Paper = ({
   children,
   width = "fit-content",
   height = "fit-content",
-  display
+  display,
 }: PaperProps) => {
   return (
     <Box
