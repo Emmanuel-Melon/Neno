@@ -1,16 +1,16 @@
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const App = () => {
   // hooks
-  const router = useRouter()
-  
+  const router = useRouter();
+
   // rest of component
-}
+};
 
 export async function getServerSideProps(context) {
-    // const session: { user: UserSession } = await getSession(context)
-    return {
-        props: {}
-    }
+  // const session: { user: UserSession } = await getSession(context)
+  return {
+    props: {},
+  };
 }

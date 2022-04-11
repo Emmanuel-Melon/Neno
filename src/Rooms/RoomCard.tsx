@@ -16,8 +16,8 @@ export const RoomCard = ({ room }: RoomCardProps) => {
     useInsertRoomMember();
   const { gameService } = useContext(GameContext);
 
-  const joinRoomById = () => {
-    insertRoomMember({
+  const joinRoomById = async () => {
+    const member = await insertRoomMember({
       roomId: room.id,
       role: "player",
       userId: gameService.state.context.playerId,
@@ -34,8 +34,8 @@ export const RoomCard = ({ room }: RoomCardProps) => {
     }
   };
 
-  const hideRoom = (roomId: string) => { };
-  const showPlayerCard = (userId: string) => { };
+  const hideRoom = (roomId: string) => {};
+  const showPlayerCard = (userId: string) => {};
 
   return (
     <Paper width="100%">

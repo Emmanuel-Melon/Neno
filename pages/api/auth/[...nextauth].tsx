@@ -3,17 +3,17 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import { handleSignIn } from "../../../src/shared/auth";
 import { useInsertNewUser } from "../../../src/hooks/users";
-import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter"
+import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter";
 import {
   UserEntity,
   AccountEntity,
-  VerificationTokenEntity
-} from "../../../src/lib/entities"
+  VerificationTokenEntity,
+} from "../../../src/lib/entities";
 
 const entities = {
   UserEntity,
   AccountEntity,
-VerificationTokenEntity
+  VerificationTokenEntity,
 };
 
 // For more information on each option (and a full list of options) go to
@@ -110,12 +110,12 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return ({
+      return {
         user,
         account,
         profile,
-        email
-      });
+        email,
+      };
     },
     // async redirect(url: string, baseUrl: string) { },
     // async session(session, token) {

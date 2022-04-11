@@ -21,6 +21,7 @@ import { Paper } from "../components/ui/paper";
 import { ErrorComponent } from "../components/ui/error";
 import { GameContext } from "../providers/game";
 import { Rooms_Word_Categories } from "../lib/graphql/globalTypes";
+import { Room } from "../Game/GameMode";
 
 type RoomCapacityProps = {
   updateRoomCapacity: (capacity: string) => void;
@@ -168,9 +169,13 @@ const RoomPrivacy = ({ privacy, updatePrivacy }: RoomPrivacyProps) => {
 
 type RoomOptionsProps = {
   closeModal: () => void;
+  createNewRoom: (room: Room) => void;
 };
 
-export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
+export const RoomOptions = ({
+  closeModal,
+  createNewRoom,
+}: RoomOptionsProps) => {
   const { wordCategories, loadingCategories } = useGetWordCategories();
   const { insertRoom, error, loading, room } = useInsertRoom();
   const [privacy, setPrivacy] = useState<string>("public");
@@ -180,40 +185,7 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
     useInsertRoomMember();
   const { gameService } = useContext(GameContext);
   const { insertCategories } = useInsertWordCategories();
-
-  const createNewRoom = async () => {
-    if (gameService?.state?.context?.playerId) {
-      const newRoom = {
-        hostId: gameService?.state?.context?.playerId,
-        capacity: parseInt(capacity, 10),
-        privacy,
-        active: true,
-      };
-      const res = await insertRoom(newRoom);
-
-      const categories = wordCategories.map((category) => {
-        return {
-          roomId: res?.id,
-          type: category.type,
-        };
-      });
-
-      insertCategories(categories);
-      insertRoomMember({
-        userId: newRoom.hostId,
-        roomId: res?.id,
-        role,
-      });
-      gameService.send({
-        type: "CREATE_ROOM",
-        payload: {
-          ...newRoom,
-          roomId: res?.id,
-        },
-      });
-      closeModal();
-    }
-  };
+  const hostId = gameService?.state?.context?.playerId;
 
   const updatePrivacy = (privacy: string) => setPrivacy(privacy);
   const updateRoomCapacity = (capacity: string) => setCapacity(capacity);
@@ -229,7 +201,18 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
           <CustomButton onClick={closeModal} loadingText="Creating Room">
             Cancel
           </CustomButton>
-          <CustomButton onClick={createNewRoom} loadingText="Creating Room">
+          <CustomButton
+            onClick={() => {
+              createNewRoom({
+                categories: wordCategories,
+                capacity,
+                privacy,
+                hostId: hostId,
+                role,
+              });
+            }}
+            loadingText="Creating Room"
+          >
             Try again
           </CustomButton>
         </Flex>
@@ -238,7 +221,7 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
   }
 
   return (
-    <Paper>
+    <Paper width="320px">
       <Flex direction="column" gap={2}>
         <RoomPrivacy updatePrivacy={updatePrivacy} privacy={privacy} />
         <WordCategories
@@ -262,7 +245,16 @@ export const RoomOptions = ({ closeModal }: RoomOptionsProps) => {
               height="30"
             />
           }
-          onClick={createNewRoom}
+          onClick={() => {
+            createNewRoom({
+              categories: wordCategories,
+              capacity,
+              privacy,
+              hostId: hostId,
+              role,
+            });
+            closeModal();
+          }}
         >
           Create Room
         </CustomButton>

@@ -13,7 +13,7 @@ const Home: NextPage = (props) => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if(!session) {
+    if (!session) {
       router.push("/auth/signin");
     }
   }, []);
@@ -22,11 +22,12 @@ const Home: NextPage = (props) => {
       <GuestProvider guest={props?.router?.query}>
         <GuestConsumer>
           {() => (
-            <GameConsumer>{(value) => (
-              <Layout>
-                <Game context={value} />
-              </Layout>
-            )}
+            <GameConsumer>
+              {(value) => (
+                <Layout>
+                  <Game context={value} />
+                </Layout>
+              )}
             </GameConsumer>
           )}
         </GuestConsumer>

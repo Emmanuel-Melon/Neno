@@ -15,7 +15,19 @@ export const INSERT_ROOM = gql`
 export const INSERT_MESSAGE = gql`
   mutation insertMessage($message: rooms_messages_insert_input!) {
     insert_rooms_messages_one(object: $message) {
+      createdAt
       id
+      senderId
+      roomId
+      text
+      user {
+        id
+        lastSeen
+        createdAt
+        email
+        image
+        username
+      }
     }
   }
 `;
@@ -37,7 +49,9 @@ export const INSERT_ROOM_MEMBER = gql`
 `;
 
 export const INSERT_WORD_CATEGORIES = gql`
-  mutation insertWordCategories($categories: [rooms_word_categories_insert_input!]!) {
+  mutation insertWordCategories(
+    $categories: [rooms_word_categories_insert_input!]!
+  ) {
     insert_rooms_word_categories(objects: $categories) {
       returning {
         roomId

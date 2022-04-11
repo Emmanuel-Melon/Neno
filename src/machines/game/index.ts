@@ -28,7 +28,7 @@ export const gameMachineFactory = () => {
           roundsTotal: 0,
           rounds: [],
           hostId: "",
-          privacy: ""
+          privacy: "",
         },
         room: {
           roomId: "",
@@ -191,7 +191,6 @@ export const gameMachineFactory = () => {
               actions: [
                 assign({
                   game: (context: any, event: any) => {
-
                     console.log(event.payload);
                     return {
                       ...context.game,
@@ -203,8 +202,8 @@ export const gameMachineFactory = () => {
                       startedAt: event?.payload?.startedAt,
                       rounds: event?.payload?.room?.games_rounds,
                       hostId: event?.payload?.room?.hostId,
-                      privacy: event?.payload?.room?.privacy
-                    }
+                      privacy: event?.payload?.room?.privacy,
+                    };
                   },
                   room: (context: any, event: any) => {
                     return {

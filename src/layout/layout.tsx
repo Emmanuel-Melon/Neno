@@ -23,7 +23,8 @@ export default function Layout({ children }: LayoutProps) {
         direction="column"
         margin={0}
         style={{
-          backgroundImage: 'url("https://res.cloudinary.com/dwacr3zpp/image/upload/v1649189764/neno/images/Cloudy.svg")',
+          backgroundImage:
+            'url("https://res.cloudinary.com/dwacr3zpp/image/upload/v1649189764/neno/images/Cloudy.svg")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
         }}

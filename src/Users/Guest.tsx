@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { Paper } from "../components/ui/paper";
-import { Heading, Flex, Avatar, Input, Box, Text, Divider, Grid, GridItem } from "@chakra-ui/react";
+import {
+  Heading,
+  Flex,
+  Avatar,
+  Input,
+  Box,
+  Text,
+  Divider,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { avatars } from "../components/utils/avatars";
 import { CustomButton } from "../components/ui/button";
@@ -10,7 +20,9 @@ import { useRouter } from "next/router";
 
 export const Guest = () => {
   const [name, setName] = useState<string>(gamerNamer.generateName());
-  const [avatar, setAvatar] = useState<string>("/images/avatars/icons8-naruto.svg");
+  const [avatar, setAvatar] = useState<string>(
+    "/images/avatars/icons8-naruto.svg"
+  );
   const { insertNewUser, loading, error } = useInsertNewUser();
   const hiddenFileInput = React.useRef(null);
   const router = useRouter();
@@ -19,20 +31,19 @@ export const Guest = () => {
     const newUser = await insertNewUser({
       username: name,
       image: avatar,
-      guest: true
+      guest: true,
     });
 
     if (newUser) {
       router.push({
-        pathname: '/',
+        pathname: "/",
         query: {
           ...newUser,
-          name: "eman"
-        }
+          name: "eman",
+        },
       });
     }
-
-  }
+  };
 
   const handleInputchange = (e: any) => {
     setName(e.target.value);
@@ -40,9 +51,9 @@ export const Guest = () => {
 
   const uploadAvatar = (event) => {
     const fileUploaded = event.target.files[0];
-  }
+  };
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     hiddenFileInput.current.click();
   };
 
@@ -79,10 +90,10 @@ export const Guest = () => {
                 display="none"
                 ref={hiddenFileInput}
               />
-              <CustomButton onClick={handleClick} size="md">Upload Photo</CustomButton>
+              <CustomButton onClick={handleClick} size="md">
+                Upload Photo
+              </CustomButton>
             </Flex>
-
-
           </GridItem>
           <GridItem colSpan={2}>
             <Flex direction="column" gap={4}>
@@ -116,23 +127,27 @@ export const Guest = () => {
                   borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
                 >
                   {avatars.map((avatar) => {
-                    return <Box
-                      border="border.secondary"
-                      borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-                      cursor="pointer"
-                      _hover={{
-                        background: "brand.highlight"
-                      }}
-                      bg="brand.white"
-                    >
-                      <Image
-                        width="60px"
-                        height="60px"
-                        src={avatar.src}
-                        key={avatar.id}
-                        onClick={() => { setAvatar(avatar.src) }}
-                      />
-                    </Box>
+                    return (
+                      <Box
+                        border="border.secondary"
+                        borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                        cursor="pointer"
+                        _hover={{
+                          background: "brand.highlight",
+                        }}
+                        bg="brand.white"
+                      >
+                        <Image
+                          width="60px"
+                          height="60px"
+                          src={avatar.src}
+                          key={avatar.id}
+                          onClick={() => {
+                            setAvatar(avatar.src);
+                          }}
+                        />
+                      </Box>
+                    );
                   })}
                 </Flex>
               </Flex>

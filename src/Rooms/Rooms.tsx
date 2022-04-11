@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useGetActiveRooms } from "../../src/hooks/rooms";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  useGetActiveRooms,
+  useInsertRoom,
+  useInsertRoomMember,
+  useInsertWordCategories,
+} from "../../src/hooks/rooms";
 import { ListRooms } from "./ListRooms";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { CustomButton } from "../../src/components/ui/button";
@@ -9,10 +14,16 @@ import { Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
 import { Paper } from "../components/ui/paper";
 import { CustomModal } from "../components/ui/modal";
 import { RoomOptions } from "../Rooms/RoomOptions";
+import { Room } from "../Game/GameMode";
+import { GameContext } from "../providers/game";
 
 export const Rooms = () => {
+  const { gameService } = useContext(GameContext);
   const { rooms, loading, error, subscribeToMore } = useGetActiveRooms();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const { insertRoom } = useInsertRoom();
+  const { insertCategories } = useInsertWordCategories();
+  const { insertRoomMember } = useInsertRoomMember();
 
   function closeModal() {
     setModalOpen((currentState) => !currentState);
@@ -27,26 +38,52 @@ export const Rooms = () => {
     return unsubscribe;
   }, []);
 
+  const createNewRoom = async ({
+    capacity,
+    categories,
+    privacy,
+    hostId,
+    role,
+  }: Room) => {
+    if (gameService?.state?.context?.playerId) {
+      const newRoom = {
+        hostId,
+        capacity: parseInt(capacity, 10),
+        privacy,
+        active: true,
+      };
+      const res = await insertRoom(newRoom);
+      const mappedCategories = categories.map((category) => ({
+        roomId: res?.id,
+        type: category.type,
+      }));
+      insertCategories(mappedCategories);
+      const member = await insertRoomMember({
+        userId: newRoom.hostId,
+        roomId: res?.id,
+        role,
+      });
+
+      console.log(member);
+      gameService.send({
+        type: "CREATE_ROOM",
+        payload: {
+          ...newRoom,
+          roomId: res?.id,
+        },
+      });
+    }
+  };
+
   return (
     <>
       <Grid
         templateColumns="repeat(3, 1fr)"
         gap={2}
-        width={[
-          '100%',
-          '100%',
-          '500px',
-          '75%',
-        ]}
+        width={["100%", "100%", "500px", "75%"]}
         p="4"
       >
-        <GridItem colSpan={[
-          3,
-          3,
-          1,
-          1
-        ]}
-        >
+        <GridItem colSpan={[3, 3, 1, 1]}>
           <VStack gap={1} width="100%">
             <Paper width="100%">
               <Flex gap={2} direction="column">
@@ -64,10 +101,14 @@ export const Rooms = () => {
                     bg="brand.secondary"
                     borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
                     color="brand.white"
-                  >Enter</Button>
+                  >
+                    Join
+                  </Button>
                 </Flex>
                 <Flex direction="column" gap={2}>
-                  <Heading color="brand.primary" as="h3" size="sm">Create your own room instead</Heading>
+                  <Heading color="brand.primary" as="h3" size="sm">
+                    Create your own room instead
+                  </Heading>
                   <CustomButton
                     width="fit-content"
                     size="md"
@@ -75,8 +116,8 @@ export const Rooms = () => {
                       <Image
                         alt="logo"
                         src="/icons/icons8-plus-math.svg"
-                        width="30"
-                        height="30"
+                        width="25"
+                        height="25"
                       />
                     }
                     onClick={openModal}
@@ -86,12 +127,7 @@ export const Rooms = () => {
                 </Flex>
               </Flex>
             </Paper>
-            <Paper width="100%" display={[
-              "none",
-              "none",
-              "none",
-              "none",
-            ]}>
+            <Paper width="100%" display={["none", "none", "none", "none"]}>
               <Flex gap={4} direction="column">
                 <Heading color="brand.primary" as="h3" size="sm">
                   Friend Activity
@@ -100,17 +136,27 @@ export const Rooms = () => {
             </Paper>
           </VStack>
         </GridItem>
-        <GridItem colSpan={[
-          3,
-          3,
-          2,
-          2
-        ]}
-        >
+        <GridItem colSpan={[3, 3, 2, 2]}>
           {rooms && rooms.length === 0 ? (
-            <Paper width="100%">
-              <Text>There are no active rooms at the moment.</Text>
-            </Paper>
+            <Flex
+              p="4"
+              direction="column"
+              gap={4}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Heading as="h3" size="sm" color="brand.white">
+                No active rooms at the moment.
+              </Heading>
+              <Image
+                src="/images/arabica-page-not-found.svg"
+                width="200px"
+                height="200px"
+              />
+              <Text color="brand.white">
+                How about you create a room yourself?
+              </Text>
+            </Flex>
           ) : null}
           {error ? (
             <Stack
@@ -172,7 +218,7 @@ export const Rooms = () => {
         </GridItem>
       </Grid>
       <CustomModal show={isModalOpen} close={closeModal}>
-        <RoomOptions closeModal={closeModal} />
+        <RoomOptions createNewRoom={createNewRoom} closeModal={closeModal} />
       </CustomModal>
     </>
   );

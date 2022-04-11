@@ -10,13 +10,14 @@ export const MyTimer = ({ minutes, seconds }: MyTimerProps) => {
   return (
     <Text
       borderRadius="50%"
-      border="border.primary"
-      color="brand.secondary"
-      bg="brand.white"
+      border="border.white"
+      color="brand.white"
+      bg="brand.secondary"
       textAlign="center"
       boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-      fontSize="4xl"
+      width="fit-content"
       p="2"
+      height="fit-content"
     >
       {minutes}:{seconds}
     </Text>

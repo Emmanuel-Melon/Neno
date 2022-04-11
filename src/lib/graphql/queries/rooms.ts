@@ -24,7 +24,6 @@ export const GET_ACTIVE_ROOMS = gql`
           lastSeen
           username
           image
-          
         }
         joinedAt
       }
@@ -52,6 +51,8 @@ export const GET_ROOM_MESSAGES = gql`
         lastSeen
         createdAt
         email
+        image
+        username
       }
     }
   }

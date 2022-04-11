@@ -68,7 +68,12 @@ const SignInPage: NextPage = ({ providers }: any) => {
                     width="120"
                     height="120"
                   />
-                  <Heading as="h1" size="lg" fontSize="4xl" color="brand.primary">
+                  <Heading
+                    as="h1"
+                    size="lg"
+                    fontSize="4xl"
+                    color="brand.primary"
+                  >
                     Neno
                   </Heading>
                   {providers &&
@@ -100,13 +105,22 @@ const SignInPage: NextPage = ({ providers }: any) => {
                         </Flex>
                       );
                     })}
-                    <VStack gap={2} marginTop="2">
+                  <VStack gap={2} marginTop="2">
                     <Heading as="h3" size="md" color="brand.secondary">
-                    Don't have an account?
-                  </Heading>
-                  <Text textAlign="center">Game is under development. It's recommended to play as guest.</Text>
-                  <CustomButton onClick={openModal} color="brand.white" bg="brand.secondary">Play as Guest</CustomButton>
-                    </VStack>
+                      Don't have an account?
+                    </Heading>
+                    <Text textAlign="center">
+                      Game is under development. It's recommended to play as
+                      guest.
+                    </Text>
+                    <CustomButton
+                      onClick={openModal}
+                      color="brand.white"
+                      bg="brand.secondary"
+                    >
+                      Play as Guest
+                    </CustomButton>
+                  </VStack>
                 </Card>
               </Layout>
               <CustomModal show={isModalOpen} close={closeModal}>
