@@ -3,7 +3,7 @@ import { useGetActiveRooms } from "../../src/hooks/rooms";
 import { ListRooms } from "./ListRooms";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { CustomButton } from "../../src/components/ui/button";
-import { Grid, GridItem, VStack } from "@chakra-ui/react";
+import { Button, Grid, GridItem, Input, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
 import { Paper } from "../components/ui/paper";
@@ -31,44 +31,82 @@ export const Rooms = () => {
     <>
       <Grid
         templateColumns="repeat(3, 1fr)"
-        gap={4}
-        width="75%"
+        gap={2}
+        width={[
+          '100%',
+          '100%',
+          '500px',
+          '75%',
+        ]}
         p="4"
       >
-        <GridItem colSpan={1}>
+        <GridItem colSpan={[
+          3,
+          3,
+          1,
+          1
+        ]}
+        >
           <VStack gap={1} width="100%">
             <Paper width="100%">
-              <Flex gap={4} direction="column">
-                <Heading color="brand.primary" as="h3" size="md">
-                  Create your own room!
+              <Flex gap={2} direction="column">
+                <Heading color="brand.primary" as="h3" size="sm">
+                  Have an invitation code?
                 </Heading>
-                <Text>Show Friends and what they're are playing</Text>
-                <CustomButton
-                  width="180px"
-                  icon={
-                    <Image
-                      alt="logo"
-                      src="/icons/icons8-plus-math.svg"
-                      width="30"
-                      height="30"
-                    />
-                  }
-                  onClick={openModal}
-                >
-                  Create Room
-                </CustomButton>
+                <Flex gap={2}>
+                  <Input
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    placeholder="Inviation code"
+                    bg="brand.white"
+                    boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
+                  />
+                  <Button
+                    bg="brand.secondary"
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    color="brand.white"
+                  >Enter</Button>
+                </Flex>
+                <Flex direction="column" gap={2}>
+                  <Heading color="brand.primary" as="h3" size="sm">Create your own room instead</Heading>
+                  <CustomButton
+                    width="fit-content"
+                    size="md"
+                    icon={
+                      <Image
+                        alt="logo"
+                        src="/icons/icons8-plus-math.svg"
+                        width="30"
+                        height="30"
+                      />
+                    }
+                    onClick={openModal}
+                  >
+                    New Room
+                  </CustomButton>
+                </Flex>
               </Flex>
             </Paper>
-            <Paper width="100%">
+            <Paper width="100%" display={[
+              "none",
+              "none",
+              "none",
+              "none",
+            ]}>
               <Flex gap={4} direction="column">
-                <Heading color="brand.primary" as="h3" size="md">
+                <Heading color="brand.primary" as="h3" size="sm">
                   Friend Activity
                 </Heading>
               </Flex>
             </Paper>
           </VStack>
         </GridItem>
-        <GridItem colSpan={2}>
+        <GridItem colSpan={[
+          3,
+          3,
+          2,
+          2
+        ]}
+        >
           {rooms && rooms.length === 0 ? (
             <Paper width="100%">
               <Text>There are no active rooms at the moment.</Text>
@@ -81,7 +119,7 @@ export const Rooms = () => {
               bg="brand.grey"
               height="200px"
               border="border.primary"
-              borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+              borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
               boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
             >
               <Heading as="h3" color="brand.primary">
@@ -93,34 +131,37 @@ export const Rooms = () => {
             </Stack>
           ) : null}
           {loading ? (
-            <VStack gap={6} width="100%">
+            <VStack width="100%">
               <Skeleton
                 height="200px"
+                width="100%"
                 border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+                borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
                 boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
               >
-                <Paper width="600px">
+                <Paper width="100%">
                   <SkeletonText />
                 </Paper>
               </Skeleton>
               <Skeleton
                 height="200px"
+                width="100%"
                 border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+                borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
                 boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
               >
-                <Paper width="600px">
+                <Paper width="100%">
                   <SkeletonText />
                 </Paper>
               </Skeleton>
               <Skeleton
                 height="200px"
+                width="100%"
                 border="border.primary"
-                borderRadius="2% 6% 5% 4% / 1% 1% 2% 4%"
+                borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
                 boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
               >
-                <Paper width="600px">
+                <Paper width="100%">
                   <SkeletonText />
                 </Paper>
               </Skeleton>

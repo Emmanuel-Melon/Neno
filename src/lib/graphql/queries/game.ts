@@ -25,9 +25,28 @@ export const GET_GAME_ROUNDS = gql`
 export const GET_CURRENT_GAME = gql`
   query getCurrentGame($roomId: uuid) {
     rooms_games(where: { roomId: { _eq: $roomId } }) {
-      startedAt
       id
       roomId
+      roundDuration
+      roundsTotal
+      winnerId
+      startedAt
+      room {
+        active
+        games_rounds {
+          letterId
+          id
+          gameId
+          time
+          timeRemaining
+          winnerId
+        }
+        hostId
+        privacy
+        id
+        capacity
+        createdAt
+      }
     }
   }
 `;

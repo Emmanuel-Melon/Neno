@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const INSERT_USER = gql`
-  mutation insertUser($id: uuid, $hostId: uuid) {
-    insert_users(objects: { id: $id }) {
-      returning {
-        id
-      }
+  mutation insertUser($user: users_insert_input!) {
+    insert_users_one(object: $user) {
+      id
+      image
+      guest
+      username
     }
   }
 `;

@@ -3,11 +3,24 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import { handleSignIn } from "../../../src/shared/auth";
 import { useInsertNewUser } from "../../../src/hooks/users";
+import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter"
+import {
+  UserEntity,
+  AccountEntity,
+  VerificationTokenEntity
+} from "../../../src/lib/entities"
+
+const entities = {
+  UserEntity,
+  AccountEntity,
+VerificationTokenEntity
+};
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 
 export default NextAuth({
+  // adapter: TypeORMLegacyAdapter(process.env.DATABASE_URL, { entities }),
   // https://next-auth.js.org/configuration/providers
   providers: [
     FacebookProvider({
@@ -97,9 +110,14 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true;
+      return ({
+        user,
+        account,
+        profile,
+        email
+      });
     },
-    // async redirect(url: string, baseUrl: string) { return url },
+    // async redirect(url: string, baseUrl: string) { },
     // async session(session, token) {
     // const encodedToken = jwt.sign(token, process.env.SECRET, { algorithm: 'HS256'});
     // session.id = token.id;

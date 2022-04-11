@@ -13,7 +13,6 @@ export const playerMachineFactory = () => {
           on: {
             SUBMIT_ANSWERS: "evaluating",
           },
-
           states: {
             typing: {
               on: {},

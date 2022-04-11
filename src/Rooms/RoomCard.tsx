@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Flex, Avatar, Heading, Tag, Button } from "@chakra-ui/react";
+import { Flex, Avatar, Heading, Tag, Button, Divider } from "@chakra-ui/react";
 import { CustomButton } from "../components/ui/button";
 import Image from "next/image";
 import { useInsertRoomMember } from "../hooks/rooms";
@@ -44,11 +44,12 @@ export const RoomCard = ({ room }: RoomCardProps) => {
           <Flex gap={2} alignItems="center">
             <Avatar
               src={room.host.image}
-              border="border.primary"
+              border="border.white"
               onMouseOver={() => showPlayerCard(room.hostId)}
               cursor="pointer"
+              boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
             />
-            <Heading as="h3" size="md" color="brand.accent">
+            <Heading color="brand.primary" as="h3" size="sm">
               {room.host.username}'s room
             </Heading>
           </Flex>
@@ -56,6 +57,7 @@ export const RoomCard = ({ room }: RoomCardProps) => {
             borderRadius="2rem"
             wrap="wrap"
             cursor="pointer"
+            px="2"
             _hover={{
               bg: "brand.highlight1",
             }}
@@ -67,9 +69,9 @@ export const RoomCard = ({ room }: RoomCardProps) => {
                     <Avatar
                       key={id}
                       src={member?.image}
-                      border="border.primary"
+                      border="solid 3px #fff"
                       marginLeft="-10px"
-                      boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+                      boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
                       onMouseOver={() => showPlayerCard(member.id)}
                       cursor="pointer"
                     />
@@ -79,27 +81,26 @@ export const RoomCard = ({ room }: RoomCardProps) => {
           </Flex>
         </Flex>
       </Flex>
-
       <Flex direction="column" gap={4}>
         <Flex gap={2}>
           <Tag
             borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
             color="brand.secondary"
-            border="border.primary"
-            bg="brand.grey"
+            bg="brand.white"
+            border="border.secondary"
             width="fit-content"
           >
             {`${room.rooms_members.length}/${room.capacity} players`}
           </Tag>
-
           {room.word_categories.map((category, index) => (
             <Tag
               borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
               color="brand.secondary"
-              border="border.primary"
-              bg="brand.grey"
+              bg="brand.white"
+              border="border.secondary"
               width="fit-content"
               key={`${index}-${category.type}`}
+              boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
             >
               {category.type}
             </Tag>

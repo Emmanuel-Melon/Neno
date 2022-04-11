@@ -4,9 +4,26 @@ export const INSERT_NEW_GAME = gql`
   mutation insertNewGame($game: rooms_games_insert_input!) {
     insert_rooms_games_one(object: $game) {
       id
+      roomId
+      roundDuration
+      roundsTotal
+      winnerId
+      startedAt
       room {
-        id
+        active
+        games_rounds {
+          letterId
+          id
+          gameId
+          time
+          timeRemaining
+          winnerId
+        }
+        hostId
         privacy
+        id
+        capacity
+        createdAt
       }
     }
   }

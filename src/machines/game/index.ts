@@ -11,20 +11,24 @@ export const gameMachineFactory = () => {
         playerEmail: "",
         playerName: "",
         playerId: "",
+        playerImage: "",
         letter: {
           value: "",
           id: "",
           icon: "",
         },
         round: 1,
-        currentRound: {
-          roundNumber: 1,
-          remaining: 3,
-          roundsTotal: 4,
-          timeRemaining: null,
-          winner: "",
-          leaderboard: [],
-          letter: "",
+        game: {
+          id: "",
+          roomId: "",
+          roundDuration: 0,
+          roundsRounds: 0,
+          winnderId: "",
+          startedAt: "",
+          roundsTotal: 0,
+          rounds: [],
+          hostId: "",
+          privacy: ""
         },
         room: {
           roomId: "",
@@ -36,8 +40,33 @@ export const gameMachineFactory = () => {
         },
       },
       states: {
-        unauthenticated: {},
-        authenticated: {},
+        unauthenticated: {
+          on: {
+            SIGNIN_AS_GUEST: {
+              target: "authenticated",
+              actions: [
+                assign({
+                  playerId: (context: any, event: any) => {
+                    return (context.playerId = event?.payload?.playerId);
+                  },
+                  playerName: (context: any, event: any) => {
+                    return (context.playerId = event?.payload?.playerId);
+                  },
+                }),
+              ],
+            },
+            SIGNIN_AS_USER: {
+              target: "authenticated",
+            },
+          },
+        },
+        authenticated: {
+          on: {
+            SIGNOUT: {
+              target: "unauthenticated",
+            },
+          },
+        },
         home: {
           on: {
             USER_ACTIVE: {
@@ -45,6 +74,8 @@ export const gameMachineFactory = () => {
                 assign({
                   playerEmail: (context: any, event: any) =>
                     (context.playerEmail = event?.payload?.playerEmail),
+                  playerImage: (context: any, event: any) =>
+                    (context.playerName = event?.payload?.playerImage),
                   playerName: (context: any, event: any) =>
                     (context.playerName = event?.payload?.playerName),
                   playerId: (context: any, event: any) => {
@@ -56,6 +87,22 @@ export const gameMachineFactory = () => {
             CLICK_PLAY: {
               target: "mode",
             },
+            SIGNIN_AS_GUEST: {
+              actions: [
+                assign({
+                  playerImage: (context: any, event: any) =>
+                    (context.playerName = event?.payload?.playerName),
+                  playerName: (context: any, event: any) =>
+                    (context.playerName = event?.payload?.playerName),
+                  playerId: (context: any, event: any) => {
+                    return (context.playerId = event?.payload?.playerId);
+                  },
+                }),
+              ],
+            },
+            SIGNIN_AS_USER: {
+              target: "home",
+            },
           },
         },
         started: {
@@ -65,7 +112,7 @@ export const gameMachineFactory = () => {
           },
           on: {
             EXIT_CURRENT_GAME: {
-              target: "mode",
+              target: "lobby",
             },
             ANSWERS_SUBMITTED: {},
           },
@@ -143,6 +190,22 @@ export const gameMachineFactory = () => {
               target: "started",
               actions: [
                 assign({
+                  game: (context: any, event: any) => {
+
+                    console.log(event.payload);
+                    return {
+                      ...context.game,
+                      id: event?.payload?.id,
+                      roomId: event?.payload?.roomId,
+                      roundDuration: event?.payload?.roundDuration,
+                      roundsTotal: event?.payload?.roundsTotal,
+                      winnderId: event?.payload?.winnderId,
+                      startedAt: event?.payload?.startedAt,
+                      rounds: event?.payload?.room?.games_rounds,
+                      hostId: event?.payload?.room?.hostId,
+                      privacy: event?.payload?.room?.privacy
+                    }
+                  },
                   room: (context: any, event: any) => {
                     return {
                       ...context.room,

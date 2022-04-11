@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
-import { Input, Flex, FormControl, Box } from "@chakra-ui/react";
+import { Input, Flex, FormControl, Box, Text, Heading, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { CustomButton } from "../components/ui/button";
 import { MyTimer } from "../components/Timer";
@@ -92,85 +92,39 @@ export const Notebook = ({
 
   return (
     <>
-      <Flex width="600px">
-        <Flex
-          direction="column"
-          justifyContent="space-between"
-          alignItems="center"
-          borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
-          bg="#fff"
-          width="100%"
-          boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
-          borderTop="border.top"
-        >
-          <Flex
-            bg="repeating-linear-gradient(#F1EDE9, #F1EDE9 40px, #94ACD4 40px, #94ACD4 32px)"
-            direction="column"
-          >
-            {categories &&
-              categories.map(
-                (category: Rooms_Word_Categories, index: number) => {
-                  return (
-                    <Flex
-                      key={index}
-                      style={{
-                        borderRadius: "1rem",
-                        width: "600px",
-                      }}
-                    >
-                      <Input
-                        autoComplete="off"
-                        placeholder={category.type}
-                        style={{
-                          outline: "none",
-                          borderWidth: "0px 0px 1px 0px",
-                          borderColor: "#216583",
-                          borderStyle: "dashed",
-                          cursor: "pointer",
-                          borderRadius: "0",
-                        }}
-                        value={answers[category.type].value}
-                        name={category.type}
-                        id={category.type}
-                        onChange={handleInputchange}
-                        _hover={{
-                          background: "#f0f0f0",
-                        }}
-                        _focus={{
-                          outline: "none",
-                        }}
-                        _last={{
-                          borderBottom: "solid 0.15rem red",
-                        }}
-                      />
-                    </Flex>
-                  );
-                }
-              )}
-          </Flex>
-        </Flex>
-      </Flex>
-      <Flex justifyContent="space-between" py="4" alignItems="center">
-        <MyTimer minutes={minutes} seconds={seconds} />
-        <Flex justifyContent="center">
-          <CustomButton
-            onClick={() => {
-              submitAnswers(answers);
-            }}
-            disabled={won}
-            icon={
-              <Image
-                alt="logo"
-                src={"/icons/icons8-ok.svg"}
-                width="30"
-                height="30"
-              />
+      <VStack
+        bg="repeating-linear-gradient(#F1EDE9, #F1EDE9 40px, #94ACD4 40px, #94ACD4 32px)"
+        width="100%"
+        borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+      >
+        {categories &&
+          categories.map(
+            (category: Rooms_Word_Categories, index: number) => {
+              return (
+                <Input
+                  autoComplete="off"
+                  placeholder={category.type}
+                  borderStyle="dashed"
+                  borderColor="#216583"
+                  borderRadius="0"
+                  cursor="pointer"
+                  borderWidth="0px 0px 1px 0px"
+                  value={answers[category.type].value}
+                  name={category.type}
+                  id={category.type}
+                  width="100%"
+                  onChange={handleInputchange}
+                  _hover={{
+                    background: "brand.grey",
+                  }}
+                  _focus={{
+                    outline: "none",
+                  }}
+                />
+              );
             }
-          >
-            Done
-          </CustomButton>
-        </Flex>
-      </Flex>
+          )}
+      </VStack>
       <CustomModal show={timeUp} close={closeModal}>
         <TimeUp />
       </CustomModal>
