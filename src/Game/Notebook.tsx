@@ -1,5 +1,13 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
-import { Input, Flex, FormControl, Box, Text, Heading, VStack } from "@chakra-ui/react";
+import {
+  Input,
+  Flex,
+  FormControl,
+  Box,
+  Text,
+  Heading,
+  VStack,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { CustomButton } from "../components/ui/button";
 import { MyTimer } from "../components/Timer";
@@ -16,46 +24,20 @@ type NotebookProps = {
   roundExpiration: Date;
   submitAnswers: any;
   won: boolean;
+  answers?: any;
+  handleInputchange: any;
 };
 
 export const Notebook = ({
+  answers,
   categories,
   submitAnswers,
   roundExpiration,
+  handleInputchange,
   won,
 }: NotebookProps) => {
-  const [answers, setAnswers] = useState<Answers>({
-    animal: {
-      value: "",
-      category: "",
-    },
-    food: {
-      value: "",
-      category: "",
-    },
-    city: {
-      value: "",
-      category: "",
-    },
-  });
-
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [timeUp, setTimeUp] = useState<boolean>(false);
-  const handleInputchange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setAnswers((currentState) => {
-        return {
-          ...currentState,
-          [name]: {
-            value,
-            category: name,
-          },
-        };
-      });
-    },
-    []
-  );
 
   const onExpire = () => {
     setTimeUp(true);
@@ -98,32 +80,30 @@ export const Notebook = ({
         borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
       >
         {categories &&
-          categories.map(
-            (category: Rooms_Word_Categories, index: number) => {
-              return (
-                <Input
-                  autoComplete="off"
-                  placeholder={category.type}
-                  borderStyle="dashed"
-                  borderColor="#216583"
-                  borderRadius="0"
-                  cursor="pointer"
-                  borderWidth="0px 0px 1px 0px"
-                  value={answers[category.type].value}
-                  name={category.type}
-                  id={category.type}
-                  width="100%"
-                  onChange={handleInputchange}
-                  _hover={{
-                    background: "brand.grey",
-                  }}
-                  _focus={{
-                    outline: "none",
-                  }}
-                />
-              );
-            }
-          )}
+          categories.map((category: Rooms_Word_Categories, index: number) => {
+            return (
+              <Input
+                autoComplete="off"
+                placeholder={category.type}
+                borderStyle="dashed"
+                borderColor="#216583"
+                borderRadius="0"
+                cursor="pointer"
+                borderWidth="0px 0px 1px 0px"
+                value={answers[category.type].value}
+                name={category.type}
+                id={category.type}
+                width="100%"
+                onChange={handleInputchange}
+                _hover={{
+                  background: "brand.grey",
+                }}
+                _focus={{
+                  outline: "none",
+                }}
+              />
+            );
+          })}
       </VStack>
       <CustomModal show={timeUp} close={closeModal}>
         <TimeUp />

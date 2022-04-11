@@ -1,11 +1,12 @@
 import { useSelector } from "@xstate/react";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useUpdateOnlineStatus } from "../hooks/users";
 import { Rooms } from "../Rooms/Rooms";
 import { GameLobby } from "./GameLobby";
 import { GameMenu } from "./GameMenu";
 import { GameMode } from "./GameMode";
 import GameScreen from "./GameScreen";
+import { GuestContext } from "../providers/guest";
 
 type GameProps = {
   context: any;
@@ -13,6 +14,7 @@ type GameProps = {
 
 export const Game = ({ context }: GameProps) => {
   const { gameService } = context;
+  const { guest } = useContext(GuestContext);
   const { updateOnlineStatus } = useUpdateOnlineStatus();
 
   // selectors
@@ -40,6 +42,20 @@ export const Game = ({ context }: GameProps) => {
     };
   }, []);
    */
+
+  useEffect(() => {
+    const items = {
+      playerName: guest.username,
+      playerId: guest.id,
+      playerImage: guest.image,
+    };
+    gameService.send({
+      type: "USER_ACTIVE",
+      payload: {
+        ...items,
+      },
+    });
+  }, []);
 
   return (
     <>

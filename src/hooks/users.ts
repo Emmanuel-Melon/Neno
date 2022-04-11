@@ -67,21 +67,18 @@ export const useGetUser = (email?: string | null) => {
 };
 
 export const useInsertNewUser = () => {
-  const [insertNewUser, { data, loading, error }] = useMutation<
-    InsertUserMutation,
-    InsertUserMutationVariables
-  >(INSERT_USER);
+  const [insertNewUser, { data, loading, error }] = useMutation(INSERT_USER);
   return useMemo(
     () => ({
       loading,
       error,
-      user: data?.insert_users,
+      user: data?.insert_users_one,
       insertNewUser: (user: OperationVariables) => {
-        return insertNewUser({ variables: { ...user } }).then(
-          ({ data }) => data?.insert_users
+        return insertNewUser({ variables: { user } }).then(
+          ({ data }) => data?.insert_users_one
         );
       },
     }),
-    [loading, error, data?.insert_users, insertNewUser]
+    [loading, error, data?.insert_users_one, insertNewUser]
   );
 };

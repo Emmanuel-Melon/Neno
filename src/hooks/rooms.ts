@@ -94,19 +94,40 @@ export const useGetActiveRooms = () => {
 };
 
 export const useGetRoomMessages = (roomId: string) => {
-  const { error, data, loading } = useSubscription<
-    GetLiveRoomMessagesSubscription,
-    GetLiveRoomMessagesSubscriptionVariables
-  >(GET_LIVE_ROOM_MESSAGES, {
-    variables: {
-      roomId,
-    },
-  });
+  const { error, data, loading, subscribeToMore } = useQuery(
+    GET_ROOM_MESSAGES,
+    {
+      variables: {
+        roomId,
+      },
+    }
+  );
+
   return useMemo(
     () => ({
       loading,
       messages: data?.rooms_messages,
       error,
+      subscribeToMore: (messageId: string) => {
+        return subscribeToMore({
+          document: GET_LIVE_ROOM_MESSAGES,
+          variables: {
+            roomId,
+            messageId,
+          },
+          updateQuery: (previousQueryResult, { subscriptionData }) => {
+            const [newMessage] = subscriptionData.data.rooms_messages;
+            if (!subscriptionData) {
+              return previousQueryResult;
+            }
+            return {
+              rooms_messages: Array.from(
+                new Set([...previousQueryResult.rooms_messages, newMessage])
+              ),
+            };
+          },
+        });
+      },
     }),
     [loading, data?.rooms_messages, error]
   );
@@ -133,7 +154,9 @@ export const useInsertRoom = () => {
 };
 
 export const useInsertWordCategories = () => {
-  const [insertCategories, { data, loading, error }] = useMutation(INSERT_WORD_CATEGORIES);
+  const [insertCategories, { data, loading, error }] = useMutation(
+    INSERT_WORD_CATEGORIES
+  );
   return useMemo(
     () => ({
       memberLoading: loading,
@@ -150,21 +173,27 @@ export const useInsertWordCategories = () => {
 };
 
 export const useInsertChatMessage = () => {
-  const [insertMessage, { data, loading, error }] = useMutation<
-    InsertMessageMutation,
-    InsertMessageMutationVariables
-  >(INSERT_MESSAGE, {
-    optimisticResponse: (variables) => {
-      const { roomId, senderId, text } = variables.message;
-      return {
-        insert_rooms_messages_one: {
-          text,
-          roomId,
-          senderId
-        },
-      };
-    },
-  });
+  const [insertMessage, { data, loading, error }] = useMutation(
+    INSERT_MESSAGE,
+    {
+      optimisticResponse: (variables) => {
+        const { roomId, senderId, text } = variables.message;
+        // insert_rooms_messages_one
+        return {
+          insertMessage: {
+            successful: true,
+            __typename: "InsertMessageResponse",
+            message: {
+              text,
+              roomId,
+              senderId,
+              __typename: "Message",
+            },
+          },
+        };
+      },
+    }
+  );
   return useMemo(
     () => ({
       loading,
@@ -175,6 +204,7 @@ export const useInsertChatMessage = () => {
           ({ data }) => data?.insert_rooms_messages_one
         );
       },
+      optimisticResponse: data?.insert_rooms_messages_one,
     }),
     [loading, error, data?.insert_rooms_messages_one, insertMessage]
   );
@@ -192,8 +222,24 @@ export const useGetRoomMembers = (roomId: string) => {
       loading,
       members: data?.rooms_members,
       error,
+      subscribeToMore: subscribeToMore({
+        document: GET_LIVE_ROOM_MEMEMBERS,
+        variables: {
+          roomId,
+        },
+        updateQuery: (previousQueryResult, { subscriptionData }) => {
+          const newMember = subscriptionData.data.rooms_members;
+          console.log(newMember);
+          if (!subscriptionData) {
+            return previousQueryResult;
+          }
+          return {
+            rooms_members: [...previousQueryResult.rooms_members, ...newMember],
+          };
+        },
+      }),
     }),
-    [loading, data?.rooms_members, error]
+    [loading, data?.rooms_members, error, subscribeToMore]
   );
 };
 
@@ -202,6 +248,8 @@ export const useInsertRoomMember = () => {
     InsertRoomMemberMutation,
     InsertRoomMemberMutationVariables
   >(INSERT_ROOM_MEMBER);
+
+  console.log(data?.insert_rooms_members_one);
   return useMemo(
     () => ({
       memberLoading: loading,

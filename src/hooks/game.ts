@@ -1,5 +1,10 @@
 import { useMemo } from "react";
-import { useQuery, useMutation, OperationVariables, useSubscription } from "@apollo/client";
+import {
+  useQuery,
+  useMutation,
+  OperationVariables,
+  useSubscription,
+} from "@apollo/client";
 
 import {
   GET_WORD_CATEGORIES,
@@ -26,7 +31,10 @@ import {
   GetWordCategoriesQuery,
   GetWordCategoriesQueryVariables,
 } from "../lib/graphql/queries/__generated__/game";
-import { GetCurrentLiveGameSubscription, GetCurrentLiveGameSubscriptionVariables } from "../lib/graphql/subscriptions/__generated__/game";
+import {
+  GetCurrentLiveGameSubscription,
+  GetCurrentLiveGameSubscriptionVariables,
+} from "../lib/graphql/subscriptions/__generated__/game";
 
 export const useGetWordCategories = () => {
   const { error, data, loading } = useQuery<
@@ -48,6 +56,7 @@ export const useInsertGame = () => {
     InsertNewGameMutation,
     InsertNewGameMutationVariables
   >(INSERT_NEW_GAME);
+
   return useMemo(
     () => ({
       loading,

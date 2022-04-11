@@ -4,12 +4,7 @@ import { Paper } from "../components/ui/paper";
 
 export const GameInstructions = () => {
   return (
-    <Flex width={[
-      '320px',
-      '320px',
-      'fit-content',
-      'fit-content',
-    ]}>
+    <Flex width={["320px", "320px", "fit-content", "fit-content"]}>
       <Paper>
         <Flex direction="column">
           <Flex direction="column" p="2" gap={2}>
@@ -30,12 +25,8 @@ export const GameInstructions = () => {
             gap={2}
             justifyContent="space-between"
             p="2"
-            direction={[
-              'column',
-              'column',
-              'row',
-              'row',
-            ]}>
+            direction={["column", "column", "row", "row"]}
+          >
             <Flex alignItems="center" justifyContent="space-between" gap={4}>
               <Heading as="h3" size="sm">
                 City

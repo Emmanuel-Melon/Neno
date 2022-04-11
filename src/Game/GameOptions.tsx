@@ -6,9 +6,29 @@ import { Paper } from "../components/ui/paper";
 export const GameOptions = () => {
   return (
     <Paper>
-      <Flex direction="column" p="8" w="400px">
-        <Flex direction="column" p="2" gap={6}>
-          <Heading as="h3" size="md">
+      <Flex
+        direction="column"
+        p="4"
+        width={["320px", "320px", "320px", "400px"]}
+      >
+        <Flex direction="column" p="2" gap={4}>
+          <Heading as="h3" size="sm" color="brand.primary">
+            General
+          </Heading>
+          <FormControl
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <FormLabel htmlFor="email-alerts" mb="0">
+              Push Notifications
+            </FormLabel>
+            <Switch id="email-alerts" />
+          </FormControl>
+        </Flex>
+        <Divider />
+        <Flex direction="column" p="2" gap={4}>
+          <Heading as="h3" size="sm" color="brand.primary">
             Appearance
           </Heading>
           <FormControl
@@ -23,8 +43,8 @@ export const GameOptions = () => {
           </FormControl>
         </Flex>
         <Divider />
-        <Flex direction="column" p="2" gap={6}>
-          <Heading as="h3" size="md">
+        <Flex direction="column" p="2" gap={4}>
+          <Heading as="h3" size="sm" color="brand.primary">
             Audio
           </Heading>
           <FormControl

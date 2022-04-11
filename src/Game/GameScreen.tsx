@@ -1,5 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Flex, Grid, Heading, Text, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Tag,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { CustomButton } from "../components/ui/button";
 import { Notebook } from "./Notebook";
 import Image from "next/image";
@@ -8,14 +20,19 @@ import { Dialog } from "../components/ui/dialog";
 import { Paper } from "../components/ui/paper";
 import { GameContext } from "../providers/game";
 import { useGetGameRounds } from "../hooks/game";
-import { getLetterByValue, getRandomLetter } from "../utils/rounds";
+import {
+  calculateScore,
+  getLetterByValue,
+  getRandomLetter,
+} from "../utils/rounds";
 import { useInsertRoundAnswers } from "../hooks/game";
 import { CustomModal } from "../components/ui/modal";
 import { CompletedScreen } from "./CompletedScreen";
-import { LoadingScreen } from "./LoadingScreen";
 import { Games_Rounds } from "../lib/graphql/globalTypes";
 import data from "../../data.json";
 import { useGetRoomById } from "../hooks/rooms";
+import { MyTimer } from "../components/Timer";
+import { Card } from "../components/ui/card";
 
 export type Category = {
   value: string;
@@ -29,48 +46,82 @@ export type Answers = {
 };
 
 type GameState = {
-  won: boolean;
-  rounds: Games_Rounds[];
-  roundId: string | number;
-  round: {
+  rounds: any[];
+  currentRound: {
     id: string;
+    score: number;
+    number: number;
+    won: boolean;
     letter: {
       icon: string;
+      value: string;
     };
-    expiration: string;
-    won: boolean;
   };
 };
 
 const GameScreen = () => {
-  const { gameService } = useContext(GameContext);
+  const { gameService, playerService } = useContext(GameContext);
   const roomId: string = gameService?.state?.context?.room?.roomId;
-  const gameId: string = gameService?.state?.context?.room?.gameId;
+  const game = gameService?.state?.context?.game;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ready, setReady] = useState(false);
   const [_isSubmitted, setSubmit] = useState(false);
   const [roundWonMessage, _setRoundWonMessage] = useState("Round");
   const [gameWonMessage, _setGameWonMessage] = useState("Game");
-  const { rounds, loadingRounds } = useGetGameRounds(gameId);
   const { insertAnswers, loadingAnswers } = useInsertRoundAnswers();
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const { room } = useGetRoomById(roomId);
-  const [game, setGame] = useState<GameState>({
-    won: false,
+  const { rounds } = useGetGameRounds(game?.id);
+  const [gameRounds, setGameRounds] = useState<GameState>({
     rounds: [],
-    roundId: "",
-    round: {
+    currentRound: {
       id: "",
-      letter: {
-        icon: "/icons/icons8-question-mark.svg",
-      },
-      expiration: "",
+      number: 1,
+      score: 0,
       won: false,
+      letter: {
+        icon: "",
+        value: "",
+      },
     },
   });
+  const [answers, setAnswers] = useState<Answers>({
+    animal: {
+      value: "",
+      category: "",
+    },
+    food: {
+      value: "",
+      category: "",
+    },
+    city: {
+      value: "",
+      category: "",
+    },
+  });
+
+  const handleInputchange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setAnswers((currentState) => {
+        return {
+          ...currentState,
+          [name]: {
+            value,
+            category: name,
+          },
+        };
+      });
+    },
+    []
+  );
 
   const exitCurrentGame = () => {
     gameService.send({
       type: "EXIT_CURRENT_GAME",
+      payload: {
+        ...room,
+      },
     });
   };
 
@@ -90,180 +141,268 @@ const GameScreen = () => {
   const submitAnswers = (answers: Answers) => {
     const input = Object.values(answers).map((answer) => ({
       value: answer.value,
-      roundId: rounds?.[0]?.id,
-      playerId: rounds?.[0]?.playerId,
+      roundId: gameRounds.currentRound.id,
+      playerId: gameService.state.context.playerId,
       correct: verifyAnswers(answer),
+      score: calculateScore(answer.value),
     }));
     insertAnswers(input);
     setSubmit((currentState) => !currentState);
-    setGame((currentState) => {
+    moveToNextRound();
+  };
+
+  const moveToNextRound = () => {
+    setGameRounds((currentState) => {
       const newRounds = currentState?.rounds?.filter(
-        (round) => round?.id !== currentState.roundId
+        (round) => round?.id !== currentState.currentRound.id
       );
       if (newRounds?.length === 0) {
         openModal();
         return {
           ...currentState,
           rounds: newRounds,
-          won: true,
-          round: {
-            ...currentState.round,
+          currentRound: {
+            ...currentState.currentRound,
             won: true,
           },
         };
       } else {
         const round = getRandomLetter(newRounds, newRounds?.length);
-        const { icon } = getLetterByValue(round?.letterId);
-
+        const { icon, letter } = getLetterByValue(round.letterId);
         return {
           ...currentState,
-          roundId: round.id.toString(),
           rounds: newRounds,
-          round: {
-            ...currentState.round,
-            ...round,
+          currentRound: {
+            ...currentState.currentRound,
+            id: round?.id,
+            won: true,
             letter: {
               icon,
+              value: letter,
             },
-            won: true,
           },
         };
       }
     });
-  };
-
-  useEffect(() => {
-    setGame((currentState) => {
-      const round = rounds?.find((round) => round.id === rounds?.[0]?.id);
-      const icon = getLetterByValue(round?.letterId);
-      return {
-        ...currentState,
-        roundId: rounds?.[0]?.id.toString(),
-        rounds: rounds,
-        round: {
-          ...currentState.round,
-          ...round,
-          expiration: round?.time,
-          letter: {
-            icon: icon?.icon || "/icons/icons8-question-mark.svg",
-          },
-        },
-      };
-    });
-  }, [loadingRounds]);
-
-  if (loadingRounds) {
-    return <LoadingScreen />;
-  }
-
-  const moveToNextRound = () => {
     closeModal();
   };
 
-  console.log(game);
+  useEffect(() => {
+    setReady(true);
+    setGameRounds((currentState) => {
+      return {
+        ...currentState,
+        rounds: rounds,
+        currentRound: {
+          ...rounds?.[0],
+          letter: getLetterByValue(rounds?.[0]?.letterId),
+          score: 0,
+        },
+      };
+    });
+  }, [rounds, game]);
 
-  return (
-    <>
-      <Flex justifyContent="center" marginBottom="8">
-        <Image
-          width="150"
-          height="150"
-          src={
-            game?.round?.letter?.icon
-              ? game.round.letter.icon
-              : "/icons/icons8-question-mark.svg"
-          }
-        />
-      </Flex>
-      <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-        <Flex direction="column" gap={6} width="100%">
-          <Paper width="100%">
-            <Heading as="h5" color="brand.primary" size="md">
-              Game Info
-            </Heading>
-            <Flex justifyContent="space-between">
-              <Text>Round</Text>
-              <Text>
-                {gameService?.state?.context?.currentRound?.roundNumber}
-              </Text>
+  if (ready) {
+    return (
+      <Flex
+        width="100%"
+        alignItems="center"
+        height={"100%"}
+        justifyContent="center"
+        gap={2}
+        direction="column"
+      >
+        <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+          <GridItem colSpan={2}>
+            <Flex
+              gap={2}
+              direction="column"
+              justifyContent="space-between"
+              height="100%"
+            >
+              <Flex flexGrow={1}>
+                <ActivePlayers room={room} />
+              </Flex>
+              <Flex gap={6} alignItems="flex-end" justifyContent="space-evenly">
+                <CustomButton
+                  onClick={() => {}}
+                  icon={
+                    <Image
+                      alt="logo"
+                      src={"/icons/icons8-circled-thin.svg"}
+                      width="30"
+                      height="30"
+                    />
+                  }
+                >
+                  Report
+                </CustomButton>
+                <CustomButton
+                  bg="brand.danger"
+                  color="#fff"
+                  icon={
+                    <Image
+                      alt="logo"
+                      src={"/icons/icons8-close (1).svg"}
+                      width="30"
+                      height="30"
+                    />
+                  }
+                  onClick={() => onOpen()}
+                >
+                  Leave Game
+                </CustomButton>
+              </Flex>
             </Flex>
-            <Flex justifyContent="space-between">
-              <Text>Remaining</Text>
-              <Text>
-                {gameService?.state?.context?.currentRound?.remaining}
-              </Text>
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Text>Game Rounds</Text>
-              <Text>
-                {gameService?.state?.context?.currentRound?.roundsTotal}
-              </Text>
-            </Flex>
-          </Paper>
-
-          <Paper width="100%">
-            <Heading as="h5" color="brand.primary" size="md">
-              Game Events
-            </Heading>
-          </Paper>
-        </Flex>
-        <Flex direction="column">
-          <Notebook
-            categories={gameService?.state?.context?.room.wordCategories}
-            submitAnswers={submitAnswers}
-            loadingAnswers={loadingAnswers}
-            roundExpiration={new Date(game.round?.expiration)}
-            won={game.won}
-          />
-        </Flex>
-        <Flex direction="column" justifyContent="space-between" gap={6} p="4">
-          <ActivePlayers room={room} />
-          <CustomButton
-            bg="brand.danger"
-            color="#fff"
-            icon={
-              <Image
-                alt="logo"
-                src={"/icons/icons8-ok.svg"}
-                width="30"
-                height="30"
+          </GridItem>
+          <GridItem colSpan={2}>
+            <Card padding="none" width="100%">
+              <Flex
+                width="100%"
+                bg="brand.white"
+                direction="column"
+                p="2"
+                gap={2}
+              >
+                <Heading color="brand.primary" as="h3" size="sm">
+                  Round info
+                </Heading>
+                <Flex py="1" gap={2}>
+                  <Tag
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+                    color="brand.secondary"
+                    border="border.secondary"
+                    bg="brand.white"
+                    width="fit-content"
+                  >
+                    Score {gameRounds?.currentRound?.score}
+                  </Tag>
+                  <Tag
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    color="brand.secondary"
+                    boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+                    border="border.secondary"
+                    bg="brand.white"
+                    width="fit-content"
+                  >
+                    Round {gameRounds?.currentRound?.number}/{room.capacity}
+                  </Tag>
+                  <Tag
+                    borderRadius="4% 12% 10% 8% / 5% 5% 10% 8%"
+                    color="brand.secondary"
+                    boxShadow="rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"
+                    border="border.secondary"
+                    bg="brand.white"
+                    width="fit-content"
+                  >
+                    Letter{" "}
+                    {gameRounds?.currentRound?.letter
+                      ? gameRounds?.currentRound?.letter?.value
+                      : "?"}
+                  </Tag>
+                </Flex>
+              </Flex>
+              <Flex justifyContent="center" p="4" gap={6}>
+                <Image
+                  width="120"
+                  height="120"
+                  src={
+                    gameRounds?.currentRound?.letter
+                      ? gameRounds?.currentRound?.letter?.icon
+                      : "/icons/icons8-question-mark.svg"
+                  }
+                />
+              </Flex>
+              <Flex width="100%" p="2">
+                <Heading color="brand.primary" as="h3" size="sm">
+                  Answers
+                </Heading>
+              </Flex>
+              <Notebook
+                categories={gameService?.state?.context?.room.wordCategories}
+                submitAnswers={submitAnswers}
+                loadingAnswers={loadingAnswers}
+                roundExpiration={new Date(game.round?.expiration)}
+                won={game.won}
+                handleInputchange={handleInputchange}
+                answers={answers}
               />
-            }
-            onClick={() => onOpen()}
-          >
-            Leave Game
-          </CustomButton>
-        </Flex>
-      </Grid>
-      <Dialog
-        heading="Leave Game"
-        body="Are you sure you wanna exit this game?"
-        cancelText="Cancel"
-        actionText="Leave Game"
-        action={exitCurrentGame}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
-      <CustomModal show={isModalOpen} close={closeModal}>
-        {game.won ? (
-          <CompletedScreen
-            message={gameWonMessage}
-            type="game"
-            primaryAction={() => { }}
-            secondaryAction={exitCurrentGame}
-          />
-        ) : null}
-      </CustomModal>
-      <CustomModal show={isModalOpen} close={closeModal}>
-        {game.round.won ? (
-          <CompletedScreen
-            message={roundWonMessage}
-            type="round"
-            primaryAction={moveToNextRound}
-          />
-        ) : null}
-      </CustomModal>
-    </>
+              <Flex p="2" direction="column" width="100%" gap={2}>
+                <Flex
+                  width="100%"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  py="2"
+                >
+                  <Flex>
+                    <Flex alignItems="center" py="2" gap={2}>
+                      <MyTimer minutes={0} seconds={9} />
+                      <Heading color="brand.secondary" as="h3" size="sm">
+                        {gameService.state.context.playerName}
+                      </Heading>
+                    </Flex>
+                  </Flex>
+                  <CustomButton
+                    onClick={() => {
+                      submitAnswers(answers);
+                    }}
+                    disabled={false}
+                    size="md"
+                    icon={
+                      <Image
+                        alt="logo"
+                        src={"/icons/icons8-ok.svg"}
+                        width="25"
+                        height="25"
+                      />
+                    }
+                  >
+                    Done!
+                  </CustomButton>
+                </Flex>
+              </Flex>
+            </Card>
+          </GridItem>
+        </Grid>
+        <Dialog
+          heading="Leave Game"
+          body="Are you sure you wanna exit this game?"
+          cancelText="Cancel"
+          actionText="Leave Game"
+          action={exitCurrentGame}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+        <CustomModal
+          show={gameRounds.currentRound.won && gameRounds.rounds.length === 0}
+          close={closeModal}
+        >
+          {gameRounds.currentRound.won && gameRounds.rounds.length === 0 ? (
+            <CompletedScreen
+              message={gameWonMessage}
+              type="game"
+              primaryAction={() => {}}
+              secondaryAction={exitCurrentGame}
+            />
+          ) : null}
+        </CustomModal>
+        <CustomModal show={isModalOpen} close={closeModal}>
+          {gameRounds.currentRound.won ? (
+            <CompletedScreen
+              message={roundWonMessage}
+              type="round"
+              primaryAction={moveToNextRound}
+            />
+          ) : null}
+        </CustomModal>
+      </Flex>
+    );
+  }
+  return (
+    <div>
+      <h3>Game is loading</h3>
+    </div>
   );
 };
 
